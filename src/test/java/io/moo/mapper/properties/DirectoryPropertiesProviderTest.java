@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.After;
@@ -83,8 +84,9 @@ public class DirectoryPropertiesProviderTest {
 
 
   @After
-  public void tearDown() {
-    if (configDir != null && configDir.delete()) {
+  public void tearDown() throws IOException {
+    if (configDir != null) {
+      FileUtils.deleteDirectory(configDir);
       LOG.info("Cleaned up the resources: %s", configDir);
     }
   }
