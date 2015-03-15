@@ -23,16 +23,43 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.mapper.properties;
+package io.moo.propane.utils;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Properties;
 
 /**
- * Property repository.
+ * Some utility methods used by tests.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
+public class PropsUtils {
 
-  <T> T load(Class<T> clazz);
+  public static void createTestPropertiesFile(String configDir, String fileName) throws IOException {
+    FileWriter fileWriter = null;
+    try {
+      final Properties props = new Properties();
+      props.setProperty("propertyName", "propertyValue");
+      final File cfgFile = new File(configDir, fileName);
+      fileWriter = new FileWriter(cfgFile);
+      props.store(fileWriter, "test config");
+    } finally {
+      if (fileWriter != null) {
+        fileWriter.flush();
+        fileWriter.close();
+      }
+    }
+  }
+
+
+  public static String getPathToTemp() throws IOException {
+    final File tmpCfg = File.createTempFile("test-properties", ".properties");
+    final String absolutePathOfCfgFile1 = tmpCfg.getAbsolutePath();
+    final int lastIndexOfSlash = absolutePathOfCfgFile1.lastIndexOf("/");
+    return absolutePathOfCfgFile1.substring(0, lastIndexOfSlash);
+  }
 }

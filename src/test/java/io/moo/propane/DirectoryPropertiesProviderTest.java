@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.mapper.properties;
+package io.moo.propane;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,8 +36,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.moo.mapper.properties.data.PropertiesEntity;
-import io.moo.mapper.properties.utils.PropsUtils;
+import io.moo.propane.data.PropertiesEntity;
+import io.moo.propane.utils.PropsUtils;
 
 /**
  * @author bagdemir

@@ -23,11 +23,11 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.mapper.properties;
+package io.moo.propane;
 
 import java.util.Collection;
 
-import io.moo.mapper.properties.data.PropertiesEntity;
+import io.moo.propane.data.PropertiesEntity;
 
 /**
  * @author bagdemir

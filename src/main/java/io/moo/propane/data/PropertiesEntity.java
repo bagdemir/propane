@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.mapper.properties.data;
+package io.moo.propane.data;
 
 import java.util.Arrays;
 

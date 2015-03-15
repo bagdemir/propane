@@ -1,11 +1,11 @@
-package io.moo.mapper.properties;
+package io.moo.propane;
 
 import java.io.File;
 import java.util.Collection;
 
 import org.apache.commons.io.FileUtils;
 
-import io.moo.mapper.properties.data.PropertiesEntity;
+import io.moo.propane.data.PropertiesEntity;
 
 /**
  * Created by bagdemir on 14/03/15.

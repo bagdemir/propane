@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.mapper.properties;
+package io.moo.propane;
 
 /**
  * @author bagdemir
