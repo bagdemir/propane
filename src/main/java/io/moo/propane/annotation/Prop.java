@@ -7,11 +7,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by bagdemir on 14/03/15.
+ * Created by bagdemir on 15/03/15.
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface PropsEntity {
-  String componentId() default "";
+@Target(ElementType.FIELD)
+public @interface Prop {
+  String name() default "";
+  Class type() default Object.class;
 }

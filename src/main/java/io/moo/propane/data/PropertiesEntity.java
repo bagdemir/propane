@@ -37,11 +37,11 @@ import java.util.Arrays;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesEntity<T> {
+public class PropertiesEntity {
   private String componentId;
   private String[] contextIds;
   private String propertyName;
-  private T propertyValue;
+  private Object propertyValue;
 
 
   public String getComponentId() {
@@ -74,12 +74,12 @@ public class PropertiesEntity<T> {
   }
 
 
-  public T getPropertyValue() {
+  public Object getPropertyValue() {
     return propertyValue;
   }
 
 
-  public void setPropertyValue(final T propertyValue) {
+  public void setPropertyValue(final Object propertyValue) {
     this.propertyValue = propertyValue;
   }
 
