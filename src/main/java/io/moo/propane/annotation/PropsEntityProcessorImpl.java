@@ -49,52 +49,56 @@ public class PropsEntityProcessorImpl implements AnnotationProcessor {
   public <T> T create(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
     checkNotNull(entities, "entities == null");
     checkArgument(!entities.isEmpty(), "!entities.isEmpty()");
-
-    final PropsEntity declaredAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
-    if (declaredAnnotation == null) {
-      throw new InvalidPropsEntityException();
-    }
-    final String componentId = declaredAnnotation.componentId();
+    final PropsEntity propsEntityAnnotation = checkNotNull(clazz.getDeclaredAnnotation(PropsEntity.class));
+    final String componentId = propsEntityAnnotation.componentId();
     final Field[] fields = clazz.getDeclaredFields();
     final T instance = newEntityInstance(clazz);
-    for (final Field field : fields) {
-      final Prop annotation = field.getAnnotation(Prop.class);
-      if (annotation != null) {
-        entities.stream().
-          filter(propertiesEntity -> propertiesEntity.getComponentId().equals(componentId)).
-          forEach(propertiesEntity -> {
-            if (annotation.name().equals(propertiesEntity.getPropertyName())) {
-              final Object propertyValue = propertiesEntity.getPropertyValue();
-              if (field.getType().isAssignableFrom(propertyValue.getClass())) {
-                try {
-                  field.setAccessible(true);
-                  field.set(instance, propertyValue);
-                  field.setAccessible(false);
-                }
-                catch (IllegalAccessException e) {
-                  LOG.error(e);
-                }
-              }
-            }
-          });
-      }
-    }
-
+    processFields(entities, componentId, fields, instance);
     return instance;
   }
 
 
-  private <T> T newEntityInstance(final Class<T> clazz) {
-    T instance = null;
-    try {
-      instance = clazz.newInstance();
+  private <T> void processFields(final Collection<PropertiesEntity> entities,
+    final String componentId,
+    final Field[] fields,
+    final T instance) {
+    for (final Field field : fields) {
+      final Prop annotation = field.getAnnotation(Prop.class);
+      if (annotation != null) {
+        entities.stream().
+        filter(propertiesEntity -> propertiesEntity.getComponentId().equals(componentId)).
+        forEach(propertiesEntity -> {
+          if (annotation.name().equals(propertiesEntity.getPropertyName())) {
+            final Object propertyValue = propertiesEntity.getPropertyValue();
+            if (field.getType().isAssignableFrom(propertyValue.getClass())) {
+              performAssignment(instance, field, propertyValue);
+            }
+          }
+        });
+      }
     }
-    catch (InstantiationException e) {
-      LOG.error(e);
+  }
+
+
+  private <T> void performAssignment(final T instance, final Field field, final Object propertyValue) {
+    try {
+      field.setAccessible(true);
+      field.set(instance, propertyValue);
+      field.setAccessible(false);
     }
     catch (IllegalAccessException e) {
       LOG.error(e);
     }
-    return instance;
+  }
+
+
+  private <T> T newEntityInstance(final Class<T> clazz) {
+    try {
+      return clazz.newInstance();
+    }
+    catch (InstantiationException | IllegalAccessException e) {
+      LOG.error(e);
+    }
+    throw new AssertionError("Cannot create a new instance of :" + clazz.getName());
   }
 }
