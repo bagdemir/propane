@@ -3,9 +3,9 @@
 
 Propane
 --
+Propane is a light-weight framework to work with configurations.
 
-<table border=0>
-<tr><td>Propane is a light-weight framework to work with configurations.</td><td><img src="http://www.bagdemir.com/img/propane.png" width="200"/></td></tr>
-</table>
+<img src="http://www.bagdemir.com/img/propane.png" width="200"/>
+
 
 
