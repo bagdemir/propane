@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.annotation;
+package io.moo.propane.annotation.processor;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
@@ -34,6 +34,8 @@ import java.util.Collection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import io.moo.propane.annotation.Prop;
+import io.moo.propane.annotation.PropsEntity;
 import io.moo.propane.data.PropertiesEntity;
 
 /**
@@ -41,7 +43,7 @@ import io.moo.propane.data.PropertiesEntity;
  * @version 1.0
  * @since 1.0
  */
-public class PropsEntityProcessorImpl implements AnnotationProcessor {
+public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
   private static final Logger LOG = LogManager.getLogger();
 
 
@@ -80,7 +82,9 @@ public class PropsEntityProcessorImpl implements AnnotationProcessor {
   }
 
 
-  private <T> void performAssignment(final T instance, final Field field, final Object propertyValue) {
+  private <T> void performAssignment(final T instance,
+    final Field field,
+    final Object propertyValue) {
     try {
       field.setAccessible(true);
       field.set(instance, propertyValue);

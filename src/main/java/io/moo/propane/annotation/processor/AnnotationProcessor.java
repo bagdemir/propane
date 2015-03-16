@@ -23,12 +23,17 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.annotation;
+package io.moo.propane.annotation.processor;
+
+import java.util.Collection;
+
+import io.moo.propane.data.PropertiesEntity;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class InvalidPropsEntityException extends RuntimeException {
+public interface AnnotationProcessor {
+  <T> T create(final Class<T> clazz, final Collection<PropertiesEntity> entities);
 }
