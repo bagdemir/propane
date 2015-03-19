@@ -25,10 +25,8 @@
  */
 package io.moo.propane.annotation.processor;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.apache.logging.log4j.LogManager;
@@ -37,6 +35,7 @@ import org.apache.logging.log4j.Logger;
 import io.moo.propane.annotation.Prop;
 import io.moo.propane.annotation.PropsEntity;
 import io.moo.propane.data.PropertiesEntity;
+import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
  * @author bagdemir
@@ -49,14 +48,14 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
 
   @Override
   public <T> T create(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
-    checkNotNull(entities, "entities == null");
-    checkArgument(!entities.isEmpty(), "!entities.isEmpty()");
-    final PropsEntity propsEntityAnnotation = checkNotNull(clazz.getDeclaredAnnotation(PropsEntity.class));
-    final String componentId = propsEntityAnnotation.componentId();
-    final Field[] fields = clazz.getDeclaredFields();
-    final T instance = newEntityInstance(clazz);
-    processFields(entities, componentId, fields, instance);
-    return instance;
+    final PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
+    if (propsEntityAnnotation != null) {
+      String componentId = propsEntityAnnotation.componentId();
+      Field[] fields = clazz.getDeclaredFields();
+      T instance = newEntityInstance(clazz);
+      processFields(entities, componentId, fields, instance);
+      return instance;
+    } else throw new InvalidPropsEntityException();
   }
 
 
@@ -64,23 +63,22 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
     final String componentId,
     final Field[] fields,
     final T instance) {
-    for (final Field field : fields) {
-      final Prop annotation = field.getAnnotation(Prop.class);
-      if (annotation != null) {
-        entities.stream().
-        filter(propertiesEntity -> propertiesEntity.getComponentId().equals(componentId)).
-        forEach(propertiesEntity -> {
-          if (annotation.name().equals(propertiesEntity.getPropertyName())) {
-            final Object propertyValue = propertiesEntity.getPropertyValue();
-            if (field.getType().isAssignableFrom(propertyValue.getClass())) {
-              performAssignment(instance, field, propertyValue);
-            }
-          }
-        });
+    Arrays.stream(fields).
+      filter(field -> null != field.getAnnotation(Prop.class)).
+      forEach(field -> entities.stream().
+        filter(entity -> entity.getComponentId().equals(componentId)).
+        forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
+          entity, field, instance)));
+  }
+
+  private <T> void performEntityProcessing(final Prop annotation, final PropertiesEntity propertiesEntity, final Field field, T instance){
+    if (annotation.name().equals(propertiesEntity.getPropertyName())) {
+      Object propertyValue = propertiesEntity.getPropertyValue();
+      if (field.getType().isAssignableFrom(propertyValue.getClass())) {
+        performAssignment(instance, field, propertyValue);
       }
     }
   }
-
 
   private <T> void performAssignment(final T instance,
     final Field field,
@@ -88,10 +86,12 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
     try {
       field.setAccessible(true);
       field.set(instance, propertyValue);
-      field.setAccessible(false);
+
     }
     catch (IllegalAccessException e) {
       LOG.error(e);
+    } finally {
+      field.setAccessible(false);
     }
   }
 
