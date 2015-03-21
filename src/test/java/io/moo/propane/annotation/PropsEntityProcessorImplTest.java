@@ -61,11 +61,18 @@ public class PropsEntityProcessorImplTest {
     propLong.setPropertyName("longProp");
     propLong.setPropertyValue(100L);
 
-    final Collection<PropertiesEntity> props = ImmutableList.<PropertiesEntity>of(propStr, propLong);
+    final PropertiesEntity propInt = new PropertiesEntity();
+    propInt.setComponentId("io.moo.test.component");
+    propInt.setContextIds(new String[]{"test"});
+    propInt.setPropertyName("intProp");
+    propInt.setPropertyValue(1);
+
+    final Collection<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
     final AnnotationProcessor processor = new PropsEntityAnnotationProcessorImpl();
-    final TestProps testProps = processor.create(TestProps.class, props);
+    final TestProps testProps = processor.createEntity(TestProps.class, props);
     assertThat(testProps, notNullValue());
     assertThat(testProps.getTimeout(), equalTo(100L));
+    assertThat(testProps.getCount(), equalTo(1));
     assertThat(testProps.getUrl(), equalTo("abc"));
   }
 }
