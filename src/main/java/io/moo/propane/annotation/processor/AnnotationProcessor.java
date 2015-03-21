@@ -30,10 +30,12 @@ import java.util.Collection;
 import io.moo.propane.data.PropertiesEntity;
 
 /**
+ * Annotation processor is used to process properties entity annotations.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
 public interface AnnotationProcessor {
-  <T> T create(final Class<T> clazz, final Collection<PropertiesEntity> entities);
+  <T> T createEntity(final Class<T> clazz, final Collection<PropertiesEntity> entities);
 }

@@ -47,7 +47,7 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   @Override
-  public <T> T create(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
+  public <T> T createEntity(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
     final PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
     if (propsEntityAnnotation != null) {
       String componentId = propsEntityAnnotation.componentId();
@@ -66,16 +66,18 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
     Arrays.stream(fields).
       filter(field -> null != field.getAnnotation(Prop.class)).
       forEach(field -> entities.stream().
-        filter(entity -> entity.getComponentId().equals(componentId)).
-        forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
-          entity, field, instance)));
+              filter(entity -> entity.getComponentId().equals(componentId)).
+              forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
+                      entity, field, instance)));
   }
 
-  private <T> void performEntityProcessing(final Prop annotation, final PropertiesEntity propertiesEntity, final Field field, T instance){
+  private <T> void performEntityProcessing(final Prop annotation, final PropertiesEntity propertiesEntity,
+          final Field field, T instance) {
     if (annotation.name().equals(propertiesEntity.getPropertyName())) {
       Object propertyValue = propertiesEntity.getPropertyValue();
-      if (field.getType().isAssignableFrom(propertyValue.getClass())) {
-        performAssignment(instance, field, propertyValue);
+      if (field.getType().isPrimitive() ||
+          field.getType().isAssignableFrom(propertyValue.getClass())) {
+          performAssignment(instance, field, propertyValue);
       }
     }
   }
@@ -103,6 +105,6 @@ public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
     catch (InstantiationException | IllegalAccessException e) {
       LOG.error(e);
     }
-    throw new AssertionError("Cannot create a new instance of :" + clazz.getName());
+    throw new AssertionError("Cannot createEntity a new instance of :" + clazz.getName());
   }
 }

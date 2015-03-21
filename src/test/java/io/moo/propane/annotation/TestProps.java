@@ -33,11 +33,16 @@ package io.moo.propane.annotation;
 @PropsEntity(componentId = "io.moo.test.component")
 public class TestProps {
 
-  @Prop(name="testProp")
+  @Prop(name = "testProp")
   private String url;
 
-  @Prop(name="longProp")
+  @Prop(name = "longProp")
   private Long timeout;
+
+  @Prop(name = "intProp")
+  private int count;
+
+  private String nonPropField;
 
 
   public String getUrl() {
@@ -47,5 +52,15 @@ public class TestProps {
 
   public Long getTimeout() {
     return timeout;
+  }
+
+
+  public int getCount() {
+    return count;
+  }
+
+
+  public String getNonPropField() {
+    return nonPropField;
   }
 }
