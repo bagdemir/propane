@@ -25,6 +25,8 @@
  */
 package io.moo.propane;
 
+import java.util.Optional;
+
 /**
  * Property repository.
  *
@@ -34,5 +36,5 @@ package io.moo.propane;
  */
 public interface PropertiesManager {
 
-  <T> T load(Class<T> clazz);
+  <T> Optional<T> load(Class<T> clazz);
 }
