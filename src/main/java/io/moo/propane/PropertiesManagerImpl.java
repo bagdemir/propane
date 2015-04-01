@@ -25,6 +25,8 @@
  */
 package io.moo.propane;
 
+import java.util.Optional;
+
 /**
  * @author bagdemir
  * @version 1.0
@@ -33,7 +35,7 @@ package io.moo.propane;
 public class PropertiesManagerImpl implements PropertiesManager {
 
   @Override
-  public <T> T load(final Class<T> clazz) {
+  public <T> Optional<T> load(final Class<T> clazz) {
     return null;
   }
 }
