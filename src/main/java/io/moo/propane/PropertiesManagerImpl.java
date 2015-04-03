@@ -63,13 +63,13 @@ public class PropertiesManagerImpl implements PropertiesManager {
 
 
   private void registerPropsProvider(final PropertiesProvider propertiesProvider) {
-    objectCache.put(propertiesProvider.init(), null);
+    objectCache.put(propertiesProvider.init(), "");
   }
 
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
-    return objectCache.containsKey(clazz);
+    return objectCache.containsKey(new PropertiesProviderImpl<T>(clazz));
   }
 
 
