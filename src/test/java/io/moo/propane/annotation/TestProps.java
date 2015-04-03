@@ -31,14 +31,12 @@ package io.moo.propane.annotation;
  * @since 1.0
  */
 @PropsEntity(componentId = "io.moo.test.component")
+@PropsSource(url = "classpath://")
 public class TestProps {
-
   @Prop(name = "testProp")
   private String url;
-
   @Prop(name = "longProp")
   private Long timeout;
-
   @Prop(name = "intProp")
   private int count;
 

@@ -42,13 +42,13 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  * @version 1.0
  * @since 1.0
  */
-public class PropsEntityAnnotationProcessorImpl implements AnnotationProcessor {
+public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
   private static final Logger LOG = LogManager.getLogger();
 
 
   @Override
   public <T> T createEntity(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
-    final PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
+    PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
     if (propsEntityAnnotation != null) {
       String componentId = propsEntityAnnotation.componentId();
       Field[] fields = clazz.getDeclaredFields();

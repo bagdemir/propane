@@ -25,18 +25,40 @@
  */
 package io.moo.propane;
 
-import java.util.Optional;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
+import io.moo.propane.annotation.TestProps;
+import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
- * Configuration repository.
+ * Unit test for properties manager.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public class PropertiesManagerTest {
+
+  @Test(expected = InvalidPropsEntityException.class)
+  public void loadTestUsingInvalidPropsEntity() {
+    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
+    propertiesManager.register(Object.class);
+  }
+
+  @Test
+  public void loadTestUsingValidPropsEntityButAlreadyRegistered() {
+    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
+    assertThat(propertiesManager.register(TestProps.class), equalTo(true));
+    assertThat(propertiesManager.register(TestProps.class), equalTo(false));
+  }
+
+  @Test
+  public void loadTestUsingValidPropsEntity() {
+    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
+    propertiesManager.register(TestProps.class);
+    assertThat(propertiesManager.isRegistered(TestProps.class), equalTo(true));
+  }
 }

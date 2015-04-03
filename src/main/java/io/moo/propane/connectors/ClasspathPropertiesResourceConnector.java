@@ -23,20 +23,47 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.connectors;
 
-import java.util.Optional;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
- * Configuration repository.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public class ClasspathPropertiesResourceConnector extends PropertiesResourceConnector {
+  private static final Logger LOG = LogManager.getLogger();
+
+
+  public ClasspathPropertiesResourceConnector(final String source) {
+    super(source);
+  }
+
+
+  @Override
+  public Map<String, Object> read() {
+    Map<String, Object> propsMap = new HashMap<>();
+
+    try {
+      Properties properties = new Properties();
+      properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
+      properties.forEach((name,value) -> propsMap.put(name.toString(), value));
+    }
+    catch (IOException e) {
+      LOG.error(e);
+    }
+
+    return propsMap;
+  }
 }

@@ -14,19 +14,16 @@ public class DirectoryPropertiesProviderImpl implements PropertiesProvider {
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
 
-  @Override
   public Collection<PropertiesEntity> read() {
     return null;
   }
 
 
-  @Override
   public Collection<PropertiesEntity> read(final String rootContext) {
     return read(rootContext, false);
   }
 
 
-  @Override
   public Collection<PropertiesEntity> read(final String rootContext, final boolean recursive) {
     final File root = new File(rootContext);
     final Collection<File> files = FileUtils.listFiles(root, FILE_PATTERNS, recursive);
@@ -34,6 +31,18 @@ public class DirectoryPropertiesProviderImpl implements PropertiesProvider {
       System.out.println(file);
     }
 
+    return null;
+  }
+
+
+  @Override
+  public PropertiesProvider init() {
+    return null;
+  }
+
+
+  @Override
+  public Object take() {
     return null;
   }
 }

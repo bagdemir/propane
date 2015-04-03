@@ -23,20 +23,32 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.connectors;
 
-import java.util.Optional;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Map;
+
+import org.junit.Test;
 
 /**
- * Configuration repository.
+ * Test for properties resource connector for classpath property files.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public class ClasspathPropertiesResourceConnectorTest {
+  public static final String TEST_PROPS = "props/test1.properties";
+
+  @Test
+  public void testRead() {
+    final ClasspathPropertiesResourceConnector connector =
+            new ClasspathPropertiesResourceConnector(TEST_PROPS);
+    final Map<String, Object> map = connector.read();
+    assertThat(map, notNullValue());
+    assertThat(map.size(), equalTo(2));
+  }
 }

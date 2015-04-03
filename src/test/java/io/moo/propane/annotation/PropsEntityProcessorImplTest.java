@@ -36,7 +36,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableList;
 
 import io.moo.propane.annotation.processor.AnnotationProcessor;
-import io.moo.propane.annotation.processor.PropsEntityAnnotationProcessorImpl;
+import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.data.PropertiesEntity;
 
 /**
@@ -68,7 +68,7 @@ public class PropsEntityProcessorImplTest {
     propInt.setPropertyValue(1);
 
     final Collection<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
-    final AnnotationProcessor processor = new PropsEntityAnnotationProcessorImpl();
+    final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
     final TestProps testProps = processor.createEntity(TestProps.class, props);
     assertThat(testProps, notNullValue());
     assertThat(testProps.getTimeout(), equalTo(100L));

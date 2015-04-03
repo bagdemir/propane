@@ -25,18 +25,39 @@
  */
 package io.moo.propane;
 
-import java.util.Optional;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
+import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
- * Configuration repository.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public class DefaultPropertyNameExtractorTest {
+
+  @Test
+  public void testExtractSingleSegmentPropertyName() {
+    final DefaultPropertyNameExtractor extractor = new DefaultPropertyNameExtractor();
+    assertThat(extractor.extract("propName"), equalTo("propName"));
+  }
+
+  @Test(expected = InvalidPropertyNameException.class)
+  public void testExtractWithBlankPropertyName() {
+    new DefaultPropertyNameExtractor().extract("");
+  }
+
+  @Test(expected = InvalidPropertyNameException.class)
+  public void testExtractWithNullPropertyName() {
+    new DefaultPropertyNameExtractor().extract(null);
+  }
+
+  @Test
+  public void testExtractMultiSegmentPropertyName() {
+    final DefaultPropertyNameExtractor extractor = new DefaultPropertyNameExtractor();
+    assertThat(extractor.extract("a/b/propName"), equalTo("propName"));
+  }
 }

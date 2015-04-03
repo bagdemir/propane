@@ -25,18 +25,29 @@
  */
 package io.moo.propane;
 
-import java.util.Optional;
+import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
- * Configuration repository.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public class DefaultPropertyNameExtractor implements TokenExtractor {
+
+  @Override
+  public String extract(final String propertyName) {
+    assertPropertyNameIsValid(propertyName);
+    if (propertyName.contains("/")) {
+      String[] split = propertyName.split("/");
+      return split[split.length -1];
+    }
+    return propertyName;
+  }
+
+
+  private void assertPropertyNameIsValid(final String propertyName) {
+    if (propertyName == null || "".equals(propertyName)) {
+      throw new InvalidPropertyNameException();
+    }
+  }
 }

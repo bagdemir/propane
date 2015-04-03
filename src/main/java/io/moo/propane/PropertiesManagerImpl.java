@@ -25,7 +25,17 @@
  */
 package io.moo.propane;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import io.moo.propane.annotation.PropsEntity;
+import io.moo.propane.annotation.processor.AnnotationProcessor;
+import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
+import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
  * @author bagdemir
@@ -33,9 +43,52 @@ import java.util.Optional;
  * @since 1.0
  */
 public class PropertiesManagerImpl implements PropertiesManager {
+  private static final Logger LOG = LogManager.getLogger();
+  private final Map<PropertiesProvider, Object> objectCache = new ConcurrentHashMap<>();
+  private final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+
+
+  @Override
+  public <T> boolean register(final Class<T> clazz) {
+    PropertiesProvider<T> propertiesProvider = new PropertiesProviderImpl<>(clazz);
+    if (objectCache.containsKey(propertiesProvider)) {
+      LOG.info("{} has already been registered.", clazz);
+      return false;
+    } else {
+      validatePropsEntity(clazz);
+      registerPropsProvider(propertiesProvider);
+    }
+    return true;
+  }
+
+
+  private void registerPropsProvider(final PropertiesProvider propertiesProvider) {
+    objectCache.put(propertiesProvider.init(), null);
+  }
+
+
+  @Override
+  public <T> boolean isRegistered(final Class<T> clazz) {
+    return objectCache.containsKey(clazz);
+  }
+
+
+  private <T> void validatePropsEntity(final Class<T> clazz) {
+    final PropsEntity propsEntityAnnotation = clazz.getAnnotation(PropsEntity.class);
+    if (propsEntityAnnotation == null) {
+      throw new InvalidPropsEntityException();
+    }
+  }
+
 
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
+    return null;
+  }
+
+
+  @Override
+  public <T> Optional<T> load(final String componentId) {
     return null;
   }
 }

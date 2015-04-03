@@ -23,20 +23,31 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.connectors;
 
-import java.util.Optional;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 /**
- * Configuration repository.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public abstract class PropertiesResourceConnector implements Callable<Map<String, Object>> {
+  protected final String source;
+  public PropertiesResourceConnector(final String source) {
+    this.source = source;
+  }
+
+  @Override
+  public Map<String, Object> call() throws Exception {
+    return read();
+  }
+
+  /**
+   * Reads properties from the resource.
+   *
+   * @return Properties.
+   */
+  public abstract Map<String, Object> read();
 }

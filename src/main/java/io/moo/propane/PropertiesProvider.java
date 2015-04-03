@@ -34,12 +34,7 @@ import io.moo.propane.data.PropertiesEntity;
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesProvider {
-  /**
-   *
-   * @return Collection of {@link PropertiesEntity}
-   */
-  Collection<PropertiesEntity> read();
-  Collection<PropertiesEntity> read(String rootContext);
-  Collection<PropertiesEntity> read(String rootContext, boolean recursive);
+public interface PropertiesProvider<T> {
+  PropertiesProvider init();
+  T take();
 }

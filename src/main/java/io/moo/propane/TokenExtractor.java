@@ -25,18 +25,11 @@
  */
 package io.moo.propane;
 
-import java.util.Optional;
-
 /**
- * Configuration repository.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
-  <T> boolean register(Class<T> clazz);
-  <T> boolean isRegistered(Class<T> clazz);
-  <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
+public interface TokenExtractor {
+  String extract(String propertyName);
 }
