@@ -35,6 +35,5 @@ import io.moo.propane.data.PropertiesEntity;
  * @since 1.0
  */
 public interface PropertiesProvider<T> {
-  PropertiesProvider init();
   T take();
 }

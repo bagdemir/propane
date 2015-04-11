@@ -28,6 +28,7 @@ package io.moo.propane.annotation.processor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -47,7 +48,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   @Override
-  public <T> T createEntity(final Class<T> clazz, final Collection<PropertiesEntity> entities) {
+  public <T> T createEntity(final Class<T> clazz, final List<PropertiesEntity> entities) {
     PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
     if (propsEntityAnnotation != null) {
       String componentId = propsEntityAnnotation.componentId();
@@ -60,35 +61,72 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void processFields(final Collection<PropertiesEntity> entities,
-    final String componentId,
-    final Field[] fields,
-    final T instance) {
+          final String componentId,
+          final Field[] fields,
+          final T instance) {
     Arrays.stream(fields).
-      filter(field -> null != field.getAnnotation(Prop.class)).
-      forEach(field -> entities.stream().
-              filter(entity -> entity.getComponentId().equals(componentId)).
-              forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
-                      entity, field, instance)));
+            filter(field -> null != field.getAnnotation(Prop.class)).
+            forEach(field -> entities.stream().
+                    filter(entity -> entity.getComponentId().equals(componentId)).
+                    forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
+                            entity, field, instance)));
   }
+
 
   private <T> void performEntityProcessing(final Prop annotation, final PropertiesEntity propertiesEntity,
           final Field field, T instance) {
     if (annotation.name().equals(propertiesEntity.getPropertyName())) {
       Object propertyValue = propertiesEntity.getPropertyValue();
-      if (field.getType().isPrimitive() ||
-          field.getType().isAssignableFrom(propertyValue.getClass())) {
-          performAssignment(instance, field, propertyValue);
+      if (isWrapper(field.getType()) || field.getType().isPrimitive()) {
+        performPrimitiveAssignment(instance, field, propertyValue);
+      } else if (field.getType().isAssignableFrom(propertyValue.getClass())) {
+        performAssignment(instance, field, propertyValue);
       }
     }
   }
 
+
+  private boolean isWrapper(final Class<?> type) {
+    return type.equals(Integer.class) || type.equals(Long.class) ||
+            type.equals(Double.class) ||
+            type.equals(Float.class) ||
+            type.equals(Short.class) ||
+            type.equals(Byte.class) ||
+            type.equals(Boolean.class) ||
+            type.equals(Character.class);
+  }
+
+
+  private <T> void performPrimitiveAssignment(final T instance,
+          final Field field,
+          final Object propertyValue) {
+    final Class<?> fieldType = field.getType();
+    if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
+      performAssignment(instance, field, Integer.valueOf((String) propertyValue));
+    } else if (fieldType.equals(long.class) || fieldType.equals(Long.class)) {
+      performAssignment(instance, field, Long.valueOf((String) propertyValue));
+    } else if (fieldType.equals(double.class) || fieldType.equals(Double.class)) {
+      performAssignment(instance, field, Double.valueOf((String) propertyValue));
+    } else if (fieldType.equals(float.class) || fieldType.equals(Float.class)) {
+      performAssignment(instance, field, Float.valueOf((String) propertyValue));
+    } else if (fieldType.equals(short.class) || fieldType.equals(Short.class)) {
+      performAssignment(instance, field, Short.valueOf((String) propertyValue));
+    } else if (fieldType.equals(byte.class) || fieldType.equals(Byte.class)) {
+      performAssignment(instance, field, Byte.valueOf((String) propertyValue));
+    } else if (fieldType.equals(char.class) || fieldType.equals(Character.class)) {
+      performAssignment(instance, field, Byte.valueOf((String) propertyValue));
+    } else if (fieldType.equals(boolean.class) || fieldType.equals(Boolean.class)) {
+      performAssignment(instance, field, Boolean.valueOf((String) propertyValue));
+    }
+  }
+
+
   private <T> void performAssignment(final T instance,
-    final Field field,
-    final Object propertyValue) {
+          final Field field,
+          final Object propertyValue) {
     try {
       field.setAccessible(true);
       field.set(instance, propertyValue);
-
     }
     catch (IllegalAccessException e) {
       LOG.error(e);

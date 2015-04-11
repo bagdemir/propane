@@ -34,13 +34,6 @@ public class DirectoryPropertiesProviderImpl implements PropertiesProvider {
     return null;
   }
 
-
-  @Override
-  public PropertiesProvider init() {
-    return null;
-  }
-
-
   @Override
   public Object take() {
     return null;

@@ -25,11 +25,16 @@
  */
 package io.moo.propane;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import io.moo.propane.annotation.PropsSource;
+import io.moo.propane.annotation.processor.AnnotationProcessor;
+import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.connectors.ClasspathPropertiesResourceConnector;
 import io.moo.propane.connectors.PropertiesResourceConnector;
+import io.moo.propane.data.PropertiesEntity;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
@@ -41,48 +46,39 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  */
 public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
   private static final String CLASSPATH_PREFIX = "classpath://";
+
   private final Class<T> propsClazz;
   private PropertiesResourceConnector connector;
   private TokenExtractor contextExtractor;
   private TokenExtractor componentIdExtractor;
 
+
   public PropertiesProviderImpl(final Class<T> propsClazz) {
     this.propsClazz = propsClazz;
+    this.componentIdExtractor = new DefaultComponentIdExtractor();
+    init();
   }
 
-  public PropertiesProvider init() {
+
+  private void init() {
     final PropsSource propsSource = propsClazz.getAnnotation(PropsSource.class);
     if (propsSource == null) {
       throw new InvalidPropsEntityException();
     }
     final String url = propsSource.url();
     if (url.startsWith(CLASSPATH_PREFIX)) {
-      connector = new ClasspathPropertiesResourceConnector(url);
+      connector = new ClasspathPropertiesResourceConnector(url.replace(CLASSPATH_PREFIX, ""));
     }
-    return this;
   }
 
 
   @Override
   public T take() {
-    final Map<String, Object> map = connector.read();
-    // map.forEach((key, value) -> key.split());
-
-    return null;
-  }
-
-
-  @Override
-  public boolean equals(final Object o) {
-    if (this == o) return true;
-    if (!(o instanceof PropertiesProviderImpl)) return false;
-    PropertiesProviderImpl that = (PropertiesProviderImpl) o;
-    return propsClazz.equals(that.propsClazz);
-  }
-
-
-  @Override
-  public int hashCode() {
-    return propsClazz.hashCode();
+    Map<String, Object> propsMap = connector.read();
+    List<PropertiesEntity> propsList = propsMap.entrySet().stream().map(entry ->
+      new PropertiesEntity(componentIdExtractor.extract(entry.getKey()),
+        null, entry.getKey().replace(componentIdExtractor.extract(entry.getKey()).concat("/"), ""), entry.getValue())).collect(Collectors.toList());
+    AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+    return processor.createEntity(propsClazz, propsList);
   }
 }

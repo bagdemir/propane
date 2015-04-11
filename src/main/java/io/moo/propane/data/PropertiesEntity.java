@@ -44,6 +44,17 @@ public class PropertiesEntity {
   private Object propertyValue;
 
 
+  public PropertiesEntity(final String componentId,
+    final String[] contextIds,
+    final String propertyName,
+    final Object propertyValue) {
+    this.componentId = componentId;
+    this.contextIds = contextIds;
+    this.propertyName = propertyName;
+    this.propertyValue = propertyValue;
+  }
+
+
   public String getComponentId() {
     return componentId;
   }

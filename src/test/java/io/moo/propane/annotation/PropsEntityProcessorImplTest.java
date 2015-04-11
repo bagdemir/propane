@@ -29,7 +29,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -45,31 +45,30 @@ import io.moo.propane.data.PropertiesEntity;
  * @since 1.0
  */
 public class PropsEntityProcessorImplTest {
+  public static final String COMPONENT_ID = "io.moo.test.component";
 
   @Test
   public void testCreate() {
 
-    final PropertiesEntity propStr = new PropertiesEntity();
-    propStr.setComponentId("io.moo.test.component");
-    propStr.setContextIds(new String[]{"test"});
-    propStr.setPropertyName("testProp");
-    propStr.setPropertyValue("abc");
+    final PropertiesEntity propStr = new PropertiesEntity(COMPONENT_ID,
+            new String[]{"test"},
+            "testProp",
+            "abc");
 
-    final PropertiesEntity propLong = new PropertiesEntity();
-    propLong.setComponentId("io.moo.test.component");
-    propLong.setContextIds(new String[]{"test"});
-    propLong.setPropertyName("longProp");
-    propLong.setPropertyValue(100L);
+    final PropertiesEntity propLong = new PropertiesEntity(COMPONENT_ID,
+            new String[]{"test"},
+            "longProp",
+            100L);
 
-    final PropertiesEntity propInt = new PropertiesEntity();
-    propInt.setComponentId("io.moo.test.component");
-    propInt.setContextIds(new String[]{"test"});
-    propInt.setPropertyName("intProp");
-    propInt.setPropertyValue(1);
+    final PropertiesEntity propInt = new PropertiesEntity(COMPONENT_ID,
+            new String[]{"test"},
+            "intProp",
+            1);
 
-    final Collection<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
-    final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-    final TestProps testProps = processor.createEntity(TestProps.class, props);
+    List<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
+    AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+    TestProps testProps = processor.createEntity(TestProps.class, props);
+
     assertThat(testProps, notNullValue());
     assertThat(testProps.getTimeout(), equalTo(100L));
     assertThat(testProps.getCount(), equalTo(1));

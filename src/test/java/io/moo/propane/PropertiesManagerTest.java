@@ -26,7 +26,10 @@
 package io.moo.propane;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Optional;
 
 import org.junit.Test;
 
@@ -43,22 +46,37 @@ import io.moo.propane.exception.InvalidPropsEntityException;
 public class PropertiesManagerTest {
 
   @Test(expected = InvalidPropsEntityException.class)
-  public void loadTestUsingInvalidPropsEntity() {
+  public void testIsRegisteredTestUsingInvalidPropsEntity() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
     propertiesManager.register(Object.class);
   }
 
+
   @Test
-  public void loadTestUsingValidPropsEntityButAlreadyRegistered() {
+  public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
     assertThat(propertiesManager.register(TestProps.class), equalTo(true));
     assertThat(propertiesManager.register(TestProps.class), equalTo(false));
   }
 
+
   @Test
-  public void loadTestUsingValidPropsEntity() {
+  public void testIsRegisteredTestUsingValidPropsEntity() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
     propertiesManager.register(TestProps.class);
     assertThat(propertiesManager.isRegistered(TestProps.class), equalTo(true));
+  }
+
+
+  @Test
+  public void testLoad() {
+    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
+    propertiesManager.register(TestProps.class);
+    final Optional<TestProps> props = propertiesManager.load(TestProps.class);
+    assertThat(props.isPresent(), equalTo(true));
+    final TestProps testProps = props.get();
+    assertThat(testProps.getUrl(), equalTo("http://localhost/"));
+    assertThat(testProps.getTimeout(), equalTo(1000L));
+    assertThat(testProps.getCount(), equalTo(99));
   }
 }

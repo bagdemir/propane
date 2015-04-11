@@ -31,7 +31,7 @@ package io.moo.propane.annotation;
  * @since 1.0
  */
 @PropsEntity(componentId = "io.moo.test.component")
-@PropsSource(url = "classpath://")
+@PropsSource(url = "classpath://props/test1.properties")
 public class TestProps {
   @Prop(name = "testProp")
   private String url;
