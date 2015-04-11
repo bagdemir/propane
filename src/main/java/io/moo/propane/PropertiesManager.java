@@ -38,5 +38,4 @@ public interface PropertiesManager {
   <T> boolean register(Class<T> clazz);
   <T> boolean isRegistered(Class<T> clazz);
   <T> Optional<T> load(Class<T> clazz);
-  <T> Optional<T> load(String componentId);
 }

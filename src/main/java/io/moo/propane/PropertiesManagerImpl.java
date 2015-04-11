@@ -33,8 +33,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.moo.propane.annotation.PropsEntity;
-import io.moo.propane.annotation.processor.AnnotationProcessor;
-import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
@@ -44,32 +42,31 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  */
 public class PropertiesManagerImpl implements PropertiesManager {
   private static final Logger LOG = LogManager.getLogger();
-  private final Map<PropertiesProvider, Object> objectCache = new ConcurrentHashMap<>();
-  private final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+  private final Map<Class<?>, PropertiesProvider> cache = new ConcurrentHashMap<>();
+//  private final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
 
 
   @Override
   public <T> boolean register(final Class<T> clazz) {
-    PropertiesProvider<T> propertiesProvider = new PropertiesProviderImpl<>(clazz);
-    if (objectCache.containsKey(propertiesProvider)) {
+    if (cache.containsKey(clazz)) {
       LOG.info("{} has already been registered.", clazz);
       return false;
     } else {
       validatePropsEntity(clazz);
-      registerPropsProvider(propertiesProvider);
+      registerPropsProvider(clazz);
     }
     return true;
   }
 
 
-  private void registerPropsProvider(final PropertiesProvider propertiesProvider) {
-    objectCache.put(propertiesProvider.init(), "");
+  private void registerPropsProvider(final Class<?> clazz) {
+    cache.put(clazz, new PropertiesProviderImpl<>(clazz));
   }
 
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
-    return objectCache.containsKey(new PropertiesProviderImpl<T>(clazz));
+    return cache.containsKey(clazz);
   }
 
 
@@ -83,12 +80,10 @@ public class PropertiesManagerImpl implements PropertiesManager {
 
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
-    return null;
-  }
-
-
-  @Override
-  public <T> Optional<T> load(final String componentId) {
-    return null;
+    if (isRegistered(clazz)) {
+      final PropertiesProvider provider = cache.get(clazz);
+      return Optional.ofNullable((T) provider.take());
+    }
+    return Optional.empty();
   }
 }
