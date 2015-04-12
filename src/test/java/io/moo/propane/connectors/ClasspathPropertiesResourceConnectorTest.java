@@ -47,8 +47,8 @@ public class ClasspathPropertiesResourceConnectorTest {
   public void testRead() {
     final ClasspathPropertiesResourceConnector connector =
             new ClasspathPropertiesResourceConnector(TEST_PROPS);
-    final Map<String, Object> map = connector.read();
+    final Map<String, String> map = connector.read();
     assertThat(map, notNullValue());
-    assertThat(map.size(), equalTo(2));
+    assertThat(map.size(), equalTo(3));
   }
 }

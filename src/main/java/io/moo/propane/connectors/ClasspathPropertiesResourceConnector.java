@@ -52,13 +52,13 @@ public class ClasspathPropertiesResourceConnector extends PropertiesResourceConn
 
 
   @Override
-  public Map<String, Object> read() {
-    Map<String, Object> propsMap = new HashMap<>();
+  public Map<String, String> read() {
+    Map<String, String> propsMap = new HashMap<>();
 
     try {
       Properties properties = new Properties();
       properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
-      properties.forEach((name,value) -> propsMap.put(name.toString(), value));
+      properties.forEach((name,value) -> propsMap.put(name.toString(), value.toString()));
     }
     catch (IOException e) {
       LOG.error(e);

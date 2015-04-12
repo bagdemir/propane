@@ -41,13 +41,13 @@ public class PropertiesEntity {
   private String componentId;
   private String[] contextIds;
   private String propertyName;
-  private Object propertyValue;
+  private String propertyValue;
 
 
   public PropertiesEntity(final String componentId,
     final String[] contextIds,
     final String propertyName,
-    final Object propertyValue) {
+    final String propertyValue) {
     this.componentId = componentId;
     this.contextIds = contextIds;
     this.propertyName = propertyName;
@@ -90,7 +90,7 @@ public class PropertiesEntity {
   }
 
 
-  public void setPropertyValue(final Object propertyValue) {
+  public void setPropertyValue(final String propertyValue) {
     this.propertyValue = propertyValue;
   }
 

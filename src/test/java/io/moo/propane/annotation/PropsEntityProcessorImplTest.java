@@ -58,12 +58,12 @@ public class PropsEntityProcessorImplTest {
     final PropertiesEntity propLong = new PropertiesEntity(COMPONENT_ID,
             new String[]{"test"},
             "longProp",
-            100L);
+            "100");
 
     final PropertiesEntity propInt = new PropertiesEntity(COMPONENT_ID,
             new String[]{"test"},
             "intProp",
-            1);
+            "1");
 
     List<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();

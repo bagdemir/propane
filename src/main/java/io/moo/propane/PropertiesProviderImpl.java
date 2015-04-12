@@ -74,7 +74,7 @@ public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
 
   @Override
   public T take() {
-    Map<String, Object> propsMap = connector.read();
+    Map<String, String> propsMap = connector.read();
     List<PropertiesEntity> propsList = propsMap.entrySet().stream().map(entry ->
       new PropertiesEntity(componentIdExtractor.extract(entry.getKey()),
         null, entry.getKey().replace(componentIdExtractor.extract(entry.getKey()).concat("/"), ""), entry.getValue())).collect(Collectors.toList());

@@ -33,14 +33,14 @@ import java.util.concurrent.Callable;
  * @version 1.0
  * @since 1.0
  */
-public abstract class PropertiesResourceConnector implements Callable<Map<String, Object>> {
+public abstract class PropertiesResourceConnector implements Callable<Map<String, String>> {
   protected final String source;
   public PropertiesResourceConnector(final String source) {
     this.source = source;
   }
 
   @Override
-  public Map<String, Object> call() throws Exception {
+  public Map<String, String> call() throws Exception {
     return read();
   }
 
@@ -49,5 +49,5 @@ public abstract class PropertiesResourceConnector implements Callable<Map<String
    *
    * @return Properties.
    */
-  public abstract Map<String, Object> read();
+  public abstract Map<String, String> read();
 }
