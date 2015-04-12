@@ -25,6 +25,12 @@
  */
 package io.moo.propane;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import org.junit.Test;
+
 import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
@@ -32,22 +38,30 @@ import io.moo.propane.exception.InvalidPropertyNameException;
  * @version 1.0
  * @since 1.0
  */
-public class DefaultContextExtractor implements TokenExtractor {
-  @Override
-  public String extract(final String propertyName) {
-    assertPropertyNameIsValid(propertyName);
-    if (propertyName.contains("/")) {
-      String[] split = propertyName.split("/");
-      if (split.length > 2) {
-        return split[split.length - 3];
-      }
-    }
-    return null;
+public class DefaultContextExtractorTest {
+
+  @Test
+  public void testExtractContext() {
+    final DefaultContextExtractor extractor = new DefaultContextExtractor();
+    final String extract = extractor.extract("us.dev.a/io.moo/propName");
+    assertThat(extract, notNullValue());
+    assertThat(extract, equalTo("us.dev.a"));
+
   }
 
-  private void assertPropertyNameIsValid(final String propertyName) {
-    if (propertyName == null || "".equals(propertyName)) {
-      throw new InvalidPropertyNameException();
-    }
+  @Test(expected = InvalidPropertyNameException.class)
+  public void testExtractWithBlankPropertyName() {
+    new DefaultContextExtractor().extract("");
+  }
+
+  @Test(expected = InvalidPropertyNameException.class)
+  public void testExtractWithNullPropertyName() {
+    new DefaultContextExtractor().extract(null);
+  }
+
+  @Test
+  public void testExtractMultiSegmentPropertyNameWithoutContext() {
+    final DefaultContextExtractor extractor = new DefaultContextExtractor();
+    assertThat(extractor.extract("b/propName"), equalTo(null));
   }
 }
