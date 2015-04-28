@@ -25,29 +25,47 @@
  */
 package io.moo.propane.connectors;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Callable;
+import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
+ * {@link PropertiesFileConfigurationSource} uses the properties file as
+ * input source.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public abstract class PropertiesResourceConnector implements Callable<Map<String, String>> {
-  protected final String source;
-  public PropertiesResourceConnector(final String source) {
-    this.source = source;
+public class PropertiesFileConfigurationSource extends ConfigurationSource {
+  private static final Logger LOG = LogManager.getLogger();
+
+
+  public PropertiesFileConfigurationSource(final String source) {
+    super(source);
   }
+
 
   @Override
-  public Map<String, String> call() throws Exception {
-    return read();
-  }
+  public Map<String, String> read() {
+    Map<String, String> propsMap = new HashMap<>();
 
-  /**
-   * Reads properties from the resource.
-   *
-   * @return Properties.
-   */
-  public abstract Map<String, String> read();
+    try {
+      Properties properties = new Properties();
+      properties.load(new FileReader(new File(source)));
+      properties.forEach((name, value) -> propsMap.put(name.toString(), value.toString()));
+    }
+    catch (IOException e) {
+      LOG.error(e);
+    }
+
+    return propsMap;
+  }
 }

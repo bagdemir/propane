@@ -29,26 +29,62 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 /**
- * Test for properties resource connector for classpath property files.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "props/test1.properties";
+public class PropertiesFileConfigurationSourceTest {
+  private File file;
+
+  @Rule
+  public TemporaryFolder folder = new TemporaryFolder();
+
+
+  @Before
+  public void setUp() throws IOException {
+    file = folder.newFile("test1.properties");
+
+    Map<String, Object> testProps = new HashMap<>(3);
+
+    testProps.put("io.moo.test.component/longProp", "1000");
+    testProps.put("io.moo.test.component/testProp", "http://localhost/");
+    testProps.put("io.moo.test.component/intProp", "99");
+
+    Properties properties = new Properties();
+    properties.putAll(testProps);
+    properties.store(new FileWriter(file), "Test properties");
+
+  }
+
 
   @Test
-  public void testRead() {
-    final ClasspathConfigurationSource connector =
-            new ClasspathConfigurationSource(TEST_PROPS);
-    final Map<String, String> map = connector.read();
-    assertThat(map, notNullValue());
-    assertThat(map.size(), equalTo(3));
+  public void testRead() throws IOException {
+    final PropertiesFileConfigurationSource connector =
+            new PropertiesFileConfigurationSource(file.getAbsolutePath());
+
+    Map<String, String> propsMap = connector.read();
+    assertThat(propsMap, notNullValue());
+    assertThat(propsMap.size(), equalTo(3));
+  }
+
+
+  @After
+  public void tearDown() {
+    if (!file.delete())
+      throw new RuntimeException("File could not be deleted.");
   }
 }

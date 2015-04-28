@@ -32,8 +32,9 @@ import java.util.stream.Collectors;
 import io.moo.propane.annotation.PropsSource;
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
-import io.moo.propane.connectors.ClasspathPropertiesResourceConnector;
-import io.moo.propane.connectors.PropertiesResourceConnector;
+import io.moo.propane.connectors.ClasspathConfigurationSource;
+import io.moo.propane.connectors.ConfigurationSource;
+import io.moo.propane.connectors.PropertiesFileConfigurationSource;
 import io.moo.propane.data.PropertiesEntity;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
@@ -46,9 +47,10 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  */
 public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
   private static final String CLASSPATH_PREFIX = "classpath://";
+  public static final String FILE_PREFIX = "file://";
 
   private final Class<T> propsClazz;
-  private PropertiesResourceConnector connector;
+  private ConfigurationSource connector;
   private TokenExtractor contextExtractor;
   private TokenExtractor componentIdExtractor;
 
@@ -62,22 +64,27 @@ public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
 
   private void init() {
     final PropsSource propsSource = propsClazz.getAnnotation(PropsSource.class);
-    if (propsSource == null) {
-      throw new InvalidPropsEntityException();
-    }
-    final String url = propsSource.url();
-    if (url.startsWith(CLASSPATH_PREFIX)) {
-      connector = new ClasspathPropertiesResourceConnector(url.replace(CLASSPATH_PREFIX, ""));
+
+    if (propsSource == null) throw new InvalidPropsEntityException();
+
+    String url = propsSource.url();
+    if (isClasspathResource(url)) {
+      connector = new ClasspathConfigurationSource(url.replace(CLASSPATH_PREFIX, ""));
+    } else {
+      connector = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, ""));
     }
   }
+
+
+  private boolean isClasspathResource(final String url) {return url.startsWith(CLASSPATH_PREFIX);}
 
 
   @Override
   public T take() {
     Map<String, String> propsMap = connector.read();
     List<PropertiesEntity> propsList = propsMap.entrySet().stream().map(entry ->
-      new PropertiesEntity(componentIdExtractor.extract(entry.getKey()),
-        null, entry.getKey().replace(componentIdExtractor.extract(entry.getKey()).concat("/"), ""), entry.getValue())).collect(Collectors.toList());
+            new PropertiesEntity(componentIdExtractor.extract(entry.getKey()),
+                    null, entry.getKey().replace(componentIdExtractor.extract(entry.getKey()).concat("/"), ""), entry.getValue())).collect(Collectors.toList());
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
     return processor.createEntity(propsClazz, propsList);
   }

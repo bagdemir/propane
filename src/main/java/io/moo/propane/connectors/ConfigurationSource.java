@@ -25,30 +25,29 @@
  */
 package io.moo.propane.connectors;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import java.util.Map;
-
-import org.junit.Test;
+import java.util.concurrent.Callable;
 
 /**
- * Test for properties resource connector for classpath property files.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "props/test1.properties";
-
-  @Test
-  public void testRead() {
-    final ClasspathConfigurationSource connector =
-            new ClasspathConfigurationSource(TEST_PROPS);
-    final Map<String, String> map = connector.read();
-    assertThat(map, notNullValue());
-    assertThat(map.size(), equalTo(3));
+public abstract class ConfigurationSource implements Callable<Map<String, String>> {
+  protected final String source;
+  public ConfigurationSource(final String source) {
+    this.source = source;
   }
+
+  @Override
+  public Map<String, String> call() throws Exception {
+    return read();
+  }
+
+  /**
+   * Reads properties from the resource.
+   *
+   * @return Properties.
+   */
+  public abstract Map<String, String> read();
 }

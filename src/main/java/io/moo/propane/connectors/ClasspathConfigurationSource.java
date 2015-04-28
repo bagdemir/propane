@@ -27,10 +27,8 @@ package io.moo.propane.connectors;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
@@ -38,15 +36,18 @@ import org.apache.logging.log4j.Logger;
 
 
 /**
+ * {@link ClasspathConfigurationSource} uses classpath resources as
+ * sources.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathPropertiesResourceConnector extends PropertiesResourceConnector {
+public class ClasspathConfigurationSource extends ConfigurationSource {
   private static final Logger LOG = LogManager.getLogger();
 
 
-  public ClasspathPropertiesResourceConnector(final String source) {
+  public ClasspathConfigurationSource(final String source) {
     super(source);
   }
 
