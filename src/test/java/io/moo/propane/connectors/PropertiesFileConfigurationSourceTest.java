@@ -48,6 +48,7 @@ import org.junit.rules.TemporaryFolder;
  * @since 1.0
  */
 public class PropertiesFileConfigurationSourceTest {
+  public static final int EXPECTED_NUM_OF_CONFIGS = 3;
   private File file;
 
   @Rule
@@ -73,12 +74,12 @@ public class PropertiesFileConfigurationSourceTest {
 
   @Test
   public void testRead() throws IOException {
-    final PropertiesFileConfigurationSource connector =
+    final PropertiesFileConfigurationSource source =
             new PropertiesFileConfigurationSource(file.getAbsolutePath());
 
-    Map<String, String> propsMap = connector.read();
+    Map<String, String> propsMap = source.read();
     assertThat(propsMap, notNullValue());
-    assertThat(propsMap.size(), equalTo(3));
+    assertThat(propsMap.size(), equalTo(EXPECTED_NUM_OF_CONFIGS));
   }
 
 
