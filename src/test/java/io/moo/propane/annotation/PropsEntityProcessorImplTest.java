@@ -45,7 +45,7 @@ import io.moo.propane.data.PropertiesEntity;
  * @since 1.0
  */
 public class PropsEntityProcessorImplTest {
-  public static final String COMPONENT_ID = "io.moo.test.component";
+  public static final String COMPONENT_ID = "testConfig";
 
   @Test
   public void testCreate() {
@@ -67,11 +67,11 @@ public class PropsEntityProcessorImplTest {
 
     List<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-    TestProps testProps = processor.createEntity(TestProps.class, props);
+    TestPropsWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestPropsWithClasspathSource.class, props);
 
-    assertThat(testProps, notNullValue());
-    assertThat(testProps.getTimeout(), equalTo(100L));
-    assertThat(testProps.getCount(), equalTo(1));
-    assertThat(testProps.getUrl(), equalTo("abc"));
+    assertThat(testPropsWithClasspathSource, notNullValue());
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(100L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(1));
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("abc"));
   }
 }

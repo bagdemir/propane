@@ -33,6 +33,7 @@ import io.moo.propane.annotation.PropsSource;
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.connectors.ClasspathConfigurationSource;
+import io.moo.propane.connectors.ConfigData;
 import io.moo.propane.connectors.ConfigurationSource;
 import io.moo.propane.connectors.PropertiesFileConfigurationSource;
 import io.moo.propane.data.PropertiesEntity;
@@ -45,7 +46,7 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
+public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProvider<T> {
   private static final String CLASSPATH_PREFIX = "classpath://";
   public static final String FILE_PREFIX = "file://";
 
@@ -55,9 +56,10 @@ public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
   private TokenExtractor componentIdExtractor;
 
 
-  public PropertiesProviderImpl(final Class<T> propsClazz) {
+  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz) {
     this.propsClazz = propsClazz;
     this.componentIdExtractor = new DefaultComponentIdExtractor();
+
     init();
   }
 
@@ -81,10 +83,11 @@ public class PropertiesProviderImpl<T> implements PropertiesProvider<T> {
 
   @Override
   public T take() {
-    Map<String, String> propsMap = connector.read();
+    final ConfigData configData = connector.read();
+    Map<String, String> propsMap = connector.read().getPropsMap();
     List<PropertiesEntity> propsList = propsMap.entrySet().stream().map(entry ->
-            new PropertiesEntity(componentIdExtractor.extract(entry.getKey()),
-                    null, entry.getKey().replace(componentIdExtractor.extract(entry.getKey()).concat("/"), ""), entry.getValue())).collect(Collectors.toList());
+            new PropertiesEntity(componentIdExtractor.extract(configData.getSource()),
+                    null, entry.getKey(), entry.getValue())).collect(Collectors.toList());
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
     return processor.createEntity(propsClazz, propsList);
   }

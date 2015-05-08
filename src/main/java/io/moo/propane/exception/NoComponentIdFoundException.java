@@ -23,17 +23,15 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
-
-import java.util.Collection;
-
-import io.moo.propane.data.PropertiesEntity;
+package io.moo.propane.exception;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesProvider<T> {
-  T take();
+public class NoComponentIdFoundException extends RuntimeException {
+  public NoComponentIdFoundException(final String source) {
+    super("Component id could not be extracted for token:" + source);
+  }
 }

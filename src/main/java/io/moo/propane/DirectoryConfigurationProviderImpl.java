@@ -10,7 +10,7 @@ import io.moo.propane.data.PropertiesEntity;
 /**
  * Created by bagdemir on 14/03/15.
  */
-public class DirectoryPropertiesProviderImpl implements PropertiesProvider {
+public class DirectoryConfigurationProviderImpl implements ConfigurationProvider {
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
 

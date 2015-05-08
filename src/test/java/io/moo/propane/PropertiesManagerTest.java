@@ -26,14 +26,13 @@
 package io.moo.propane;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.Optional;
 
 import org.junit.Test;
 
-import io.moo.propane.annotation.TestProps;
+import io.moo.propane.annotation.TestPropsWithClasspathSource;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
@@ -55,28 +54,30 @@ public class PropertiesManagerTest {
   @Test
   public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    assertThat(propertiesManager.register(TestProps.class), equalTo(true));
-    assertThat(propertiesManager.register(TestProps.class), equalTo(false));
+    assertThat(propertiesManager.register(TestPropsWithClasspathSource.class), equalTo(true));
+    assertThat(propertiesManager.register(TestPropsWithClasspathSource.class), equalTo(false));
   }
 
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntity() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    propertiesManager.register(TestProps.class);
-    assertThat(propertiesManager.isRegistered(TestProps.class), equalTo(true));
+    propertiesManager.register(TestPropsWithClasspathSource.class);
+    assertThat(propertiesManager.isRegistered(TestPropsWithClasspathSource.class), equalTo(true));
   }
 
 
   @Test
   public void testLoad() {
     final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    propertiesManager.register(TestProps.class);
-    final Optional<TestProps> props = propertiesManager.load(TestProps.class);
+    propertiesManager.register(TestPropsWithClasspathSource.class);
+
+    final Optional<TestPropsWithClasspathSource> props = propertiesManager.load(TestPropsWithClasspathSource.class);
     assertThat(props.isPresent(), equalTo(true));
-    final TestProps testProps = props.get();
-    assertThat(testProps.getUrl(), equalTo("http://localhost/"));
-    assertThat(testProps.getTimeout(), equalTo(1000L));
-    assertThat(testProps.getCount(), equalTo(99));
+
+    final TestPropsWithClasspathSource testPropsWithClasspathSource = props.get();
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
   }
 }

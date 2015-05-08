@@ -57,7 +57,7 @@ public class PropertiesFileConfigurationSourceTest {
 
   @Before
   public void setUp() throws IOException {
-    file = folder.newFile("test1.properties");
+    file = folder.newFile("testConfig.properties");
 
     Map<String, Object> testProps = new HashMap<>(3);
 
@@ -77,7 +77,8 @@ public class PropertiesFileConfigurationSourceTest {
     final PropertiesFileConfigurationSource source =
             new PropertiesFileConfigurationSource(file.getAbsolutePath());
 
-    Map<String, String> propsMap = source.read();
+    final ConfigData configData = source.read();
+    Map<String, String> propsMap = configData.getPropsMap();
     assertThat(propsMap, notNullValue());
     assertThat(propsMap.size(), equalTo(EXPECTED_NUM_OF_CONFIGS));
   }

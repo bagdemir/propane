@@ -33,14 +33,14 @@ import java.util.concurrent.Callable;
  * @version 1.0
  * @since 1.0
  */
-public abstract class ConfigurationSource implements Callable<Map<String, String>> {
+public abstract class ConfigurationSource implements Callable<ConfigData> {
   protected final String source;
   public ConfigurationSource(final String source) {
     this.source = source;
   }
 
   @Override
-  public Map<String, String> call() throws Exception {
+  public ConfigData call() throws Exception {
     return read();
   }
 
@@ -49,5 +49,10 @@ public abstract class ConfigurationSource implements Callable<Map<String, String
    *
    * @return Properties.
    */
-  public abstract Map<String, String> read();
+  public abstract ConfigData read();
+
+
+  public String getSource() {
+    return source;
+  }
 }

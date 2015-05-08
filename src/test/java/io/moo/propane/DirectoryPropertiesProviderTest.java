@@ -46,7 +46,7 @@ import io.moo.propane.utils.PropsUtils;
  */
 public class DirectoryPropertiesProviderTest {
 
-  private static final String CFG_FILE_1 = "test1.properties";
+  private static final String CFG_FILE_1 = "testConfig.properties";
   private static final String CFG_FILE_2 = "test2.cfg";
   private static final String NON_CFG_FILE_3 = "test3.txt";
   private static final Logger LOG = LogManager.getLogger();
@@ -77,7 +77,7 @@ public class DirectoryPropertiesProviderTest {
 
   @Test
   public void testRead() {
-    final DirectoryPropertiesProviderImpl directoryPropertiesProvider = new DirectoryPropertiesProviderImpl();
+    final DirectoryConfigurationProviderImpl directoryPropertiesProvider = new DirectoryConfigurationProviderImpl();
     final Collection<PropertiesEntity> read = directoryPropertiesProvider.read(configDir.getAbsolutePath());
   }
 

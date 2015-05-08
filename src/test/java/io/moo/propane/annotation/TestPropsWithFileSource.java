@@ -23,50 +23,42 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.connectors;
-
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
+package io.moo.propane.annotation;
 
 /**
- * {@link ClasspathConfigurationSource} uses classpath resources as
- * sources.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathConfigurationSource extends ConfigurationSource {
-  private static final Logger LOG = LogManager.getLogger();
+@PropsEntity(componentId = "io.moo.test.component")
+@PropsSource(url = "classpath://props/testConfig.properties")
+public class TestPropsWithFileSource {
+  @Prop(name = "testProp")
+  private String url;
+  @Prop(name = "longProp")
+  private Long timeout;
+  @Prop(name = "intProp")
+  private int count;
+
+  private String nonPropField;
 
 
-  public ClasspathConfigurationSource(final String source) {
-    super(source);
+  public String getUrl() {
+    return url;
   }
 
 
-  @Override
-  public ConfigData read() {
-    ConfigData configData = new ConfigData();
-    Map<String, String> propsMap = configData.getPropsMap();
+  public Long getTimeout() {
+    return timeout;
+  }
 
-    try {
-      Properties properties = new Properties();
-      properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
-      properties.forEach((name,value) -> propsMap.put(name.toString(), value.toString()));
-    }
-    catch (IOException e) {
-      LOG.error(e);
-    }
 
-    configData.setSource(super.getSource());
-    return configData;
+  public int getCount() {
+    return count;
+  }
+
+
+  public String getNonPropField() {
+    return nonPropField;
   }
 }

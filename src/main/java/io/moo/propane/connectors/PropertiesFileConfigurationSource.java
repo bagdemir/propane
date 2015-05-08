@@ -28,8 +28,6 @@ package io.moo.propane.connectors;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -54,8 +52,9 @@ public class PropertiesFileConfigurationSource extends ConfigurationSource {
 
 
   @Override
-  public Map<String, String> read() {
-    Map<String, String> propsMap = new HashMap<>();
+  public ConfigData read() {
+    final ConfigData configData = new ConfigData();
+    final Map<String, String> propsMap = configData.getPropsMap();
 
     try {
       Properties properties = new Properties();
@@ -66,6 +65,7 @@ public class PropertiesFileConfigurationSource extends ConfigurationSource {
       LOG.error(e);
     }
 
-    return propsMap;
+    configData.setSource(super.getSource());
+    return configData;
   }
 }

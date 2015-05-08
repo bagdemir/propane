@@ -41,14 +41,15 @@ import org.junit.Test;
  * @since 1.0
  */
 public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "props/test1.properties";
+  public static final String TEST_PROPS = "props/testConfig.properties";
 
   @Test
   public void testRead() {
     final ClasspathConfigurationSource connector =
             new ClasspathConfigurationSource(TEST_PROPS);
-    final Map<String, String> map = connector.read();
-    assertThat(map, notNullValue());
-    assertThat(map.size(), equalTo(3));
+    final ConfigData configData = connector.read();
+    final Map<String, String> propsMap = configData.getPropsMap();
+    assertThat(propsMap, notNullValue());
+    assertThat(propsMap.size(), equalTo(3));
   }
 }

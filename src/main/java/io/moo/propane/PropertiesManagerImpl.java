@@ -42,7 +42,7 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  */
 public class PropertiesManagerImpl implements PropertiesManager {
   private static final Logger LOG = LogManager.getLogger();
-  private final Map<Class<?>, PropertiesProvider> cache = new ConcurrentHashMap<>();
+  private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 //  private final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
 
 
@@ -60,7 +60,7 @@ public class PropertiesManagerImpl implements PropertiesManager {
 
 
   private void registerPropsProvider(final Class<?> clazz) {
-    cache.put(clazz, new PropertiesProviderImpl<>(clazz));
+    cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz));
   }
 
 
@@ -81,7 +81,7 @@ public class PropertiesManagerImpl implements PropertiesManager {
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
     if (isRegistered(clazz)) {
-      final PropertiesProvider provider = cache.get(clazz);
+      final ConfigurationProvider provider = cache.get(clazz);
       return Optional.ofNullable((T) provider.take());
     }
     return Optional.empty();

@@ -23,42 +23,47 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.annotation;
+package io.moo.propane.connectors;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-@PropsEntity(componentId = "io.moo.test.component")
-@PropsSource(url = "classpath://props/test1.properties")
-public class TestProps {
-  @Prop(name = "testProp")
-  private String url;
-  @Prop(name = "longProp")
-  private Long timeout;
-  @Prop(name = "intProp")
-  private int count;
+public class ConfigData {
 
-  private String nonPropField;
+  private Map<String, String> propsMap = new HashMap<>();
+  private String source;
 
 
-  public String getUrl() {
-    return url;
+  public Map<String, String> getPropsMap() {
+    return propsMap;
   }
 
 
-  public Long getTimeout() {
-    return timeout;
+  public void setPropsMap(final Map<String, String> propsMap) {
+    this.propsMap = propsMap;
   }
 
 
-  public int getCount() {
-    return count;
+  public String getSource() {
+    return source;
   }
 
 
-  public String getNonPropField() {
-    return nonPropField;
+  public void setSource(final String source) {
+    this.source = source;
+  }
+
+
+  @Override
+  public String toString() {
+    return "ConfigData{" +
+            "propsMap=" + propsMap +
+            ", source='" + source + '\'' +
+            '}';
   }
 }
