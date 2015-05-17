@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.extractors;
 
 /**
  * @author bagdemir
@@ -31,5 +31,5 @@ package io.moo.propane;
  * @since 1.0
  */
 public interface TokenExtractor {
-  String extract(String propertyName);
+  String extract(String sourceString);
 }

@@ -23,31 +23,31 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.extractors;
 
-import io.moo.propane.exception.NoComponentIdFoundException;
+import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class DefaultComponentIdExtractor implements TokenExtractor {
+public class DefaultPropertyNameExtractor implements TokenExtractor {
 
   @Override
-  public String extract(final String source) {
-    assertPropertyNameIsValid(source);
-    int slLastIndex = source.lastIndexOf("/");
-    int ptLastIndex = source.lastIndexOf(".");
-    if (slLastIndex < ptLastIndex) {
-      return source.substring(slLastIndex + 1, ptLastIndex);
-    } else if (slLastIndex > -1) {
-      return source.substring(slLastIndex + 1);
-    } else throw new NoComponentIdFoundException(source);
+  public String extract(final String sourceString) {
+    assertPropertyNameIsValid(sourceString);
+    if (sourceString.contains("/")) {
+      String[] split = sourceString.split("/");
+      return split[split.length -1];
+    }
+    return sourceString;
   }
 
 
-  private void assertPropertyNameIsValid(final String source) {
-    if (source == null) throw new NoComponentIdFoundException(source);
+  private void assertPropertyNameIsValid(final String propertyName) {
+    if (propertyName == null || "".equals(propertyName)) {
+      throw new InvalidPropertyNameException();
+    }
   }
 }

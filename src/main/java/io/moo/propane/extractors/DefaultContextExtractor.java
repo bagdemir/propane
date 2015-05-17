@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.extractors;
 
 import io.moo.propane.exception.InvalidPropertyNameException;
 
@@ -34,10 +34,10 @@ import io.moo.propane.exception.InvalidPropertyNameException;
  */
 public class DefaultContextExtractor implements TokenExtractor {
   @Override
-  public String extract(final String propertyName) {
-    assertPropertyNameIsValid(propertyName);
-    if (propertyName.contains("/")) {
-      String[] split = propertyName.split("/");
+  public String extract(final String sourceString) {
+    assertPropertyNameIsValid(sourceString);
+    if (sourceString.contains("/")) {
+      String[] split = sourceString.split("/");
       if (split.length > 2) {
         return split[split.length - 3];
       }
