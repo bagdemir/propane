@@ -38,6 +38,8 @@ import io.moo.propane.connectors.ConfigurationSource;
 import io.moo.propane.connectors.PropertiesFileConfigurationSource;
 import io.moo.propane.data.PropertiesEntity;
 import io.moo.propane.exception.InvalidPropsEntityException;
+import io.moo.propane.extractors.DefaultComponentIdExtractor;
+import io.moo.propane.extractors.TokenExtractor;
 
 /**
  * Properties provider.
@@ -49,6 +51,7 @@ import io.moo.propane.exception.InvalidPropsEntityException;
 public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProvider<T> {
   private static final String CLASSPATH_PREFIX = "classpath://";
   public static final String FILE_PREFIX = "file://";
+  public static final String BLANK_STR = "";
 
   private final Class<T> propsClazz;
   private ConfigurationSource connector;
@@ -71,9 +74,11 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
 
     String url = propsSource.url();
     if (isClasspathResource(url)) {
-      connector = new ClasspathConfigurationSource(url.replace(CLASSPATH_PREFIX, ""));
+      final String replace = url.replace(CLASSPATH_PREFIX, BLANK_STR);
+      connector = new ClasspathConfigurationSource(replace);
     } else {
-      connector = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, ""));
+      final String replace = url.replace(FILE_PREFIX, BLANK_STR);
+      connector = new PropertiesFileConfigurationSource(replace);
     }
   }
 
