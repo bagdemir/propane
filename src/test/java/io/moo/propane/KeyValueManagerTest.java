@@ -42,37 +42,37 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesManagerTest {
+public class KeyValueManagerTest {
 
   @Test(expected = InvalidPropsEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
-    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    propertiesManager.register(Object.class);
+    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    configurationManager.register(Object.class);
   }
 
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
-    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    assertThat(propertiesManager.register(TestPropsWithClasspathSource.class), equalTo(true));
-    assertThat(propertiesManager.register(TestPropsWithClasspathSource.class), equalTo(false));
+    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    assertThat(configurationManager.register(TestPropsWithClasspathSource.class), equalTo(true));
+    assertThat(configurationManager.register(TestPropsWithClasspathSource.class), equalTo(false));
   }
 
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntity() {
-    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    propertiesManager.register(TestPropsWithClasspathSource.class);
-    assertThat(propertiesManager.isRegistered(TestPropsWithClasspathSource.class), equalTo(true));
+    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    configurationManager.register(TestPropsWithClasspathSource.class);
+    assertThat(configurationManager.isRegistered(TestPropsWithClasspathSource.class), equalTo(true));
   }
 
 
   @Test
   public void testLoad() {
-    final PropertiesManager propertiesManager = new PropertiesManagerImpl();
-    propertiesManager.register(TestPropsWithClasspathSource.class);
+    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    configurationManager.register(TestPropsWithClasspathSource.class);
 
-    final Optional<TestPropsWithClasspathSource> props = propertiesManager.load(TestPropsWithClasspathSource.class);
+    final Optional<TestPropsWithClasspathSource> props = configurationManager.load(TestPropsWithClasspathSource.class);
     assertThat(props.isPresent(), equalTo(true));
 
     final TestPropsWithClasspathSource testPropsWithClasspathSource = props.get();

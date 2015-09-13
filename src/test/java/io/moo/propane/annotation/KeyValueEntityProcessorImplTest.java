@@ -31,41 +31,41 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.List;
 
+import io.moo.propane.data.ConfigurationEntity;
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
-import io.moo.propane.data.PropertiesEntity;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class PropsEntityProcessorImplTest {
+public class KeyValueEntityProcessorImplTest {
   public static final String COMPONENT_ID = "testConfig";
 
   @Test
   public void testCreate() {
 
-    final PropertiesEntity propStr = new PropertiesEntity(COMPONENT_ID,
+    final ConfigurationEntity propStr = new ConfigurationEntity(COMPONENT_ID,
             new String[]{"test"},
             "testProp",
             "abc");
 
-    final PropertiesEntity propLong = new PropertiesEntity(COMPONENT_ID,
+    final ConfigurationEntity propLong = new ConfigurationEntity(COMPONENT_ID,
             new String[]{"test"},
             "longProp",
             "100");
 
-    final PropertiesEntity propInt = new PropertiesEntity(COMPONENT_ID,
+    final ConfigurationEntity propInt = new ConfigurationEntity(COMPONENT_ID,
             new String[]{"test"},
             "intProp",
             "1");
 
-    List<PropertiesEntity> props = ImmutableList.of(propStr, propLong, propInt);
+    List<ConfigurationEntity> props = ImmutableList.of(propStr, propLong, propInt);
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
     TestPropsWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestPropsWithClasspathSource.class, props);
 

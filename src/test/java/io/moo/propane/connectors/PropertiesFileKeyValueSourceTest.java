@@ -47,7 +47,7 @@ import org.junit.rules.TemporaryFolder;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesFileConfigurationSourceTest {
+public class PropertiesFileKeyValueSourceTest {
   public static final int EXPECTED_NUM_OF_CONFIGS = 3;
   private File file;
 

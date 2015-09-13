@@ -28,6 +28,7 @@ package io.moo.propane;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import io.moo.propane.extractors.DefaultPropertyNameExtractor;
 import org.junit.Test;
 
 import io.moo.propane.exception.InvalidPropertyNameException;

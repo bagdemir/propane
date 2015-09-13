@@ -36,7 +36,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import io.moo.propane.data.PropertiesEntity;
+import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.utils.PropsUtils;
 
 /**
@@ -78,7 +78,7 @@ public class DirectoryPropertiesProviderTest {
   @Test
   public void testRead() {
     final DirectoryConfigurationProviderImpl directoryPropertiesProvider = new DirectoryConfigurationProviderImpl();
-    final Collection<PropertiesEntity> read = directoryPropertiesProvider.read(configDir.getAbsolutePath());
+    final Collection<ConfigurationEntity> read = directoryPropertiesProvider.read(configDir.getAbsolutePath());
   }
 
 

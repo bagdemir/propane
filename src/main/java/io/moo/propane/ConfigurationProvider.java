@@ -25,10 +25,6 @@
  */
 package io.moo.propane;
 
-import java.util.Collection;
-
-import io.moo.propane.data.PropertiesEntity;
-
 /**
  * @author bagdemir
  * @version 1.0

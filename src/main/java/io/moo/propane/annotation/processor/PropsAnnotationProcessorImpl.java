@@ -30,12 +30,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import io.moo.propane.annotation.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.moo.propane.annotation.Prop;
-import io.moo.propane.annotation.PropsEntity;
-import io.moo.propane.data.PropertiesEntity;
+import io.moo.propane.annotation.KeyValue;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
@@ -48,10 +47,10 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   @Override
-  public <T> T createEntity(final Class<T> clazz, final List<PropertiesEntity> entities) {
-    PropsEntity propsEntityAnnotation = clazz.getDeclaredAnnotation(PropsEntity.class);
-    if (propsEntityAnnotation != null) {
-      String componentId = propsEntityAnnotation.componentId();
+  public <T> T createEntity(final Class<T> clazz, final List<io.moo.propane.data.ConfigurationEntity> entities) {
+    Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
+    if (configurationAnnotation != null) {
+      String componentId = configurationAnnotation.componentId();
       Field[] fields = clazz.getDeclaredFields();
       T instance = newEntityInstance(clazz);
       processFields(entities, componentId, fields, instance);
@@ -60,23 +59,23 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
   }
 
 
-  private <T> void processFields(final Collection<PropertiesEntity> entities,
+  private <T> void processFields(final Collection<io.moo.propane.data.ConfigurationEntity> entities,
           final String componentId,
           final Field[] fields,
           final T instance) {
     Arrays.stream(fields).
-            filter(field -> null != field.getAnnotation(Prop.class)).
+            filter(field -> null != field.getAnnotation(KeyValue.class)).
             forEach(field -> entities.stream().
                     filter(entity -> entity.getComponentId().equals(componentId)).
-                    forEach(entity -> performEntityProcessing(field.getAnnotation(Prop.class),
+                    forEach(entity -> performEntityProcessing(field.getAnnotation(KeyValue.class),
                             entity, field, instance)));
   }
 
 
-  private <T> void performEntityProcessing(final Prop annotation, final PropertiesEntity propertiesEntity,
+  private <T> void performEntityProcessing(final KeyValue annotation, final io.moo.propane.data.ConfigurationEntity configurationEntity,
           final Field field, T instance) {
-    if (annotation.name().equals(propertiesEntity.getPropertyName())) {
-      Object propertyValue = propertiesEntity.getPropertyValue();
+    if (annotation.name().equals(configurationEntity.getPropertyName())) {
+      Object propertyValue = configurationEntity.getPropertyValue();
       if (isWrapper(field.getType()) || field.getType().isPrimitive()) {
         performPrimitiveAssignment(instance, field, propertyValue);
       } else if (field.getType().isAssignableFrom(propertyValue.getClass())) {

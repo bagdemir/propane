@@ -37,17 +37,17 @@ import java.util.Arrays;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesEntity {
+public class ConfigurationEntity {
   private String componentId;
   private String[] contextIds;
   private String propertyName;
   private String propertyValue;
 
 
-  public PropertiesEntity(final String componentId,
-    final String[] contextIds,
-    final String propertyName,
-    final String propertyValue) {
+  public ConfigurationEntity(final String componentId,
+                             final String[] contextIds,
+                             final String propertyName,
+                             final String propertyValue) {
     this.componentId = componentId;
     this.contextIds = contextIds;
     this.propertyName = propertyName;
@@ -98,9 +98,9 @@ public class PropertiesEntity {
   @Override
   public boolean equals(final Object o) {
     if (this == o) return true;
-    if (!(o instanceof PropertiesEntity)) return false;
+    if (!(o instanceof ConfigurationEntity)) return false;
 
-    PropertiesEntity that = (PropertiesEntity) o;
+    ConfigurationEntity that = (ConfigurationEntity) o;
 
     if (!componentId.equals(that.componentId)) return false;
     if (!Arrays.equals(contextIds, that.contextIds)) return false;
@@ -123,7 +123,7 @@ public class PropertiesEntity {
 
   @Override
   public String toString() {
-    return "PropertiesEntity{" +
+    return "Configuration{" +
             "componentId='" + componentId + '\'' +
             ", contextIds=" + Arrays.toString(contextIds) +
             ", propertyName='" + propertyName + '\'' +

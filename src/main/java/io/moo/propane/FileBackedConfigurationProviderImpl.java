@@ -29,14 +29,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import io.moo.propane.annotation.PropsSource;
+import io.moo.propane.annotation.Source;
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.connectors.ClasspathConfigurationSource;
 import io.moo.propane.connectors.ConfigData;
-import io.moo.propane.connectors.ConfigurationSource;
 import io.moo.propane.connectors.PropertiesFileConfigurationSource;
-import io.moo.propane.data.PropertiesEntity;
+import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.exception.InvalidPropsEntityException;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import io.moo.propane.extractors.TokenExtractor;
@@ -54,7 +53,7 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   public static final String BLANK_STR = "";
 
   private final Class<T> propsClazz;
-  private ConfigurationSource connector;
+  private io.moo.propane.connectors.ConfigurationSource connector;
   private TokenExtractor contextExtractor;
   private TokenExtractor componentIdExtractor;
 
@@ -68,11 +67,11 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
 
 
   private void init() {
-    final PropsSource propsSource = propsClazz.getAnnotation(PropsSource.class);
+    final Source source = propsClazz.getAnnotation(Source.class);
 
-    if (propsSource == null) throw new InvalidPropsEntityException();
+    if (source == null) throw new InvalidPropsEntityException();
 
-    String url = propsSource.url();
+    String url = source.url();
     if (isClasspathResource(url)) {
       final String replace = url.replace(CLASSPATH_PREFIX, BLANK_STR);
       connector = new ClasspathConfigurationSource(replace);
@@ -90,8 +89,8 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   public T take() {
     final ConfigData configData = connector.read();
     Map<String, String> propsMap = connector.read().getPropsMap();
-    List<PropertiesEntity> propsList = propsMap.entrySet().stream().map(entry ->
-            new PropertiesEntity(componentIdExtractor.extract(configData.getSource()),
+    List<ConfigurationEntity> propsList = propsMap.entrySet().stream().map(entry ->
+            new ConfigurationEntity(componentIdExtractor.extract(configData.getSource()),
                     null, entry.getKey(), entry.getValue())).collect(Collectors.toList());
     AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
     return processor.createEntity(propsClazz, propsList);

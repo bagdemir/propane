@@ -28,13 +28,13 @@ package io.moo.propane;
 import java.util.Optional;
 
 /**
- * Configuration repository.
+ * KeyValue repository.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface PropertiesManager {
+public interface ConfigurationManager {
   <T> boolean register(Class<T> clazz);
   <T> boolean isRegistered(Class<T> clazz);
   <T> Optional<T> load(Class<T> clazz);
