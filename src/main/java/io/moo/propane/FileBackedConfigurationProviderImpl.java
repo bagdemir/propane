@@ -70,9 +70,12 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   private void init() {
     final PropsSource propsSource = propsClazz.getAnnotation(PropsSource.class);
 
-    if (propsSource == null) throw new InvalidPropsEntityException();
+    if (propsSource == null) {
+      throw new InvalidPropsEntityException();
+    }
 
-    String url = propsSource.url();
+    final String url = propsSource.url();
+
     if (isClasspathResource(url)) {
       final String replace = url.replace(CLASSPATH_PREFIX, BLANK_STR);
       connector = new ClasspathConfigurationSource(replace);
@@ -83,7 +86,9 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   }
 
 
-  private boolean isClasspathResource(final String url) {return url.startsWith(CLASSPATH_PREFIX);}
+  private boolean isClasspathResource(final String url) {
+    return url.startsWith(CLASSPATH_PREFIX);
+  }
 
 
   @Override

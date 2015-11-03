@@ -32,6 +32,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Test;
 
 import io.moo.propane.exception.NoComponentIdFoundException;
+import io.moo.propane.extractors.DefaultComponentIdExtractor;
 
 /**
  * Test case for component id extraction.
