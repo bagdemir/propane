@@ -26,18 +26,23 @@
 package io.moo.propane.annotation;
 
 /**
+ * Test configuration entity.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-@PropsEntity(componentId = "testConfig")
-@PropsSource(url = "classpath://props/testConfig.properties")
+@Configuration(componentId = "testConfig")
+@Source(url = "classpath://props/testConfig.properties")
 public class TestPropsWithClasspathSource {
-  @Prop(name = "testProp")
+
+  @KeyValue(name = "testProp")
   private String url;
-  @Prop(name = "longProp")
+
+  @KeyValue(name = "longProp")
   private Long timeout;
-  @Prop(name = "intProp")
+
+  @KeyValue(name = "intProp")
   private int count;
 
   private String nonPropField;

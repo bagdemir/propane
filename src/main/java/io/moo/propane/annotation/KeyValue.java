@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface Prop {
+public @interface KeyValue {
   String name() default "";
   Class factory() default void.class;
 }

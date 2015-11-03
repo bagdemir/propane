@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.moo.propane.annotation.PropsEntity;
+import io.moo.propane.annotation.Configuration;
 import io.moo.propane.exception.InvalidPropsEntityException;
 
 /**
@@ -40,11 +40,9 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  * @version 1.0
  * @since 1.0
  */
-public class PropertiesManagerImpl implements PropertiesManager {
+public class ConfigurationManagerImpl implements ConfigurationManager {
   private static final Logger LOG = LogManager.getLogger();
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
-//  private final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-
 
   @Override
   public <T> boolean register(final Class<T> clazz) {
@@ -71,8 +69,8 @@ public class PropertiesManagerImpl implements PropertiesManager {
 
 
   private <T> void validatePropsEntity(final Class<T> clazz) {
-    final PropsEntity propsEntityAnnotation = clazz.getAnnotation(PropsEntity.class);
-    if (propsEntityAnnotation == null) {
+    final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
+    if (configurationAnnotation == null) {
       throw new InvalidPropsEntityException();
     }
   }

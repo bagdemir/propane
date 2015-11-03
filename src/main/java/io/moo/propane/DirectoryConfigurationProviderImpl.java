@@ -3,9 +3,8 @@ package io.moo.propane;
 import java.io.File;
 import java.util.Collection;
 
+import io.moo.propane.data.ConfigurationEntity;
 import org.apache.commons.io.FileUtils;
-
-import io.moo.propane.data.PropertiesEntity;
 
 /**
  * Created by bagdemir on 14/03/15.
@@ -14,17 +13,17 @@ public class DirectoryConfigurationProviderImpl implements ConfigurationProvider
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
 
-  public Collection<PropertiesEntity> read() {
+  public Collection<ConfigurationEntity> read() {
     return null;
   }
 
 
-  public Collection<PropertiesEntity> read(final String rootContext) {
+  public Collection<ConfigurationEntity> read(final String rootContext) {
     return read(rootContext, false);
   }
 
 
-  public Collection<PropertiesEntity> read(final String rootContext, final boolean recursive) {
+  public Collection<ConfigurationEntity> read(final String rootContext, final boolean recursive) {
     final File root = new File(rootContext);
     final Collection<File> files = FileUtils.listFiles(root, FILE_PATTERNS, recursive);
     for (File file : files) {
