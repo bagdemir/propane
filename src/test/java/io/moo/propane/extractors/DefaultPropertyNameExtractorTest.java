@@ -23,47 +23,43 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.extractors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import io.moo.propane.extractors.DefaultContextExtractor;
+import io.moo.propane.extractors.DefaultConfigurationNameExtractor;
 import org.junit.Test;
 
 import io.moo.propane.exception.InvalidPropertyNameException;
-import io.moo.propane.extractors.DefaultContextExtractor;
+import io.moo.propane.extractors.DefaultPropertyNameExtractor;
 
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class DefaultContextExtractorTest {
+public class DefaultPropertyNameExtractorTest {
 
   @Test
-  public void testExtractContext() {
-    final DefaultContextExtractor extractor = new DefaultContextExtractor();
-    final String extract = extractor.extract("us.dev.a/io.moo/propName");
-    assertThat(extract, notNullValue());
-    assertThat(extract, equalTo("us.dev.a"));
-
+  public void testExtractSingleSegmentPropertyName() {
+    final DefaultConfigurationNameExtractor extractor = new DefaultConfigurationNameExtractor();
+    assertThat(extractor.extract("propName"), equalTo("propName"));
   }
 
   @Test(expected = InvalidPropertyNameException.class)
   public void testExtractWithBlankPropertyName() {
-    new DefaultContextExtractor().extract("");
+    new DefaultConfigurationNameExtractor().extract("");
   }
 
   @Test(expected = InvalidPropertyNameException.class)
   public void testExtractWithNullPropertyName() {
-    new DefaultContextExtractor().extract(null);
+    new DefaultConfigurationNameExtractor().extract(null);
   }
 
   @Test
-  public void testExtractMultiSegmentPropertyNameWithoutContext() {
-    final DefaultContextExtractor extractor = new DefaultContextExtractor();
-    assertThat(extractor.extract("b/propName"), equalTo(null));
+  public void testExtractMultiSegmentPropertyName() {
+    final DefaultConfigurationNameExtractor extractor = new DefaultConfigurationNameExtractor();
+    assertThat(extractor.extract("a/b/propName"), equalTo("propName"));
   }
 }
