@@ -15,16 +15,18 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
   private static final int CORE_POOL_SIZE = 1;
   private static final long INITIAL_DELAY = 0L;
 
-  private int frequencyInMins = 1;
+  private int frequencyInSecs = 60;
   private ConfigurationSource connector;
   private Class<T> configurationClazz;
 
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(CORE_POOL_SIZE);
+  // Kind of singleton caching.
   protected final AtomicReference<ConfigData> configData = new AtomicReference<>(new ConfigData());
 
-  public ScheduledConfigurationProvider(final Class<T> propsClazz, final ConfigurationSource connector) {
+  public ScheduledConfigurationProvider(final Class<T> propsClazz, final ConfigurationSource connector, final int frequencyInSecs) {
     this.configurationClazz = propsClazz;
     this.connector = connector;
+    this.frequencyInSecs = frequencyInSecs;
 
     initScheduler();
   }
@@ -34,7 +36,7 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
     executorService.scheduleAtFixedRate(() -> {
       final ConfigData newConfigData = connector.read();
       configData.set(newConfigData);
-    }, INITIAL_DELAY, frequencyInMins, TimeUnit.MINUTES);
+    }, INITIAL_DELAY, frequencyInSecs, TimeUnit.SECONDS);
   }
 
   public Class<T> getConfigurationClazz() {

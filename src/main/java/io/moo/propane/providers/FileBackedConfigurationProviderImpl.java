@@ -50,8 +50,8 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   private final TokenExtractor componentIdExtractor;
 
-  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz, final ConfigurationSource source) {
-    super(propsClazz, source);
+  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz, final ConfigurationSource source, final int frequencyInSecs) {
+    super(propsClazz, source, frequencyInSecs);
 
     this.componentIdExtractor = new DefaultComponentIdExtractor();
   }

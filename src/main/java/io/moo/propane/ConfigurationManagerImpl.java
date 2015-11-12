@@ -81,7 +81,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
       configSource = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, BLANK_STR));
     }
 
-    cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz, configSource));
+    cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz, configSource, 60 /*TODO make configurable*/));
   }
 
   private boolean isClasspathResource(final String url) {
