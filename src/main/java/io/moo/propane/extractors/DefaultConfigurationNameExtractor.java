@@ -23,47 +23,33 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.connectors;
+package io.moo.propane.extractors;
 
-import java.util.HashMap;
-import java.util.Map;
+import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
+ * Extracts the configuration names from the source string.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ConfigData {
-
-  private Map<String, String> propsMap = new HashMap<>();
-  private String source;
-
-
-  public Map<String, String> getPropsMap() {
-    return propsMap;
-  }
-
-
-  public void setPropsMap(final Map<String, String> propsMap) {
-    this.propsMap = propsMap;
-  }
-
-
-  public String getSource() {
-    return source;
-  }
-
-
-  public void setSource(final String source) {
-    this.source = source;
-  }
-
+public class DefaultConfigurationNameExtractor implements TokenExtractor {
 
   @Override
-  public String toString() {
-    return "ConfigData{" +
-            "propsMap=" + propsMap +
-            ", source='" + source + '\'' +
-            '}';
+  public String extract(final String sourceString) {
+    assertconfigurationNameIsValid(sourceString);
+    if (sourceString.contains("/")) {
+      String[] split = sourceString.split("/");
+      return split[split.length -1];
+    }
+    return sourceString;
+  }
+
+
+  private void assertconfigurationNameIsValid(final String propertyName) {
+    if (propertyName == null || "".equals(propertyName)) {
+      throw new InvalidPropertyNameException();
+    }
   }
 }

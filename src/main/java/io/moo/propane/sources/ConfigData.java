@@ -23,50 +23,47 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.connectors;
+package io.moo.propane.sources;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 
 /**
- * {@link ClasspathConfigurationSource} uses classpath resources as
- * sources.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathConfigurationSource extends ConfigurationSource {
-  private static final Logger LOG = LogManager.getLogger();
+public class ConfigData {
+
+  private Map<String, String> propsMap = new HashMap<>();
+  private String source;
 
 
-  public ClasspathConfigurationSource(final String source) {
-    super(source);
+  public Map<String, String> getPropsMap() {
+    return propsMap;
+  }
+
+
+  public void setPropsMap(final Map<String, String> propsMap) {
+    this.propsMap = propsMap;
+  }
+
+
+  public String getSource() {
+    return source;
+  }
+
+
+  public void setSource(final String source) {
+    this.source = source;
   }
 
 
   @Override
-  public ConfigData read() {
-    ConfigData configData = new ConfigData();
-    Map<String, String> propsMap = configData.getPropsMap();
-
-    try {
-      Properties properties = new Properties();
-      properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
-      properties.forEach((name,value) -> propsMap.put(name.toString(), value.toString()));
-    }
-    catch (IOException e) {
-      LOG.error(e);
-    }
-
-    configData.setSource(super.getSource());
-    return configData;
+  public String toString() {
+    return "ConfigData{" +
+            "propsMap=" + propsMap +
+            ", source='" + source + '\'' +
+            '}';
   }
 }

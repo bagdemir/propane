@@ -32,9 +32,9 @@ import java.util.stream.Collectors;
 import io.moo.propane.annotation.Source;
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
-import io.moo.propane.connectors.ClasspathConfigurationSource;
-import io.moo.propane.connectors.ConfigData;
-import io.moo.propane.connectors.PropertiesFileConfigurationSource;
+import io.moo.propane.sources.ClasspathConfigurationSource;
+import io.moo.propane.sources.ConfigData;
+import io.moo.propane.sources.PropertiesFileConfigurationSource;
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.exception.InvalidPropsEntityException;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
@@ -53,7 +53,7 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   public static final String BLANK_STR = "";
 
   private final Class<T> propsClazz;
-  private io.moo.propane.connectors.ConfigurationSource connector;
+  private io.moo.propane.sources.ConfigurationSource connector;
   private TokenExtractor contextExtractor;
   private TokenExtractor componentIdExtractor;
 

@@ -77,8 +77,8 @@ public class DirectoryPropertiesProviderTest {
 
   @Test
   public void testRead() {
-    final DirectoryConfigurationProviderImpl directoryPropertiesProvider = new DirectoryConfigurationProviderImpl();
-    final Collection<ConfigurationEntity> read = directoryPropertiesProvider.read(configDir.getAbsolutePath());
+    final DirectoryConfigurationProviderImpl configProvider = new DirectoryConfigurationProviderImpl();
+    final Collection<ConfigurationEntity> read = configProvider.read(configDir.getAbsolutePath());
   }
 
 

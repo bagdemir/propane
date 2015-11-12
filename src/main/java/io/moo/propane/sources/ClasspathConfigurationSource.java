@@ -23,33 +23,49 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.connectors;
+package io.moo.propane.sources;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Map;
+import java.util.Properties;
 
-import org.junit.Test;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
- * Test for properties resource connector for classpath property files.
+ * {@link ClasspathConfigurationSource} uses classpath resources as
+ * sources.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "props/testConfig.properties";
+public class ClasspathConfigurationSource extends ConfigurationSource {
+  private static final Logger LOG = LogManager.getLogger();
 
-  @Test
-  public void testRead() {
-    final ClasspathConfigurationSource connector =
-            new ClasspathConfigurationSource(TEST_PROPS);
-    final ConfigData configData = connector.read();
-    final Map<String, String> propsMap = configData.getPropsMap();
-    assertThat(propsMap, notNullValue());
-    assertThat(propsMap.size(), equalTo(3));
+
+  public ClasspathConfigurationSource(final String source) {
+    super(source);
+  }
+
+
+  @Override
+  public ConfigData read() {
+    ConfigData configData = new ConfigData();
+    Map<String, String> propsMap = configData.getPropsMap();
+
+    try {
+      Properties properties = new Properties();
+      properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
+      properties.forEach((name,value) -> propsMap.put(name.toString(), value.toString()));
+    }
+    catch (IOException e) {
+      LOG.error(e);
+    }
+
+    configData.setSource(super.getSource());
+    return configData;
   }
 }

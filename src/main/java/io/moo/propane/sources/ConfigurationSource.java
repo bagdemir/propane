@@ -23,9 +23,8 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.connectors;
+package io.moo.propane.sources;
 
-import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**

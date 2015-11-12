@@ -23,31 +23,49 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane.extractors;
+package io.moo.propane.sources;
 
-import io.moo.propane.exception.InvalidPropertyNameException;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
+ * {@link PropertiesFileConfigurationSource} uses the properties file as
+ * input source.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class DefaultPropertyNameExtractor implements TokenExtractor {
+public class PropertiesFileConfigurationSource extends ConfigurationSource {
+  private static final Logger LOG = LogManager.getLogger();
 
-  @Override
-  public String extract(final String sourceString) {
-    assertPropertyNameIsValid(sourceString);
-    if (sourceString.contains("/")) {
-      String[] split = sourceString.split("/");
-      return split[split.length -1];
-    }
-    return sourceString;
+
+  public PropertiesFileConfigurationSource(final String source) {
+    super(source);
   }
 
 
-  private void assertPropertyNameIsValid(final String propertyName) {
-    if (propertyName == null || "".equals(propertyName)) {
-      throw new InvalidPropertyNameException();
+  @Override
+  public ConfigData read() {
+    final ConfigData configData = new ConfigData();
+    final Map<String, String> propsMap = configData.getPropsMap();
+
+    try {
+      Properties properties = new Properties();
+      properties.load(new FileReader(new File(source)));
+      properties.forEach((name, value) -> propsMap.put(name.toString(), value.toString()));
     }
+    catch (IOException e) {
+      LOG.error(e);
+    }
+
+    configData.setSource(super.getSource());
+    return configData;
   }
 }

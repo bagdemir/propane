@@ -28,7 +28,7 @@ package io.moo.propane;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import io.moo.propane.extractors.DefaultPropertyNameExtractor;
+import io.moo.propane.extractors.DefaultConfigurationNameExtractor;
 import org.junit.Test;
 
 import io.moo.propane.exception.InvalidPropertyNameException;
@@ -42,23 +42,23 @@ public class DefaultPropertyNameExtractorTest {
 
   @Test
   public void testExtractSingleSegmentPropertyName() {
-    final DefaultPropertyNameExtractor extractor = new DefaultPropertyNameExtractor();
+    final DefaultConfigurationNameExtractor extractor = new DefaultConfigurationNameExtractor();
     assertThat(extractor.extract("propName"), equalTo("propName"));
   }
 
   @Test(expected = InvalidPropertyNameException.class)
   public void testExtractWithBlankPropertyName() {
-    new DefaultPropertyNameExtractor().extract("");
+    new DefaultConfigurationNameExtractor().extract("");
   }
 
   @Test(expected = InvalidPropertyNameException.class)
   public void testExtractWithNullPropertyName() {
-    new DefaultPropertyNameExtractor().extract(null);
+    new DefaultConfigurationNameExtractor().extract(null);
   }
 
   @Test
   public void testExtractMultiSegmentPropertyName() {
-    final DefaultPropertyNameExtractor extractor = new DefaultPropertyNameExtractor();
+    final DefaultConfigurationNameExtractor extractor = new DefaultConfigurationNameExtractor();
     assertThat(extractor.extract("a/b/propName"), equalTo("propName"));
   }
 }
