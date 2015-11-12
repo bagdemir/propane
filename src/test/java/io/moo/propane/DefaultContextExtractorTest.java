@@ -33,6 +33,7 @@ import io.moo.propane.extractors.DefaultContextExtractor;
 import org.junit.Test;
 
 import io.moo.propane.exception.InvalidPropertyNameException;
+import io.moo.propane.extractors.DefaultContextExtractor;
 
 /**
  * @author bagdemir

@@ -82,7 +82,9 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   }
 
 
-  private boolean isClasspathResource(final String url) {return url.startsWith(CLASSPATH_PREFIX);}
+  private boolean isClasspathResource(final String url) {
+    return url.startsWith(CLASSPATH_PREFIX);
+  }
 
 
   @Override

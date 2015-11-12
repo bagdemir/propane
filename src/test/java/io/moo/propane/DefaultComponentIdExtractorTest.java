@@ -33,6 +33,7 @@ import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import org.junit.Test;
 
 import io.moo.propane.exception.NoComponentIdFoundException;
+import io.moo.propane.extractors.DefaultComponentIdExtractor;
 
 /**
  * Test case for component id extraction.

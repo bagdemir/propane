@@ -55,7 +55,6 @@ public class PropsUtils {
     }
   }
 
-
   public static String getPathToTemp() throws IOException {
     final File tmpCfg = File.createTempFile("test-properties", ".properties");
     final String absolutePathOfCfgFile1 = tmpCfg.getAbsolutePath();
