@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.moo.propane.providers.ConfigurationProvider;
+import io.moo.propane.providers.FileBackedConfigurationProviderImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,7 +80,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
     public <T> Optional<T> load(final Class<T> clazz) {
         if (isRegistered(clazz)) {
             final ConfigurationProvider provider = cache.get(clazz);
-            return Optional.ofNullable((T) provider.take());
+            return Optional.ofNullable((T) provider.load());
         }
         return Optional.empty();
     }

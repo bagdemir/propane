@@ -23,7 +23,7 @@
  *   THE SOFTWARE.
  *
  */
-package io.moo.propane;
+package io.moo.propane.providers;
 
 import java.util.List;
 import java.util.Map;
@@ -34,6 +34,7 @@ import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
 import io.moo.propane.sources.ClasspathConfigurationSource;
 import io.moo.propane.sources.ConfigData;
+import io.moo.propane.sources.ConfigurationSource;
 import io.moo.propane.sources.PropertiesFileConfigurationSource;
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
@@ -49,11 +50,12 @@ import io.moo.propane.extractors.TokenExtractor;
  */
 public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProvider<T> {
   private static final String CLASSPATH_PREFIX = "classpath://";
+
   public static final String FILE_PREFIX = "file://";
   public static final String BLANK_STR = "";
 
   private final Class<T> propsClazz;
-  private io.moo.propane.sources.ConfigurationSource connector;
+  private ConfigurationSource connector;
   private TokenExtractor contextExtractor;
   private TokenExtractor componentIdExtractor;
 
@@ -88,7 +90,7 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
 
 
   @Override
-  public T take() {
+  public T load() {
     final ConfigData configData = connector.read();
     Map<String, String> propsMap = connector.read().getPropsMap();
     List<ConfigurationEntity> propsList = propsMap.entrySet().stream().map(entry ->

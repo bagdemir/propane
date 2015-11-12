@@ -1,4 +1,4 @@
-package io.moo.propane;
+package io.moo.propane.providers;
 
 import java.io.File;
 import java.util.Collection;
@@ -34,7 +34,7 @@ public class DirectoryConfigurationProviderImpl implements ConfigurationProvider
   }
 
   @Override
-  public Object take() {
+  public Object load() {
     return null;
   }
 }
