@@ -12,16 +12,13 @@ import org.apache.commons.io.FileUtils;
 public class DirectoryConfigurationProviderImpl implements ConfigurationProvider {
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
-
   public Collection<ConfigurationEntity> read() {
     return null;
   }
 
-
   public Collection<ConfigurationEntity> read(final String rootContext) {
     return read(rootContext, false);
   }
-
 
   public Collection<ConfigurationEntity> read(final String rootContext, final boolean recursive) {
     final File root = new File(rootContext);

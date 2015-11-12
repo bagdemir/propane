@@ -45,8 +45,8 @@ public class ClasspathPropertiesResourceConnectorTest {
 
   @Test
   public void testRead() {
-    final ClasspathConfigurationSource connector =
-            new ClasspathConfigurationSource(TEST_PROPS);
+    final ClasspathFileConfigurationSource connector =
+            new ClasspathFileConfigurationSource(TEST_PROPS);
     final ConfigData configData = connector.read();
     final Map<String, String> propsMap = configData.getPropsMap();
     assertThat(propsMap, notNullValue());

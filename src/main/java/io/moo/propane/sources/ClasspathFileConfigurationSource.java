@@ -35,18 +35,18 @@ import org.apache.logging.log4j.Logger;
 
 
 /**
- * {@link ClasspathConfigurationSource} uses classpath resources as
+ * {@link ClasspathFileConfigurationSource} uses classpath resources as
  * sources.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathConfigurationSource extends ConfigurationSource {
+public class ClasspathFileConfigurationSource extends ConfigurationSource {
   private static final Logger LOG = LogManager.getLogger();
 
 
-  public ClasspathConfigurationSource(final String source) {
+  public ClasspathFileConfigurationSource(final String source) {
     super(source);
   }
 

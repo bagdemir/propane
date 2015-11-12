@@ -68,10 +68,11 @@ public class KeyValueManagerTest {
 
 
   @Test
-  public void testLoad() {
+  public void testLoad() throws InterruptedException {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
     configurationManager.register(TestPropsWithClasspathSource.class);
 
+    Thread.sleep(100L);
     final Optional<TestPropsWithClasspathSource> props = configurationManager.load(TestPropsWithClasspathSource.class);
     assertThat(props.isPresent(), equalTo(true));
 

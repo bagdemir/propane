@@ -27,8 +27,12 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.moo.propane.annotation.Source;
 import io.moo.propane.providers.ConfigurationProvider;
 import io.moo.propane.providers.FileBackedConfigurationProviderImpl;
+import io.moo.propane.sources.ClasspathFileConfigurationSource;
+import io.moo.propane.sources.ConfigurationSource;
+import io.moo.propane.sources.PropertiesFileConfigurationSource;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,47 +45,69 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
  * @since 1.0
  */
 public class ConfigurationManagerImpl implements ConfigurationManager {
-    private static final Logger LOG = LogManager.getLogger();
-    private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
+  private static final Logger LOG = LogManager.getLogger();
+  private static final String CLASSPATH_PREFIX = "classpath://";
+  private static final String FILE_PREFIX = "file://";
+  private static final String BLANK_STR = "";
 
-    @Override
-    public <T> boolean register(final Class<T> clazz) {
-        if (cache.containsKey(clazz)) {
-            LOG.info("{} has already been registered.", clazz);
-            return false;
-        } else {
-            validateConfigurationEntity(clazz);
-            registerConfigurationProvider(clazz);
-        }
-        return true;
+  private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
+
+  @Override
+  public <T> boolean register(final Class<T> clazz) {
+    if (cache.containsKey(clazz)) {
+      LOG.info("{} has already been registered.", clazz);
+      return false;
+    } else {
+      validateConfigurationEntity(clazz);
+      registerConfigurationProvider(clazz);
+    }
+    return true;
+  }
+
+
+  private void registerConfigurationProvider(final Class<?> clazz) {
+
+    final Source source = clazz.getAnnotation(Source.class);
+
+    if (source == null) throw new InvalidConfigurationEntityException();
+
+    final String url = source.url();
+
+    ConfigurationSource configSource;
+
+    if (isClasspathResource(url)) {
+      configSource = new ClasspathFileConfigurationSource(url.replace(CLASSPATH_PREFIX, BLANK_STR));
+    } else {
+      configSource = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, BLANK_STR));
     }
 
+    cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz, configSource));
+  }
 
-    private void registerConfigurationProvider(final Class<?> clazz) {
-        cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz));
+  private boolean isClasspathResource(final String url) {
+    return url.startsWith(CLASSPATH_PREFIX);
+  }
+
+  @Override
+  public <T> boolean isRegistered(final Class<T> clazz) {
+    return cache.containsKey(clazz);
+  }
+
+
+  private <T> void validateConfigurationEntity(final Class<T> clazz) {
+    final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
+    if (configurationAnnotation == null) {
+      throw new InvalidConfigurationEntityException();
     }
+  }
 
 
-    @Override
-    public <T> boolean isRegistered(final Class<T> clazz) {
-        return cache.containsKey(clazz);
+  @Override
+  public <T> Optional<T> load(final Class<T> clazz) {
+    if (isRegistered(clazz)) {
+      final ConfigurationProvider provider = cache.get(clazz);
+      return Optional.ofNullable((T) provider.load());
     }
-
-
-    private <T> void validateConfigurationEntity(final Class<T> clazz) {
-        final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
-        if (configurationAnnotation == null) {
-            throw new InvalidConfigurationEntityException();
-        }
-    }
-
-
-    @Override
-    public <T> Optional<T> load(final Class<T> clazz) {
-        if (isRegistered(clazz)) {
-            final ConfigurationProvider provider = cache.get(clazz);
-            return Optional.ofNullable((T) provider.load());
-        }
-        return Optional.empty();
-    }
+    return Optional.empty();
+  }
 }
