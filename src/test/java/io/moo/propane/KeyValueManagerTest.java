@@ -33,7 +33,7 @@ import java.util.Optional;
 import org.junit.Test;
 
 import io.moo.propane.annotation.TestPropsWithClasspathSource;
-import io.moo.propane.exception.InvalidPropsEntityException;
+import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
  * Unit test for properties manager.
@@ -44,7 +44,7 @@ import io.moo.propane.exception.InvalidPropsEntityException;
  */
 public class KeyValueManagerTest {
 
-  @Test(expected = InvalidPropsEntityException.class)
+  @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
     configurationManager.register(Object.class);

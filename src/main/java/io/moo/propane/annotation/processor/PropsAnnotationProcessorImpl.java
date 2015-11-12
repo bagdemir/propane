@@ -35,7 +35,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.moo.propane.annotation.KeyValue;
-import io.moo.propane.exception.InvalidPropsEntityException;
+import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
  * @author bagdemir
@@ -55,7 +55,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
       T instance = newEntityInstance(clazz);
       processFields(entities, componentId, fields, instance);
       return instance;
-    } else throw new InvalidPropsEntityException();
+    } else throw new InvalidConfigurationEntityException();
   }
 
 

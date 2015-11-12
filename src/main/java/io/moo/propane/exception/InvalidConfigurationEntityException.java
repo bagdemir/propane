@@ -30,5 +30,5 @@ package io.moo.propane.exception;
  * @version 1.0
  * @since 1.0
  */
-public class InvalidPropsEntityException extends RuntimeException {
+public class InvalidConfigurationEntityException extends RuntimeException {
 }

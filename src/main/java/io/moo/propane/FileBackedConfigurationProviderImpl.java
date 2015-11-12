@@ -36,7 +36,7 @@ import io.moo.propane.sources.ClasspathConfigurationSource;
 import io.moo.propane.sources.ConfigData;
 import io.moo.propane.sources.PropertiesFileConfigurationSource;
 import io.moo.propane.data.ConfigurationEntity;
-import io.moo.propane.exception.InvalidPropsEntityException;
+import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import io.moo.propane.extractors.TokenExtractor;
 
@@ -69,7 +69,7 @@ public class FileBackedConfigurationProviderImpl<T> implements ConfigurationProv
   private void init() {
     final Source source = propsClazz.getAnnotation(Source.class);
 
-    if (source == null) throw new InvalidPropsEntityException();
+    if (source == null) throw new InvalidConfigurationEntityException();
 
     String url = source.url();
     if (isClasspathResource(url)) {
