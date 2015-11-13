@@ -25,11 +25,19 @@
  */
 package io.moo.propane.providers;
 
+import io.moo.propane.annotation.Source;
+import io.moo.propane.exception.InvalidConfigurationEntityException;
+import io.moo.propane.sources.ClasspathFileConfigurationSource;
+import io.moo.propane.sources.ConfigurationSource;
+import io.moo.propane.sources.PropertiesFileConfigurationSource;
+
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
 public interface ConfigurationProvider<T> {
+
   T load();
+
 }

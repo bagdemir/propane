@@ -46,9 +46,6 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
  */
 public class ConfigurationManagerImpl implements ConfigurationManager {
   private static final Logger LOG = LogManager.getLogger();
-  private static final String CLASSPATH_PREFIX = "classpath://";
-  private static final String FILE_PREFIX = "file://";
-  private static final String BLANK_STR = "";
 
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 
@@ -68,25 +65,12 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   private void registerConfigurationProvider(final Class<?> clazz) {
 
     final Source source = clazz.getAnnotation(Source.class);
-
-    if (source == null) throw new InvalidConfigurationEntityException();
-
-    final String url = source.url();
-
-    ConfigurationSource configSource;
-
-    if (isClasspathResource(url)) {
-      configSource = new ClasspathFileConfigurationSource(url.replace(CLASSPATH_PREFIX, BLANK_STR));
-    } else {
-      configSource = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, BLANK_STR));
-    }
+    final ConfigurationSource configSource = ConfigurationSource.newConfigurationSourceFor(source);
 
     cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz, configSource, 60 /*TODO make configurable*/));
   }
 
-  private boolean isClasspathResource(final String url) {
-    return url.startsWith(CLASSPATH_PREFIX);
-  }
+
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
