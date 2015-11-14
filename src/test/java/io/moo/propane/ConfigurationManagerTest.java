@@ -32,7 +32,7 @@ import java.util.Optional;
 
 import org.junit.Test;
 
-import io.moo.propane.annotation.TestPropsWithClasspathSource;
+import io.moo.propane.annotation.TestConfigurationEntityWithClasspathSource;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
@@ -42,7 +42,7 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
  * @version 1.0
  * @since 1.0
  */
-public class KeyValueManagerTest {
+public class ConfigurationManagerTest {
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
@@ -50,33 +50,30 @@ public class KeyValueManagerTest {
     configurationManager.register(Object.class);
   }
 
-
   @Test
   public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    assertThat(configurationManager.register(TestPropsWithClasspathSource.class), equalTo(true));
-    assertThat(configurationManager.register(TestPropsWithClasspathSource.class), equalTo(false));
+    assertThat(configurationManager.register(TestConfigurationEntityWithClasspathSource.class), equalTo(true));
+    assertThat(configurationManager.register(TestConfigurationEntityWithClasspathSource.class), equalTo(false));
   }
-
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntity() {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    configurationManager.register(TestPropsWithClasspathSource.class);
-    assertThat(configurationManager.isRegistered(TestPropsWithClasspathSource.class), equalTo(true));
+    configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+    assertThat(configurationManager.isRegistered(TestConfigurationEntityWithClasspathSource.class), equalTo(true));
   }
-
 
   @Test
   public void testLoad() throws InterruptedException {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    configurationManager.register(TestPropsWithClasspathSource.class);
+    configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
 
     Thread.sleep(100L);
-    final Optional<TestPropsWithClasspathSource> props = configurationManager.load(TestPropsWithClasspathSource.class);
+    final Optional<TestConfigurationEntityWithClasspathSource> props = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
     assertThat(props.isPresent(), equalTo(true));
 
-    final TestPropsWithClasspathSource testPropsWithClasspathSource = props.get();
+    final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = props.get();
     assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
