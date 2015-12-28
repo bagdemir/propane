@@ -68,7 +68,7 @@ public class KeyValueEntityProcessorImplTest {
 
         List<ConfigurationEntity> props = ImmutableList.of(propStr, propLong, propInt);
         AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-        TestPropsWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestPropsWithClasspathSource.class, props);
+        TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestConfigurationEntityWithClasspathSource.class, props);
 
         assertThat(testPropsWithClasspathSource, notNullValue());
         assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(EXPECTED_TIMEOUT));
