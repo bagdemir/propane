@@ -48,7 +48,8 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
   @Override
   public <T> T createEntity(final Class<T> clazz, final List<io.moo.propane.data.ConfigurationEntity> entities) {
-    Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
+
+    final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
     if (configurationAnnotation != null) {
       String componentId = configurationAnnotation.componentId();
       Field[] fields = clazz.getDeclaredFields();
@@ -60,9 +61,8 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void processFields(final Collection<io.moo.propane.data.ConfigurationEntity> entities,
-          final String componentId,
-          final Field[] fields,
-          final T instance) {
+          final String componentId, final Field[] fields, final T instance) {
+
     Arrays.stream(fields).
             filter(field -> null != field.getAnnotation(KeyValue.class)).
             forEach(field -> entities.stream().
@@ -74,6 +74,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
   private <T> void performEntityProcessing(final KeyValue annotation, final io.moo.propane.data.ConfigurationEntity configurationEntity,
           final Field field, T instance) {
+
     if (annotation.name().equals(configurationEntity.getPropertyName())) {
       Object propertyValue = configurationEntity.getPropertyValue();
       if (isWrapper(field.getType()) || field.getType().isPrimitive()) {

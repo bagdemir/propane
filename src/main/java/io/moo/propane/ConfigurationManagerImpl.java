@@ -34,15 +34,14 @@ import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.Source;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.providers.ConfigurationProvider;
-import io.moo.propane.providers.FileBackedConfigurationProviderImpl;
 import io.moo.propane.sources.ConfigurationSource;
 
 /**
  * @author bagdemir
  * @version 1.0
- * @since 1.0
  */
 public class ConfigurationManagerImpl implements ConfigurationManager {
+
   private static final Logger LOG = LogManager.getLogger();
 
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
@@ -50,6 +49,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
   @Override
   public <T> boolean register(final Class<T> clazz) {
+
     if (cache.containsKey(clazz)) {
       LOG.info("{} has already been registered.", clazz);
       return false;
@@ -59,15 +59,14 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
     return true;
   }
 
-
-  private void registerConfigurationProvider(final Class<?> clazz) {
+  private <T> void registerConfigurationProvider(final Class<T> clazz) {
 
     final Source source = clazz.getAnnotation(Source.class);
     final ConfigurationSource configSource = ConfigurationSource.newConfigurationSourceFor(source);
+    final ConfigurationProvider<T> fileBackedProvider = ConfigurationProvider.createFileBackedProvider(clazz, configSource, 60);
 
-    cache.put(clazz, new FileBackedConfigurationProviderImpl<>(clazz, configSource, 60 /*TODO make configurable*/));
+    cache.put(clazz, fileBackedProvider);
   }
-
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
@@ -86,7 +85,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
     if (isRegistered(clazz)) {
-      final ConfigurationProvider provider = cache.get(clazz);
+      final ConfigurationProvider<T> provider = cache.get(clazz);
       return Optional.ofNullable((T) provider.load(clazz));
     }
     return Optional.empty();
