@@ -50,20 +50,22 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   private final TokenExtractor componentIdExtractor;
 
-  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz, final ConfigurationSource source, final int frequencyInSecs) {
-    super(propsClazz, source, frequencyInSecs);
+  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz, final ConfigurationSource source, final int refreshFrequencyInSeconds) {
+    super(propsClazz, source, refreshFrequencyInSeconds);
 
     this.componentIdExtractor = new DefaultComponentIdExtractor();
   }
 
   @Override
-  public T load() {
+  public T load(Class<T> clazz) {
     final ConfigData data = configData.get();
     final Map<String, String> propsMap = data.getPropsMap();
     final List<ConfigurationEntity> propsList = propsMap.entrySet().stream().map(entry ->
             new ConfigurationEntity(componentIdExtractor.extract(data.getSource()),
                     null, entry.getKey(), entry.getValue())).collect(Collectors.toList());
+
     final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-    return processor.createEntity(getConfigurationClazz(), propsList);
+
+    return processor.createEntity(clazz, propsList);
   }
 }

@@ -36,13 +36,13 @@ import io.moo.propane.annotation.TestPropsWithClasspathSource;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
- * Unit test for properties manager.
+ * Unit test for the configuration manager.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class KeyValueManagerTest {
+public class ConfigurationManagerTest {
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {

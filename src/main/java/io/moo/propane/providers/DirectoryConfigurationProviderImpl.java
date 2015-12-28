@@ -9,7 +9,7 @@ import org.apache.commons.io.FileUtils;
 /**
  * Created by bagdemir on 14/03/15.
  */
-public class DirectoryConfigurationProviderImpl implements ConfigurationProvider {
+public class DirectoryConfigurationProviderImpl<T> implements ConfigurationProvider<T> {
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
   public Collection<ConfigurationEntity> read() {
@@ -31,7 +31,7 @@ public class DirectoryConfigurationProviderImpl implements ConfigurationProvider
   }
 
   @Override
-  public Object load() {
+  public T load(Class<T> clazz) {
     return null;
   }
 }

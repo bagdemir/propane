@@ -38,6 +38,10 @@ import io.moo.propane.sources.PropertiesFileConfigurationSource;
  */
 public interface ConfigurationProvider<T> {
 
-  T load();
+  static FileBackedConfigurationProviderImpl createFileBackedProvider(Class clazz, ConfigurationSource configurationSource, int refreshnessInSeconds) {
+    return new FileBackedConfigurationProviderImpl<>(clazz, configurationSource, refreshnessInSeconds);
+  }
+
+  T load(Class<T> clazz);
 
 }

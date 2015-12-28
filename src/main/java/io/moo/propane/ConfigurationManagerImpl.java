@@ -90,7 +90,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   public <T> Optional<T> load(final Class<T> clazz) {
     if (isRegistered(clazz)) {
       final ConfigurationProvider provider = cache.get(clazz);
-      return Optional.ofNullable((T) provider.load());
+      return Optional.ofNullable((T) provider.load(clazz));
     }
     return Optional.empty();
   }
