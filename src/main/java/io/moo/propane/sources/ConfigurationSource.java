@@ -45,6 +45,7 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
    * @return {@link ConfigurationSource} instance.
    */
   public static ConfigurationSource newConfigurationSourceFor(Source source) {
+
     if (source == null) throw new InvalidConfigurationEntityException();
 
     final String url = source.url();

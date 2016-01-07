@@ -33,10 +33,13 @@ package io.moo.propane.annotation;
 @Configuration(componentId = "io.moo.test.component")
 @Source(url = "classpath://props/testConfig.properties")
 public class TestPropsWithFileSource {
+
   @KeyValue(name = "testProp")
   private String url;
+
   @KeyValue(name = "longProp")
   private Long timeout;
+
   @KeyValue(name = "intProp")
   private int count;
 

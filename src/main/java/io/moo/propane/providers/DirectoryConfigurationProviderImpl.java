@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
  * Created by bagdemir on 14/03/15.
  */
 public class DirectoryConfigurationProviderImpl<T> implements ConfigurationProvider<T> {
+  // File patterns
   private static final String[] FILE_PATTERNS = new String[]{"cfg", "properties"};
 
   public Collection<ConfigurationEntity> read() {

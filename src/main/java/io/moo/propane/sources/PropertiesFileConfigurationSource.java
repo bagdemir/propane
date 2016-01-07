@@ -53,6 +53,7 @@ public class PropertiesFileConfigurationSource extends ConfigurationSource {
 
   @Override
   public ConfigData read() {
+
     final ConfigData configData = new ConfigData();
     final Map<String, String> propsMap = configData.getPropsMap();
 
