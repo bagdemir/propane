@@ -64,7 +64,7 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
     final Map<String, String> propsMap = data.getPropsMap();
 
     final List<ConfigurationEntity> propsList = propsMap.entrySet().stream().map(entry ->
-            new ConfigurationEntity(componentIdExtractor.extract(data.getSource()),
+            new ConfigurationEntity(String.join("", componentIdExtractor.extract(data.getSource())),
                     null, entry.getKey(), entry.getValue())).collect(Collectors.toList());
 
     final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();

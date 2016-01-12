@@ -25,15 +25,17 @@
  */
 package io.moo.propane.extractors;
 
+import java.util.Collection;
+
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
 public interface TokenExtractor {
-
-  String SLASH = "/";
+  String CONTEXT_SEPARATOR = "\\.";
+  String SEGMENT_SEPARATOR = "/";
   String BLANK_STR = "";
 
-  String extract(String sourceString);
+  Collection<String> extract(String sourceString);
 }

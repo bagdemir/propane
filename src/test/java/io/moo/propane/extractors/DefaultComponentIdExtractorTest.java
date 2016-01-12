@@ -26,8 +26,11 @@
 package io.moo.propane.extractors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Collection;
 
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import org.junit.Test;
@@ -46,9 +49,9 @@ public class DefaultComponentIdExtractorTest {
   @Test
   public void testExtractComponentId() {
     final DefaultComponentIdExtractor extractor = new DefaultComponentIdExtractor();
-    final String extracted = extractor.extract("classpath://foo/bar.props");
+    final Collection<String> extracted = extractor.extract("classpath://foo/bar.props");
     assertThat(extracted, notNullValue());
-    assertThat(extracted, equalTo("bar"));
+    assertThat(extracted, hasItem("bar"));
   }
 
 
@@ -67,26 +70,26 @@ public class DefaultComponentIdExtractorTest {
   @Test
   public void testExtractComponentIdWithoutFileExtension() {
     final DefaultComponentIdExtractor extractor = new DefaultComponentIdExtractor();
-    final String extracted = extractor.extract("classpath://foo/bar");
+    final Collection<String> extracted = extractor.extract("classpath://foo/bar");
     assertThat(extracted, notNullValue());
-    assertThat(extracted, equalTo("bar"));
+    assertThat(extracted, hasItem("bar"));
   }
 
 
   @Test
   public void testExtractComponentIdWithLeadingSpecialChars() {
     final DefaultComponentIdExtractor extractor = new DefaultComponentIdExtractor();
-    final String extracted = extractor.extract("classpath://f.o.o/bar");
+    final Collection<String> extracted = extractor.extract("classpath://f.o.o/bar");
     assertThat(extracted, notNullValue());
-    assertThat(extracted, equalTo("bar"));
+    assertThat(extracted, hasItem("bar"));
   }
 
 
   @Test
   public void testFail() {
     final DefaultComponentIdExtractor extractor = new DefaultComponentIdExtractor();
-    final String extracted = extractor.extract("classpath://props/testConfig.properties");
+    final Collection<String> extracted = extractor.extract("classpath://props/testConfig.properties");
     assertThat(extracted, notNullValue());
-    assertThat(extracted, equalTo("testConfig"));
+    assertThat(extracted, hasItem("testConfig"));
   }
 }

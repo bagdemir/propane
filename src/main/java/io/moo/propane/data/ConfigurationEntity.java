@@ -1,18 +1,18 @@
 /**
  * The MIT License (MIT)
- * <p>
+ * <p/>
  * Copyright (c) 2015 moo.io , Erhan Bagdemir
- * <p>
+ * <p/>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p>
+ * <p/>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * <p>
+ * <p/>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -36,95 +36,97 @@ import java.util.Arrays;
  * @since 1.0
  */
 public class ConfigurationEntity {
-    private String componentId;
-    private String[] contextIds;
-    private String propertyName;
-    private String propertyValue;
-
-    public ConfigurationEntity(final String componentId,
-                               final String[] contextIds,
-                               final String propertyName,
-                               final String propertyValue) {
-        this.componentId = componentId;
-        this.contextIds = contextIds;
-        this.propertyName = propertyName;
-        this.propertyValue = propertyValue;
-    }
+  private String componentId;
+  private String[] contextIds;
+  private String propertyName;
+  private String propertyValue;
 
 
-    public String getComponentId() {
-        return componentId;
-    }
+  public ConfigurationEntity(final String componentId,
+          final String[] contextIds,
+          final String propertyName,
+          final String propertyValue) {
+
+    this.componentId = componentId;
+    this.contextIds = contextIds;
+    this.propertyName = propertyName;
+    this.propertyValue = propertyValue;
+  }
 
 
-    public void setComponentId(final String componentId) {
-        this.componentId = componentId;
-    }
+  public String getComponentId() {
+    return componentId;
+  }
 
 
-    public String[] getContextIds() {
-        return contextIds;
-    }
+  public void setComponentId(final String componentId) {
+    this.componentId = componentId;
+  }
 
 
-    public void setContextIds(final String[] contextIds) {
-        this.contextIds = contextIds;
-    }
+  public String[] getContextIds() {
+    return contextIds;
+  }
 
 
-    public String getPropertyName() {
-        return propertyName;
-    }
+  public void setContextIds(final String[] contextIds) {
+    this.contextIds = contextIds;
+  }
 
 
-    public void setPropertyName(final String propertyName) {
-        this.propertyName = propertyName;
-    }
+  public String getPropertyName() {
+    return propertyName;
+  }
 
 
-    public Object getPropertyValue() {
-        return propertyValue;
-    }
+  public void setPropertyName(final String propertyName) {
+    this.propertyName = propertyName;
+  }
 
 
-    public void setPropertyValue(final String propertyValue) {
-        this.propertyValue = propertyValue;
-    }
+  public Object getPropertyValue() {
+    return propertyValue;
+  }
 
 
-    @Override
-    public boolean equals(final Object o) {
-        if (this == o) return true;
-        if (!(o instanceof ConfigurationEntity)) return false;
-
-        ConfigurationEntity that = (ConfigurationEntity) o;
-
-        if (!componentId.equals(that.componentId)) return false;
-        if (!Arrays.equals(contextIds, that.contextIds)) return false;
-        if (!propertyName.equals(that.propertyName)) return false;
-        if (!propertyValue.equals(that.propertyValue)) return false;
-
-        return true;
-    }
+  public void setPropertyValue(final String propertyValue) {
+    this.propertyValue = propertyValue;
+  }
 
 
-    @Override
-    public int hashCode() {
-        int result = componentId.hashCode();
-        result = 31 * result + Arrays.hashCode(contextIds);
-        result = 31 * result + propertyName.hashCode();
-        result = 31 * result + propertyValue.hashCode();
-        return result;
-    }
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ConfigurationEntity)) return false;
+
+    ConfigurationEntity that = (ConfigurationEntity) o;
+
+    if (!componentId.equals(that.componentId)) return false;
+    if (!Arrays.equals(contextIds, that.contextIds)) return false;
+    if (!propertyName.equals(that.propertyName)) return false;
+    if (!propertyValue.equals(that.propertyValue)) return false;
+
+    return true;
+  }
 
 
-    @Override
-    public String toString() {
-        return "Configuration{" +
-                "componentId='" + componentId + '\'' +
-                ", contextIds=" + Arrays.toString(contextIds) +
-                ", propertyName='" + propertyName + '\'' +
-                ", propertyValue=" + propertyValue +
-                '}';
-    }
+  @Override
+  public int hashCode() {
+    int result = componentId.hashCode();
+    result = 31 * result + Arrays.hashCode(contextIds);
+    result = 31 * result + propertyName.hashCode();
+    result = 31 * result + propertyValue.hashCode();
+    return result;
+  }
+
+
+  @Override
+  public String toString() {
+    return "Configuration{" +
+            "componentId='" + componentId + '\'' +
+            ", contextIds=" + Arrays.toString(contextIds) +
+            ", propertyName='" + propertyName + '\'' +
+            ", propertyValue=" + propertyValue +
+            '}';
+  }
 }
