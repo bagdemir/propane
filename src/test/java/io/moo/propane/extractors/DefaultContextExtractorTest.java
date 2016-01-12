@@ -26,8 +26,15 @@
 package io.moo.propane.extractors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.collection.IsEmptyCollection.empty;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import io.moo.propane.extractors.DefaultContextExtractor;
 import org.junit.Test;
@@ -36,6 +43,11 @@ import io.moo.propane.exception.InvalidPropertyNameException;
 import io.moo.propane.extractors.DefaultContextExtractor;
 
 /**
+ * Tests for the default context extractor. {@link DefaultContextExtractor}
+ * expects the form:
+ *
+ *    "context token / component id token / property name"
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
@@ -45,9 +57,11 @@ public class DefaultContextExtractorTest {
   @Test
   public void testExtractContext() {
     final DefaultContextExtractor extractor = new DefaultContextExtractor();
-    final String extract = extractor.extract("us.dev.a/io.moo/propName");
+    final Collection<String> extract = extractor.extract("us.dev.a/io.moo/propName");
+    final List<String> strings = Arrays.asList("us", "dev", "a");
+
     assertThat(extract, notNullValue());
-    assertThat(extract, equalTo("us.dev.a"));
+    assertThat(extract.containsAll(strings), is(true));
   }
 
   @Test(expected = InvalidPropertyNameException.class)
@@ -63,6 +77,6 @@ public class DefaultContextExtractorTest {
   @Test
   public void testExtractMultiSegmentPropertyNameWithoutContext() {
     final DefaultContextExtractor extractor = new DefaultContextExtractor();
-    assertThat(extractor.extract("b/propName"), equalTo(null));
+    assertThat(extractor.extract("b/propName"), is(empty()));
   }
 }

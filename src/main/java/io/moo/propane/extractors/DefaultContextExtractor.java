@@ -25,6 +25,10 @@
  */
 package io.moo.propane.extractors;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
@@ -35,16 +39,18 @@ import io.moo.propane.exception.InvalidPropertyNameException;
  * @since 1.0
  */
 public class DefaultContextExtractor implements TokenExtractor {
+
   @Override
-  public String extract(final String sourceString) {
+  public Collection<String> extract(final String sourceString) {
     assertPropertyNameIsValid(sourceString);
-    if (sourceString.contains(SLASH)) {
-      String[] split = sourceString.split(SLASH);
+
+    if (sourceString.contains(SEGMENT_SEPARATOR)) {
+      String[] split = sourceString.split(SEGMENT_SEPARATOR);
       if (split.length > 2) {
-        return split[split.length - 3];
+        return Arrays.asList(split[split.length - 3].split(CONTEXT_SEPARATOR));
       }
     }
-    return null;
+    return Collections.<String>emptyList();
   }
 
   private void assertPropertyNameIsValid(final String propertyName) {
