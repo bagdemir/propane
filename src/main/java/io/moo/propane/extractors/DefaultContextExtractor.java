@@ -28,6 +28,8 @@ package io.moo.propane.extractors;
 import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
+ * Context extractor to determine the context of a configuration entity.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
@@ -36,8 +38,8 @@ public class DefaultContextExtractor implements TokenExtractor {
   @Override
   public String extract(final String sourceString) {
     assertPropertyNameIsValid(sourceString);
-    if (sourceString.contains("/")) {
-      String[] split = sourceString.split("/");
+    if (sourceString.contains(SLASH)) {
+      String[] split = sourceString.split(SLASH);
       if (split.length > 2) {
         return split[split.length - 3];
       }
@@ -46,7 +48,7 @@ public class DefaultContextExtractor implements TokenExtractor {
   }
 
   private void assertPropertyNameIsValid(final String propertyName) {
-    if (propertyName == null || "".equals(propertyName)) {
+    if (propertyName == null || BLANK_STR.equals(propertyName)) {
       throw new InvalidPropertyNameException();
     }
   }

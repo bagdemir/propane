@@ -37,7 +37,7 @@ public class DefaultComponentIdExtractor implements TokenExtractor {
   @Override
   public String extract(final String sourceString) {
     assertPropertyNameIsValid(sourceString);
-    int slLastIndex = sourceString.lastIndexOf("/");
+    int slLastIndex = sourceString.lastIndexOf(SLASH);
     int ptLastIndex = sourceString.lastIndexOf(".");
     if (slLastIndex < ptLastIndex) {
       return sourceString.substring(slLastIndex + 1, ptLastIndex);

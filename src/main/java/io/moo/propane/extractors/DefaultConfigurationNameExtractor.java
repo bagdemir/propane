@@ -35,15 +35,12 @@ import io.moo.propane.exception.InvalidPropertyNameException;
  * @since 1.0
  */
 public class DefaultConfigurationNameExtractor implements TokenExtractor {
-  public static final String SLASH = "/";
-  public static final String BLANK_STR = "";
-
 
   @Override
   public String extract(final String sourceString) {
     assertConfigurationNameIsValid(sourceString);
     if (sourceString.contains(SLASH)) {
-      String[] split = sourceString.split(SLASH);
+      final String[] split = sourceString.split(SLASH);
       return split[split.length -1];
     }
     return sourceString;

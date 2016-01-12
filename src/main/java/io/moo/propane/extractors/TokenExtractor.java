@@ -31,5 +31,9 @@ package io.moo.propane.extractors;
  * @since 1.0
  */
 public interface TokenExtractor {
+
+  String SLASH = "/";
+  String BLANK_STR = "";
+
   String extract(String sourceString);
 }

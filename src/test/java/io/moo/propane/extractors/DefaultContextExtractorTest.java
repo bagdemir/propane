@@ -48,7 +48,6 @@ public class DefaultContextExtractorTest {
     final String extract = extractor.extract("us.dev.a/io.moo/propName");
     assertThat(extract, notNullValue());
     assertThat(extract, equalTo("us.dev.a"));
-
   }
 
   @Test(expected = InvalidPropertyNameException.class)
