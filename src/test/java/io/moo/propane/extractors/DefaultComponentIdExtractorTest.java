@@ -83,8 +83,8 @@ public class DefaultComponentIdExtractorTest {
   @Test
   public void testFail() {
     final DefaultComponentIdExtractor extractor = new DefaultComponentIdExtractor();
-    final Collection<String> extracted = extractor.extract("classpath://props/testConfig.properties");
+    final Collection<String> extracted = extractor.extract("classpath://configurations/test.properties");
     assertThat(extracted, notNullValue());
-    assertThat(extracted, hasItem("testConfig"));
+    assertThat(extracted, hasItem("test"));
   }
 }
