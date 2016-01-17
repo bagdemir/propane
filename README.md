@@ -30,13 +30,13 @@ mvn -e clean install
 
 After you install propane in your local Maven repository, you can add it into your project by defining the dependency and test it:
 
-<pre>
+```
 <dependency>
  <groupId>io.moo</groupId>
  <artifactId>propane</artifactId>
  <version>1.0-SNAPSHOT</version>
 </dependency>
-</pre>
+```
 
 Now, you can create the configuration entities: 
 
