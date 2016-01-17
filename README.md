@@ -1,4 +1,4 @@
-<img src="https://travis-ci.org/bagdemir/Propane.svg"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" />
+<img src="https://travis-ci.org/bagdemir/Propane.svg"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
 
 ## Propane
@@ -14,13 +14,67 @@ Propane is a Java framework to manage your configurations for different contexts
 - Annotate your Java classes with configuration management annotations. 
 - Define your configurations for each context for a particular application. 
 
-and then the Propane enables the configuration set for a given context.
+and then  Propane enables the configuration set in applications for this given context.
  
-A context may be region, environment, or a custom context defined by you. For instance, if your service is running in the US region and in the development environment, Propane enables the configurations for the US region and the development environment.
+A context may be a region, an environment, or a custom context just defined by you. For instance, if your service is running in the US region and in the dev environment, Propane enables the configurations for Development + US in those applications running in US and dev environment.
 
 ## Usage
 
-TODO: Write usage instructions here
+Since the project is under development, you are able to test it by cloning the project on your computer and build it. 
+
+<pre lang="shell">
+git clone git@github.com:bagdemir/propane.git
+cd propane
+mvn -e clean install
+</pre>
+
+After you install propane in your local Maven repository, you can add it into your project by defining the dependency and test it:
+
+```
+<dependency>
+ <groupId>io.moo</groupId>
+ <artifactId>propane</artifactId>
+ <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
+Now, you can create the configuration entities: 
+
+<pre lang="java">
+@Configuration(componentId = "test")
+@Source(url = "classpath://configurations/test.properties")
+public class TestConfigurationEntityWithClasspathSource {
+
+  @KeyValue(name = "testProp")
+  private String url;
+
+  @KeyValue(name = "longProp")
+  private Long timeout;
+
+  @KeyValue(name = "intProp")
+  private int count;
+
+  private String nonPropField;
+
+}
+</pre>
+
+You can now register your entity witin the configuration manager:
+<pre lang="java">
+final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+</pre>
+
+Once the configurations are loaded by the ConfigurationManager, you can access them:
+
+<pre lang="java">
+final Optional<TestConfigurationEntityWithClasspathSource> configs = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
+final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = configs.get();
+testPropsWithClasspathSource.getUrl()
+</pre>
+
+That's all. 
+
 
 ## Contributing
 

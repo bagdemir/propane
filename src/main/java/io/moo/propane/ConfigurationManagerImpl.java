@@ -37,6 +37,9 @@ import io.moo.propane.providers.ConfigurationProvider;
 import io.moo.propane.sources.ConfigurationSource;
 
 /**
+ * {@link ConfigurationManagerImpl} is the repository for your configuration
+ * entities.
+ *
  * @author bagdemir
  * @version 1.0
  */
@@ -44,6 +47,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
   private static final Logger LOG = LogManager.getLogger();
 
+  /** Cache */
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 
 
@@ -54,8 +58,11 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
       LOG.info("{} has already been registered.", clazz);
       return false;
     }
+
     validateConfigurationEntity(clazz);
+
     registerConfigurationProvider(clazz);
+
     return true;
   }
 
