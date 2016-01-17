@@ -43,7 +43,7 @@ import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
  * @since 1.0
  */
 public class KeyValueEntityProcessorImplTest {
-    public static final String COMPONENT_ID = "testConfig";
+    public static final String COMPONENT_ID = "test";
     public static final long EXPECTED_TIMEOUT = 100L;
     public static final int EXPECTED_COUNT = 1;
     public static final String EXPECTED_URL = "abc";

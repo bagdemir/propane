@@ -31,7 +31,7 @@ package io.moo.propane.annotation;
  * @since 1.0
  */
 @Configuration(componentId = "io.moo.test.component")
-@Source(url = "classpath://props/testConfig.properties")
+@Source(url = "classpath://configurations/test.properties")
 public class TestPropsWithFileSource {
 
   @KeyValue(name = "testProp")

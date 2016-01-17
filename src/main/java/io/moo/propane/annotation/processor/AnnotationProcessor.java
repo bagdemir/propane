@@ -30,7 +30,7 @@ import java.util.List;
 import io.moo.propane.data.ConfigurationEntity;
 
 /**
- * Annotation processor is used to process properties entity annotations.
+ * Annotation processor is used to process configuration entity annotations.
  *
  * @author bagdemir
  * @version 1.0

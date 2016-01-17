@@ -41,7 +41,7 @@ import org.junit.Test;
  * @since 1.0
  */
 public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "props/testConfig.properties";
+  public static final String TEST_PROPS = "configurations/test.properties";
 
   @Test
   public void testRead() {
