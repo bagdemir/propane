@@ -37,6 +37,9 @@ import io.moo.propane.providers.ConfigurationProvider;
 import io.moo.propane.sources.ConfigurationSource;
 
 /**
+ * {@link ConfigurationManagerImpl} is the repository for your configuration
+ * entities.
+ *
  * @author bagdemir
  * @version 1.0
  */
@@ -57,7 +60,9 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
     }
 
     validateConfigurationEntity(clazz);
+
     registerConfigurationProvider(clazz);
+
     return true;
   }
 

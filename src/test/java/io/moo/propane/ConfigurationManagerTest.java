@@ -53,44 +53,6 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
 public class ConfigurationManagerTest {
   private static final Logger LOG = LogManager.getLogger();
   private static final String TEST_PROPS = "configurations/test.properties";
-  private static File testConfigFile;
-
-
-  @BeforeClass
-  public static void setUp() throws IOException {
-
-    testConfigFile = File.createTempFile(String.format("test-%s", UUID.randomUUID()), ".tmp");
-
-    LOG.info("Created a new file file %s", testConfigFile);
-
-    final FileOutputStream fileOutputStream = new FileOutputStream(testConfigFile);
-    final OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
-    final Properties props = new Properties();
-    props.put("longProp", "1000");
-    props.put("testProp", "http://localhost/");
-    props.put("intProp", "99");
-
-    try {
-      props.store(outputStreamWriter, "Test properties used by tests.");
-    }
-    catch (IOException e) {
-      try {
-        outputStreamWriter.close();
-      }
-      catch (IOException ioe) {
-        throw new RuntimeException(String.format("Cannot close the stream for %s file.", TEST_PROPS));
-      }
-    }
-  }
-
-
-  @AfterClass
-  public static void tearDown() {
-    if (testConfigFile != null && testConfigFile.exists() && testConfigFile.delete()) {
-      LOG.info("Test file %s successfully deleted.", testConfigFile);
-    }
-  }
-
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
@@ -116,7 +78,7 @@ public class ConfigurationManagerTest {
 
 
   @Test
-  public void testLoad() throws InterruptedException {
+  public void testLoadFromClasspath() throws InterruptedException {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
     configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
 
