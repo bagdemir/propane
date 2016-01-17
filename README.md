@@ -2,14 +2,14 @@
 
 
 ## Propane
---
+
 Propane is a light-weight Java framework for Configuration Management.
 [Check out Project's home for API docs.] (http://propane.moo.io)
 
 <img src="http://www.bagdemir.com/img/propane.png" width="200"/>
 
 ### Overview
---
+
 Propane is a Java framework to manage your configurations for different contexts. 
 - Annotate your Java classes with configuration management annotations. 
 - Define your configurations for each context for a particular application. 
