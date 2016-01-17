@@ -22,21 +22,21 @@ A context may be a region, an environment, or a custom context just defined by y
 
 Since the project is under development, you are able to test it by cloning the project on your computer and build it. 
 
-```
+<pre lang="shell">
 git clone git@github.com:bagdemir/propane.git
 cd propane
 mvn -e clean install
-```
+</pre>
 
 After you install propane in your local Maven repository, you can add it into your project by defining the dependency and test it:
 
-```   
+<pre lang="xml">
 <dependency>
  <groupId>io.moo</groupId>
  <artifactId>propane</artifactId>
  <version>1.0-SNAPSHOT</version>
 </dependency>
-```
+</pre>
 
 Now, you can create the configuration entities: 
 
