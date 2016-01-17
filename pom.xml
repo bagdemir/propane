@@ -7,6 +7,16 @@
     <groupId>io.moo</groupId>
     <artifactId>propane</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <description>Propane is a light-weight Java framework for Configuration Management.</description>
+
+    <developers>
+        <developer>
+            <name>Erhan Bagdemir</name>
+            <email>bagdemir@moo.io</email>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

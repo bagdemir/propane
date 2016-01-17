@@ -26,18 +26,10 @@ package io.moo.propane;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Optional;
-import java.util.Properties;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import io.moo.propane.annotation.TestConfigurationEntityWithClasspathSource;
@@ -53,6 +45,7 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
 public class ConfigurationManagerTest {
   private static final Logger LOG = LogManager.getLogger();
   private static final String TEST_PROPS = "configurations/test.properties";
+
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
