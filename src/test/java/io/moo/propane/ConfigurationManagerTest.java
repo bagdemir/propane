@@ -70,10 +70,10 @@ public class ConfigurationManagerTest {
     configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
 
     Thread.sleep(100L);
-    final Optional<TestConfigurationEntityWithClasspathSource> props = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
-    assertThat(props.isPresent(), equalTo(true));
+    final Optional<TestConfigurationEntityWithClasspathSource> configs = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
+    assertThat(configs.isPresent(), equalTo(true));
 
-    final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = props.get();
+    final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = configs.get();
     assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
