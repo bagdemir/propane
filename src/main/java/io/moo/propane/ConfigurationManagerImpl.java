@@ -44,6 +44,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
   private static final Logger LOG = LogManager.getLogger();
 
+  /** Cache */
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 
 
@@ -54,6 +55,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
       LOG.info("{} has already been registered.", clazz);
       return false;
     }
+
     validateConfigurationEntity(clazz);
     registerConfigurationProvider(clazz);
     return true;
