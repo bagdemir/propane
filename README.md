@@ -38,6 +38,44 @@ After you install propane in your local Maven repository, you can add it into yo
 </dependency>
 ```
 
+Now, you can create the configuration entities: 
+
+```
+@Configuration(componentId = "test")
+@Source(url = "classpath://configurations/test.properties")
+public class TestConfigurationEntityWithClasspathSource {
+
+  @KeyValue(name = "testProp")
+  private String url;
+
+  @KeyValue(name = "longProp")
+  private Long timeout;
+
+  @KeyValue(name = "intProp")
+  private int count;
+
+  private String nonPropField;
+
+}
+```
+
+You can now register your entity witin the configuration manager:
+```
+final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+
+```
+
+Once the configurations are loaded by the ConfigurationManager, you can access them:
+
+```
+final Optional<TestConfigurationEntityWithClasspathSource> configs = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
+final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = configs.get();
+testPropsWithClasspathSource.getUrl()
+```
+
+That's all. 
+
 
 ## Contributing
 
