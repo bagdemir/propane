@@ -1,4 +1,4 @@
-<img src="https://travis-ci.org/bagdemir/Propane.svg"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" />
+<img src="https://travis-ci.org/bagdemir/Propane.svg"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
 
 ## Propane
