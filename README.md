@@ -14,9 +14,9 @@ Propane is a Java framework to manage your configurations for different contexts
 - Annotate your Java classes with configuration management annotations. 
 - Define your configurations for each context for a particular application. 
 
-and then the Propane enables the configuration set for a given context.
+and then  Propane enables the configuration set in applications for this given context.
  
-A context may be region, environment, or a custom context defined by you. For instance, if your service is running in the US region and in the development environment, Propane enables the configurations for the US region and the development environment.
+A context may be a region, an environment, or a custom context just defined by you. For instance, if your service is running in the US region and in the dev environment, Propane enables the configurations for Development + US in those applications running in US and dev environment.
 
 ## Usage
 
