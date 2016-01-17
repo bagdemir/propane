@@ -25,7 +25,8 @@ Since the project is under development, you are able to test it by cloning the p
 ```
 git clone git@github.com:bagdemir/propane.git
 cd propane
-mvn -e clean install```
+mvn -e clean install
+```
 
 After you install propane in your local Maven repository, you can add it into your project by defining the dependency and test it:
 
