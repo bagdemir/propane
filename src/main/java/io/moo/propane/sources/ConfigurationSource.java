@@ -46,7 +46,9 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
    */
   public static ConfigurationSource newConfigurationSourceFor(Source source) {
 
-    if (source == null) throw new InvalidConfigurationEntityException();
+    if (source == null) {
+      throw new InvalidConfigurationEntityException("@Source annotation is missing.");
+    }
 
     final String url = source.url();
     final String prefix = getPrefix(url);

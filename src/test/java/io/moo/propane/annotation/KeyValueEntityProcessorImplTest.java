@@ -27,15 +27,15 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.List;
+import java.util.Map;
 
-import io.moo.propane.data.ConfigurationEntity;
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
+import io.moo.propane.sources.ConfigData;
 
 /**
  * @author bagdemir
@@ -43,36 +43,29 @@ import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
  * @since 1.0
  */
 public class KeyValueEntityProcessorImplTest {
-    public static final String COMPONENT_ID = "test";
-    public static final long EXPECTED_TIMEOUT = 100L;
-    public static final int EXPECTED_COUNT = 1;
-    public static final String EXPECTED_URL = "abc";
+  public static final String COMPONENT_ID = "test";
+  public static final long EXPECTED_TIMEOUT = 100L;
+  public static final int EXPECTED_COUNT = 1;
+  public static final String EXPECTED_URL = "abc";
 
-    @Test
-    public void testCreate() {
 
-        final ConfigurationEntity propStr = new ConfigurationEntity(COMPONENT_ID,
-                new String[]{"test"},
-                "testProp",
-                "abc");
+  @Test
+  public void testCreate() {
+    final Map<String, String> propsMap = ImmutableMap.of(
+            "testProp", "abc",
+            "longProp", "100",
+            "intProp", "1"
+    );
+    final ConfigData configData = new ConfigData();
+    configData.setSource("classpath://configurations/test.properties");
+    configData.setPropsMap(propsMap);
 
-        final ConfigurationEntity propLong = new ConfigurationEntity(COMPONENT_ID,
-                new String[]{"test"},
-                "longProp",
-                "100");
+    AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+    TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestConfigurationEntityWithClasspathSource.class, configData);
 
-        final ConfigurationEntity propInt = new ConfigurationEntity(COMPONENT_ID,
-                new String[]{"test"},
-                "intProp",
-                "1");
-
-        List<ConfigurationEntity> props = ImmutableList.of(propStr, propLong, propInt);
-        AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-        TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = processor.createEntity(TestConfigurationEntityWithClasspathSource.class, props);
-
-        assertThat(testPropsWithClasspathSource, notNullValue());
-        assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(EXPECTED_TIMEOUT));
-        assertThat(testPropsWithClasspathSource.getCount(), equalTo(EXPECTED_COUNT));
-        assertThat(testPropsWithClasspathSource.getUrl(), equalTo(EXPECTED_URL));
-    }
+    assertThat(testPropsWithClasspathSource, notNullValue());
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(EXPECTED_TIMEOUT));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(EXPECTED_COUNT));
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo(EXPECTED_URL));
+  }
 }

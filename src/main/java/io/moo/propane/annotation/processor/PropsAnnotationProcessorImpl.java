@@ -1,18 +1,18 @@
 /**
  * The MIT License (MIT)
- * <p/>
+ * <p>
  * Copyright (c) 2015 moo.io , Erhan Bagdemir
- * <p/>
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p/>
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * <p/>
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,13 +27,18 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.KeyValue;
+import io.moo.propane.annotation.Source;
+import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
+import io.moo.propane.extractors.TokenExtractor;
+import io.moo.propane.sources.ConfigData;
 
 /**
  * @author bagdemir
@@ -45,20 +50,43 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   @Override
-  public <T> T createEntity(final Class<T> clazz, final List<io.moo.propane.data.ConfigurationEntity> entities) {
+  public <T> T createEntity(final Class<T> clazz, ConfigData data) {
+
+    final Source source = clazz.getDeclaredAnnotation(Source.class);
+    final TokenExtractor componentIdExtractor = getComponentIdExtractorInstance(source);
+    final List<ConfigurationEntity> entities = data.getPropsMap().entrySet().stream().map(entry ->
+            new ConfigurationEntity(String.join("", componentIdExtractor.extract(data.getSource())),
+                    null /*TODO */, entry.getKey(), entry.getValue())).collect(Collectors.toList());
 
     final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
     if (configurationAnnotation != null) {
-      String componentId = configurationAnnotation.componentId();
-      Field[] fields = clazz.getDeclaredFields();
-      T instance = newEntityInstance(clazz);
+      final String componentId = configurationAnnotation.componentId();
+      final Field[] fields = clazz.getDeclaredFields();
+      final T instance = newEntityInstance(clazz);
       processFields(entities, componentId, fields, instance);
       return instance;
-    } else throw new InvalidConfigurationEntityException();
+    } else
+      throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
   }
 
 
-  private <T> void processFields(final Collection<io.moo.propane.data.ConfigurationEntity> entities,
+  private TokenExtractor getComponentIdExtractorInstance(final Source source) {
+
+    try {
+      if (source == null) {
+        throw new InvalidConfigurationEntityException("@Source annotation is missing.");
+      } else {
+        return source.componentIdExtractor().newInstance();
+      }
+    }
+    catch (InstantiationException | IllegalAccessException e) {
+      LOG.error(e);
+      throw new InvalidConfigurationEntityException(e.getMessage(), e);
+    }
+  }
+
+
+  private <T> void processFields(final Collection<ConfigurationEntity> entities,
           final String componentId, final Field[] fields, final T instance) {
 
     Arrays.stream(fields).
@@ -70,7 +98,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
   }
 
 
-  private <T> void performEntityProcessing(final KeyValue annotation, final io.moo.propane.data.ConfigurationEntity configurationEntity,
+  private <T> void performEntityProcessing(final KeyValue annotation, final ConfigurationEntity configurationEntity,
           final Field field, T instance) {
 
     if (annotation.name().equals(configurationEntity.getPropertyName())) {

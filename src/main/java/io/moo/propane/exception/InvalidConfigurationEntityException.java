@@ -31,4 +31,13 @@ package io.moo.propane.exception;
  * @since 1.0
  */
 public class InvalidConfigurationEntityException extends RuntimeException {
+
+  public InvalidConfigurationEntityException(final String message) {
+    super(message);
+  }
+
+
+  public InvalidConfigurationEntityException(final String message, final Throwable e) {
+    super(message, e);
+  }
 }
