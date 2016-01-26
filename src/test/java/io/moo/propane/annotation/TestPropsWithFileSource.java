@@ -25,13 +25,15 @@
  */
 package io.moo.propane.annotation;
 
+import io.moo.propane.extractors.DefaultContextExtractor;
+
 /**
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
 @Configuration(componentId = "io.moo.test.component")
-@Source(url = "classpath://configurations/test.properties")
+@Source(url = "classpath://configurations/test.properties", contextExtractor = DefaultContextExtractor.class)
 public class TestPropsWithFileSource {
 
   @KeyValue(name = "testProp")

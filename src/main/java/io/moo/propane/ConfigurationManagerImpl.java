@@ -84,7 +84,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   private <T> void validateConfigurationEntity(final Class<T> clazz) {
     final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
     if (configurationAnnotation == null) {
-      throw new InvalidConfigurationEntityException();
+      throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
     }
   }
 

@@ -26,8 +26,10 @@
 package io.moo.propane.annotation.processor;
 
 import java.util.List;
+import java.util.Map;
 
 import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.sources.ConfigData;
 
 /**
  * Annotation processor is used to process configuration entity annotations.
@@ -37,5 +39,5 @@ import io.moo.propane.data.ConfigurationEntity;
  * @since 1.0
  */
 public interface AnnotationProcessor {
-  <T> T createEntity(final Class<T> clazz, final List<ConfigurationEntity> entities);
+  <T> T createEntity(final Class<T> clazz, final ConfigData data);
 }

@@ -58,17 +58,6 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   @Override
   public T load(Class<T> clazz) {
-
-    final ConfigData data = configData.get();
-
-    final Map<String, String> propsMap = data.getPropsMap();
-
-    final List<ConfigurationEntity> propsList = propsMap.entrySet().stream().map(entry ->
-            new ConfigurationEntity(String.join("", componentIdExtractor.extract(data.getSource())),
-                    null, entry.getKey(), entry.getValue())).collect(Collectors.toList());
-
-    final AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
-
-    return processor.createEntity(clazz, propsList);
+    return new PropsAnnotationProcessorImpl().createEntity(clazz, configData.get());
   }
 }
