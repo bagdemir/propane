@@ -24,6 +24,7 @@
 package io.moo.propane.data;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * Entity to hold a single property imported from a props file. Each property
@@ -37,13 +38,13 @@ import java.util.Arrays;
  */
 public class ConfigurationEntity {
   private String componentId;
-  private String[] contextIds;
+  private Collection<String> contextIds;
   private String propertyName;
   private String propertyValue;
 
 
   public ConfigurationEntity(final String componentId,
-          final String[] contextIds,
+          final Collection<String> contextIds,
           final String propertyName,
           final String propertyValue) {
 
@@ -64,12 +65,12 @@ public class ConfigurationEntity {
   }
 
 
-  public String[] getContextIds() {
+  public Collection<String> getContextIds() {
     return contextIds;
   }
 
 
-  public void setContextIds(final String[] contextIds) {
+  public void setContextIds(final Collection<String> contextIds) {
     this.contextIds = contextIds;
   }
 
@@ -101,21 +102,23 @@ public class ConfigurationEntity {
 
     ConfigurationEntity that = (ConfigurationEntity) o;
 
-    if (!componentId.equals(that.componentId)) return false;
-    if (!Arrays.equals(contextIds, that.contextIds)) return false;
-    if (!propertyName.equals(that.propertyName)) return false;
-    if (!propertyValue.equals(that.propertyValue)) return false;
+    if (componentId != null ? !componentId.equals(that.componentId) : that.componentId != null)
+      return false;
+    if (contextIds != null ? !contextIds.equals(that.contextIds) : that.contextIds != null)
+      return false;
+    if (propertyName != null ? !propertyName.equals(that.propertyName) : that.propertyName != null)
+      return false;
+    return !(propertyValue != null ? !propertyValue.equals(that.propertyValue) : that.propertyValue != null);
 
-    return true;
   }
 
 
   @Override
   public int hashCode() {
-    int result = componentId.hashCode();
-    result = 31 * result + Arrays.hashCode(contextIds);
-    result = 31 * result + propertyName.hashCode();
-    result = 31 * result + propertyValue.hashCode();
+    int result = componentId != null ? componentId.hashCode() : 0;
+    result = 31 * result + (contextIds != null ? contextIds.hashCode() : 0);
+    result = 31 * result + (propertyName != null ? propertyName.hashCode() : 0);
+    result = 31 * result + (propertyValue != null ? propertyValue.hashCode() : 0);
     return result;
   }
 
@@ -124,7 +127,7 @@ public class ConfigurationEntity {
   public String toString() {
     return "Configuration{" +
             "componentId='" + componentId + '\'' +
-            ", contextIds=" + Arrays.toString(contextIds) +
+            ", contextIds=" + String.join(",", getContextIds()) +
             ", propertyName='" + propertyName + '\'' +
             ", propertyValue=" + propertyValue +
             '}';

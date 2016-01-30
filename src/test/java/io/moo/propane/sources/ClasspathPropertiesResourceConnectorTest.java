@@ -42,6 +42,8 @@ import org.junit.Test;
  */
 public class ClasspathPropertiesResourceConnectorTest {
   public static final String TEST_PROPS = "configurations/test.properties";
+  public static final int EXPECTED_PROP_COUNT = 4;
+
 
   @Test
   public void testRead() {
@@ -50,6 +52,6 @@ public class ClasspathPropertiesResourceConnectorTest {
     final ConfigData configData = connector.read();
     final Map<String, String> propsMap = configData.getPropsMap();
     assertThat(propsMap, notNullValue());
-    assertThat(propsMap.size(), equalTo(3));
+    assertThat(propsMap.size(), equalTo(EXPECTED_PROP_COUNT));
   }
 }
