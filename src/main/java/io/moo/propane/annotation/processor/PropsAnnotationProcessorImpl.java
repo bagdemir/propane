@@ -56,8 +56,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
     final TokenExtractor componentIdExtractor = getComponentIdExtractorInstance(source);
     final TokenExtractor componentContextExtractor = getComponentContextExtractorInstance(source);
     final List<ConfigurationEntity> entities = data.getPropsMap().entrySet().stream().map(entry ->
-            new ConfigurationEntity(String.join("", componentIdExtractor.extract(data.getSource())),
-                    componentContextExtractor.extract(entry.getKey()), entry.getKey(), entry.getValue())).collect(Collectors.toList());
+            AnnotationProcessor.newEntity(componentIdExtractor, componentContextExtractor, data, entry)).collect(Collectors.toList());
 
     final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
     if (configurationAnnotation != null) {
@@ -79,8 +78,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
       } else {
         return source.componentIdExtractor().newInstance();
       }
-    }
-    catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       LOG.error(e);
       throw new InvalidConfigurationEntityException(e.getMessage(), e);
     }
@@ -94,8 +92,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
       } else {
         return source.contextExtractor().newInstance();
       }
-    }
-    catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       LOG.error(e);
       throw new InvalidConfigurationEntityException(e.getMessage(), e);
     }
@@ -103,7 +100,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void processFields(final Collection<ConfigurationEntity> entities,
-          final String componentId, final Field[] fields, final T instance) {
+                                 final String componentId, final Field[] fields, final T instance) {
 
     Arrays.stream(fields).
             filter(field -> null != field.getAnnotation(KeyValue.class)).
@@ -115,7 +112,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void performEntityProcessing(final KeyValue annotation, final ConfigurationEntity configurationEntity,
-          final Field field, T instance) {
+                                           final Field field, T instance) {
 
     if (annotation.name().equals(configurationEntity.getPropertyName())) {
       Object propertyValue = configurationEntity.getPropertyValue();
@@ -140,8 +137,8 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void performPrimitiveAssignment(final T instance,
-          final Field field,
-          final Object propertyValue) {
+                                              final Field field,
+                                              final Object propertyValue) {
     final Class<?> fieldType = field.getType();
     if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
       performAssignment(instance, field, Integer.valueOf((String) propertyValue));
@@ -164,13 +161,12 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
 
   private <T> void performAssignment(final T instance,
-          final Field field,
-          final Object propertyValue) {
+                                     final Field field,
+                                     final Object propertyValue) {
     try {
       field.setAccessible(true);
       field.set(instance, propertyValue);
-    }
-    catch (IllegalAccessException e) {
+    } catch (IllegalAccessException e) {
       LOG.error(e);
     } finally {
       field.setAccessible(false);
@@ -181,8 +177,7 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
   private <T> T newEntityInstance(final Class<T> clazz) {
     try {
       return clazz.newInstance();
-    }
-    catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException e) {
       LOG.error(e);
     }
     throw new AssertionError("Cannot createEntity a new instance of :" + clazz.getName());
