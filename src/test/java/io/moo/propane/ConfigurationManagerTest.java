@@ -49,14 +49,16 @@ public class ConfigurationManagerTest {
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
-    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.empty());
     configurationManager.register(Object.class);
   }
 
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
-    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.empty());
     assertThat(configurationManager.register(TestConfigEntity.class), equalTo(true));
     assertThat(configurationManager.register(TestConfigEntity.class), equalTo(false));
   }
@@ -64,7 +66,8 @@ public class ConfigurationManagerTest {
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntity() {
-    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.empty());
     configurationManager.register(TestConfigEntity.class);
     assertThat(configurationManager.isRegistered(TestConfigEntity.class), equalTo(true));
   }
@@ -72,7 +75,8 @@ public class ConfigurationManagerTest {
 
   @Test
   public void testLoadFromClasspath() throws InterruptedException {
-    final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.empty());
     configurationManager.register(TestConfigEntity.class);
 
     Thread.sleep(100L);

@@ -41,14 +41,21 @@ import io.moo.propane.sources.ConfigurationSource;
 
 /**
  * {@link ConfigurationManagerImpl} is the repository for your configuration
- * entities.
+ * entities which lives in a context like environment, region, etc. According
+ * to its content, the configuration managers gives only the configurations
+ * back that they exist within the same configuration.
  *
  * @author bagdemir
  * @version 1.0
  */
 public class ConfigurationManagerImpl implements ConfigurationManager {
-
   private static final Logger LOG = LogManager.getLogger();
+
+  private final Optional<ContextInfo> contextInfo;
+
+  public ConfigurationManagerImpl(Optional<ContextInfo> contextInfo) {
+    this.contextInfo = contextInfo;
+  }
 
   /** Cache */
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
