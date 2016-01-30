@@ -23,12 +23,13 @@
  */
 package io.moo.propane.annotation.processor;
 
-import java.util.List;
-import java.util.Map;
-
 import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigData;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Annotation processor is used to process configuration entity annotations.
@@ -43,13 +44,16 @@ public interface AnnotationProcessor {
 
   <T> T createEntity(final Class<T> clazz, final ConfigData data);
 
+  <T> T createEntity(final Class<T> clazz, final ConfigData data, final Optional<ContextInfo> contextInfo);
+
   /**
-   * Static factory method that creates configuration entity instances from the raw configuration data.
+   * Static factory method that creates configuration entity instances from the
+   * raw configuration data.
    *
    * @param componentIdExtractor Component id extractor.
-   * @param contextExtractor Context extractor.
-   * @param data Configuration data.
-   * @param entry Configuration entry as key, value.
+   * @param contextExtractor     Context extractor.
+   * @param data                 Configuration data.
+   * @param entry                Configuration entry as key, value.
    * @return Configuration entity.
    * @see ConfigurationEntity
    * @see ConfigData

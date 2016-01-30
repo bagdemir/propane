@@ -23,19 +23,17 @@
  */
 package io.moo.propane.annotation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
+import com.google.common.collect.ImmutableMap;
+import io.moo.propane.annotation.processor.AnnotationProcessor;
+import io.moo.propane.annotation.processor.ConfigurationAnnotationProcessorImpl;
+import io.moo.propane.sources.ConfigData;
+import org.junit.Test;
 
 import java.util.Map;
 
-import org.junit.Test;
-
-import com.google.common.collect.ImmutableMap;
-
-import io.moo.propane.annotation.processor.AnnotationProcessor;
-import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
-import io.moo.propane.sources.ConfigData;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * @author bagdemir
@@ -60,7 +58,7 @@ public class KeyValueEntityProcessorImplTest {
     configData.setSource("classpath://configurations/test.properties");
     configData.setPropsMap(propsMap);
 
-    AnnotationProcessor processor = new PropsAnnotationProcessorImpl();
+    AnnotationProcessor processor = new ConfigurationAnnotationProcessorImpl();
     TestConfigEntity testPropsWithClasspathSource = processor.createEntity(TestConfigEntity.class, configData);
 
     assertThat(testPropsWithClasspathSource, notNullValue());
