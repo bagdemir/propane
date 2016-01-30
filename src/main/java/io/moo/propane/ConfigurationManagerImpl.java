@@ -23,10 +23,13 @@
  */
 package io.moo.propane;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.moo.propane.data.ContextInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -91,9 +94,14 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
+    return load(clazz, Optional.empty());
+  }
+
+  @Override
+  public <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
     if (isRegistered(clazz)) {
       final ConfigurationProvider<T> provider = cache.get(clazz);
-      return Optional.ofNullable((T) provider.load(clazz));
+      return Optional.ofNullable((T) provider.load(clazz, contextInfo));
     }
     return Optional.empty();
   }

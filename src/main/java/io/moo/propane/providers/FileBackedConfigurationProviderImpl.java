@@ -23,21 +23,13 @@
  */
 package io.moo.propane.providers;
 
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import io.moo.propane.annotation.Source;
-import io.moo.propane.annotation.processor.AnnotationProcessor;
-import io.moo.propane.annotation.processor.PropsAnnotationProcessorImpl;
-import io.moo.propane.exception.InvalidConfigurationEntityException;
-import io.moo.propane.sources.ClasspathFileConfigurationSource;
-import io.moo.propane.sources.ConfigData;
-import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.annotation.processor.ConfigurationAnnotationProcessorImpl;
+import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigurationSource;
-import io.moo.propane.sources.PropertiesFileConfigurationSource;
+
+import java.util.Optional;
 
 /**
  * File backed configuration provider.
@@ -58,6 +50,11 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   @Override
   public T load(Class<T> clazz) {
-    return new PropsAnnotationProcessorImpl().createEntity(clazz, configData.get());
+    return load(clazz, Optional.empty());
+  }
+
+  @Override
+  public T load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
+    return new ConfigurationAnnotationProcessorImpl().createEntity(clazz, configData.get(), contextInfo);
   }
 }

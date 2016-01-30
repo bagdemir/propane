@@ -2,8 +2,10 @@ package io.moo.propane.providers;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Optional;
 
 import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.data.ContextInfo;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -33,6 +35,11 @@ public class DirectoryConfigurationProviderImpl<T> implements ConfigurationProvi
 
   @Override
   public T load(Class<T> clazz) {
+    return null;
+  }
+
+  @Override
+  public T load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
     return null;
   }
 }

@@ -25,6 +25,9 @@
  */
 package io.moo.propane;
 
+import io.moo.propane.data.ContextInfo;
+
+import java.util.Collection;
 import java.util.Optional;
 
 /**
@@ -38,4 +41,6 @@ public interface ConfigurationManager {
   <T> boolean register(Class<T> clazz);
   <T> boolean isRegistered(Class<T> clazz);
   <T> Optional<T> load(Class<T> clazz);
+  <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contexts);
+
 }
