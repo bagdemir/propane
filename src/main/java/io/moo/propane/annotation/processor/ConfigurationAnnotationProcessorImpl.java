@@ -23,24 +23,26 @@
  */
 package io.moo.propane.annotation.processor;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.KeyValue;
 import io.moo.propane.annotation.Source;
 import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigData;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
+ * Process the configuration annotations provided in configuration entities.
  *
  * @author bagdemir
  * @version 1.0
@@ -49,15 +51,26 @@ import io.moo.propane.sources.ConfigData;
 public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor {
   private static final Logger LOG = LogManager.getLogger();
 
+  private boolean isWithinContext(final Optional<ContextInfo> contextInfo, final ConfigurationEntity entity) {
+    if (!contextInfo.isPresent() || contextInfo.get().getContexts().isEmpty()) {
+      return true;
+    }
+    return entity.getContextIds().containsAll(contextInfo.get().getContexts());
+  }
 
   @Override
-  public <T> T createEntity(final Class<T> clazz, ConfigData data) {
+  public <T> T createEntity(final Class<T> clazz, final ConfigData data) {
+    return createEntity(clazz, data, Optional.empty());
+  }
 
+  public <T> T createEntity(final Class<T> clazz, final ConfigData configData, final Optional<ContextInfo> contextInfo) {
     final Source source = clazz.getDeclaredAnnotation(Source.class);
-    final TokenExtractor componentIdExtractor = getComponentIdExtractorInstance(source);
-    final TokenExtractor componentContextExtractor = getComponentContextExtractorInstance(source);
-    final List<ConfigurationEntity> entities = data.getPropsMap().entrySet().stream().map(entry ->
-            AnnotationProcessor.newEntity(componentIdExtractor, componentContextExtractor, data, entry)).collect(Collectors.toList());
+    final TokenExtractor idExtractor = getComponentIdExtractorInstance(source);
+    final TokenExtractor contextExtractor = getComponentContextExtractorInstance(source);
+    final List<ConfigurationEntity> entities = configData.getPropsMap().entrySet().stream().
+            map(entity -> AnnotationProcessor.newEntity(idExtractor, contextExtractor, configData, entity)).
+            filter(entity -> isWithinContext(contextInfo, entity)).
+            collect(Collectors.toList());
 
     final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
     if (configurationAnnotation != null) {
@@ -68,8 +81,8 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
       return instance;
     } else
       throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
-  }
 
+  }
 
   private TokenExtractor getComponentIdExtractorInstance(final Source source) {
 
@@ -110,7 +123,6 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
                     forEach(entity -> performEntityProcessing(field.getAnnotation(KeyValue.class),
                             entity, field, instance)));
   }
-
 
   private <T> void performEntityProcessing(final KeyValue annotation, final ConfigurationEntity configurationEntity,
                                            final Field field, T instance) {
