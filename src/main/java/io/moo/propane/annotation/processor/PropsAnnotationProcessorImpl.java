@@ -54,9 +54,10 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
 
     final Source source = clazz.getDeclaredAnnotation(Source.class);
     final TokenExtractor componentIdExtractor = getComponentIdExtractorInstance(source);
+    final TokenExtractor componentContextExtractor = getComponentContextExtractorInstance(source);
     final List<ConfigurationEntity> entities = data.getPropsMap().entrySet().stream().map(entry ->
             new ConfigurationEntity(String.join("", componentIdExtractor.extract(data.getSource())),
-                    null /*TODO */, entry.getKey(), entry.getValue())).collect(Collectors.toList());
+                    componentContextExtractor.extract(entry.getKey()), entry.getKey(), entry.getValue())).collect(Collectors.toList());
 
     final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
     if (configurationAnnotation != null) {
@@ -77,6 +78,21 @@ public class PropsAnnotationProcessorImpl implements AnnotationProcessor {
         throw new InvalidConfigurationEntityException("@Source annotation is missing.");
       } else {
         return source.componentIdExtractor().newInstance();
+      }
+    }
+    catch (InstantiationException | IllegalAccessException e) {
+      LOG.error(e);
+      throw new InvalidConfigurationEntityException(e.getMessage(), e);
+    }
+  }
+
+  private TokenExtractor getComponentContextExtractorInstance(final Source source) {
+
+    try {
+      if (source == null) {
+        throw new InvalidConfigurationEntityException("@Source annotation is missing.");
+      } else {
+        return source.contextExtractor().newInstance();
       }
     }
     catch (InstantiationException | IllegalAccessException e) {

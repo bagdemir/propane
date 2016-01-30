@@ -32,7 +32,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import io.moo.propane.annotation.TestConfigurationEntityWithClasspathSource;
+import io.moo.propane.annotation.TestConfigEntity;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
@@ -57,29 +57,29 @@ public class ConfigurationManagerTest {
   @Test
   public void testIsRegisteredTestUsingValidPropsEntityButAlreadyRegistered() {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    assertThat(configurationManager.register(TestConfigurationEntityWithClasspathSource.class), equalTo(true));
-    assertThat(configurationManager.register(TestConfigurationEntityWithClasspathSource.class), equalTo(false));
+    assertThat(configurationManager.register(TestConfigEntity.class), equalTo(true));
+    assertThat(configurationManager.register(TestConfigEntity.class), equalTo(false));
   }
 
 
   @Test
   public void testIsRegisteredTestUsingValidPropsEntity() {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
-    assertThat(configurationManager.isRegistered(TestConfigurationEntityWithClasspathSource.class), equalTo(true));
+    configurationManager.register(TestConfigEntity.class);
+    assertThat(configurationManager.isRegistered(TestConfigEntity.class), equalTo(true));
   }
 
 
   @Test
   public void testLoadFromClasspath() throws InterruptedException {
     final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-    configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+    configurationManager.register(TestConfigEntity.class);
 
     Thread.sleep(100L);
-    final Optional<TestConfigurationEntityWithClasspathSource> configs = configurationManager.load(TestConfigurationEntityWithClasspathSource.class);
+    final Optional<TestConfigEntity> configs = configurationManager.load(TestConfigEntity.class);
     assertThat(configs.isPresent(), equalTo(true));
 
-    final TestConfigurationEntityWithClasspathSource testPropsWithClasspathSource = configs.get();
+    final TestConfigEntity testPropsWithClasspathSource = configs.get();
     assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));

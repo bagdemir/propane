@@ -33,7 +33,7 @@ import java.util.Collection;
  * @since 1.0
  */
 public interface TokenExtractor {
-  String CONTEXT_SEPARATOR = "\\.";
+  String CONTEXT_SEPARATOR = ".";
   String SEGMENT_SEPARATOR = "/";
   String BLANK_STR = "";
 

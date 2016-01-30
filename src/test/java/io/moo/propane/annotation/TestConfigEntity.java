@@ -34,7 +34,7 @@ package io.moo.propane.annotation;
  */
 @Configuration(componentId = "test")
 @Source(url = "classpath://configurations/test.properties")
-public class TestConfigurationEntityWithClasspathSource {
+public class TestConfigEntity {
 
   @KeyValue(name = "testProp")
   private String url;

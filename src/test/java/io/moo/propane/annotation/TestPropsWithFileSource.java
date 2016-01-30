@@ -33,7 +33,7 @@ import io.moo.propane.extractors.DefaultContextExtractor;
  * @since 1.0
  */
 @Configuration(componentId = "io.moo.test.component")
-@Source(url = "classpath://configurations/test.properties", contextExtractor = DefaultContextExtractor.class)
+@Source(url = "classpath://configurations/test.properties")
 public class TestPropsWithFileSource {
 
   @KeyValue(name = "testProp")
