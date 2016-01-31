@@ -28,24 +28,68 @@ import io.moo.propane.data.ContextInfo;
 import java.util.Optional;
 
 /**
- * {@link ConfigurationManager} is the repository for your configuration
+ * <p>{@link ConfigurationManager} is the repository for your configuration
  * entities which lives in a context like environment, region, etc. According
  * to its content, the configuration managers gives only the configurations
- * back that they exist within the same configuration.
+ * back that they exist within the same configuration.</p>
+ * <p>
+ * <p>
+ * <p>Each configuration manager instance may live in a context for which the
+ * configuration manager handles the configurations. For instance, if the
+ * configuration manager instance is configured for the environment <i>STAGE</i>,
+ * only the configurations for the <i>STAGE</i> environment will be returned
+ * to the clients of the manager.</p>
  *
  * @author bagdemir
  * @version 1.0
+ * @see ContextInfo
+ * @see io.moo.propane.data.ConfigurationEntity
  * @since 1.0
  */
 public interface ConfigurationManager {
+
+  /**
+   * Registers a new configuration entity type which is going to be managed
+   * by this configuration manager.
+   *
+   * @param clazz The entity class type.
+   * @param <T>   The type of the entity.
+   * @return The instance of the entity.
+   */
   <T> boolean register(Class<T> clazz);
 
+  /**
+   * Queries if the entity class type has already been registered within this
+   * entity manager.
+   *
+   * @param clazz The class type to be queried.
+   * @param <T>   The configuration entity type.
+   * @return Boolean value.
+   */
   <T> boolean isRegistered(Class<T> clazz);
 
+  /**
+   * Loads a registered entity instance.
+   *
+   * @param clazz The class type to be queried.
+   * @param <T>   The configuration entity type.
+   * @return The configuration entity instance.
+   */
   <T> Optional<T> load(Class<T> clazz);
 
+  /**
+   * @param clazz    The class type to be queried.
+   * @param contexts The optional context information.
+   * @return The configuration entity instance.
+   */
   <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contexts);
 
+  /**
+   * Static factory to instantiate a manager.
+   *
+   * @param contextInfo Context info of the {@link ConfigurationManager}.
+   * @return Manager instance.
+   */
   static ConfigurationManager newManager(Optional<ContextInfo> contextInfo) {
     return new ConfigurationManagerImpl(contextInfo);
   }
