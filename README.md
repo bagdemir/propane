@@ -3,7 +3,13 @@
 
 ## Propane
 
-Propane is a light-weight Java framework for Configuration Management.
+Propane is a light-weight Java framework for Configuration Management. This 
+project is inspired by the Netflix's Archaius project with some cool new 
+features like annotation based configuration entities, custom context 
+definitions and so on. If Archaius works for you, probably you would keep it.
+ If you make some considerations on managing your configurations throughout 
+ your applications, Propane might be the right solution for you.
+ 
 [Check out Project's home for API docs.] (http://propane.moo.io)
 
 <img src="http://www.bagdemir.com/img/propane.png" width="200"/>
