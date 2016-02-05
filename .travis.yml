@@ -1,9 +1,8 @@
 language: java
-
 jdk:
-  - oraclejdk8
-  
+- oraclejdk8
 after_success:
-  - mvn clean test jacoco:report coveralls:report
-
-secure: "LGWj4Dr9uNyKkGBnnPB3yE3cyg9yJ9GkIbttGqrKx/2xTpsVrQFgv7oMCSUHjKQs9qUHPKvZ9Bt7o7sIkJrKq5JQIKSuE3/iwoyBrb52q9aD+pl39MKKk1Vn6ghyBttjrT8Z+nV2WU9y7Kpv+P2RSe8JHcr0ktUOQKbMuclMai8="
+- mvn clean test jacoco:report coveralls:report
+env:
+  global:
+  - secure: qWWzYiTHzsVhfnX/lr4uHNyF7bpAcTGcKv8U4o54NaNeA/uHuGdcIzkfbiIwqTpGAw8xoZUHcIHJqdr6U4gLJsIMRqrFnDJBsbt0SOVmXQAA9L/HHHHUym8DDm+AWc22/jvOhlXLTcka11G6qGTEyyfvuDRNXZTKLYWALqTzQyf3M6G5ivXKWJIC6HCF9I6slQ1d7Zfz7fJPLIFENRx9kVwQqq8OBgIt+t//UmMQtm2TFhYYbrKw5DY/uxL2k+E9poQYQd9hMksu/1eXTJteOBLLyIoexXY0SbexcZhTlBmyXF8kITaHhr93SipZ+RsU7C/JweqlAxxvFjhkX8xUj+xHNWH+gOpxNikA8oZDI28zrgp0sLyBkfhYUWWDdNXf/tqlT/OD1/OH2ZbKBIO5Tzs8lMO8srfM/a36VNjvcXCbdip69b4q78cBtg1J4aPye73TmO3+fDJd8KUASWqdrLoC7bd2BjZdye3ovJMNcKZtXgWE7Dc8igLLDrrc32Au8XE/ecT66q0/z4OrxYn53EYoVLJEkPY9dID2YUYV6ERRqfcbVb3rE8h4DwoxoMX0ii4e7Gz9bQ9ii2ynwp0xChd1QxGh1pgWWhfHfSifCpMGSoB5LZMXBRxXsvCKCyV6RyaLFFRhuYHuD/FXkLoZO5dTsxUxU1C7ysUlB3p7ZIU=
