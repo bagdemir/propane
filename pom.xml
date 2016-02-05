@@ -35,6 +35,8 @@
         <junit>4.12</junit>
         <hamcrest>1.3</hamcrest>
         <mockito>1.10.19</mockito>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
