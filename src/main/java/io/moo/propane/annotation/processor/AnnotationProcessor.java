@@ -23,13 +23,13 @@
  */
 package io.moo.propane.annotation.processor;
 
+import java.util.Map;
+import java.util.Optional;
+
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigData;
-
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Annotation processor is used to process configuration entity annotations.
@@ -59,10 +59,27 @@ public interface AnnotationProcessor {
    * @see ConfigData
    */
   static ConfigurationEntity newEntity(final TokenExtractor componentIdExtractor,
-                                       final TokenExtractor contextExtractor,
-                                       final ConfigData data,
-                                       final Map.Entry<String, String> entry) {
+          final TokenExtractor contextExtractor,
+          final ConfigData data,
+          final Map.Entry<String, String> entry) {
+
     return new ConfigurationEntity(String.join(BLANK_STRING, componentIdExtractor.extract(data.getSource())),
-            contextExtractor.extract(entry.getKey()), entry.getKey(), entry.getValue());
+            contextExtractor.extract(entry.getKey()), getPropertyNameFromFQPropertyName(entry.getKey()),
+
+            entry.getValue());
+  }
+
+  /**
+   * Returns the plain property name from a fully-qualified property name.
+   *
+   * @param FQPropertyName Fully-qualified property name.
+   * @return Plain property name.
+   */
+  static String getPropertyNameFromFQPropertyName(final String FQPropertyName) {
+    if (FQPropertyName.contains(".")) {
+      final String[] split = FQPropertyName.split("\\.");
+      return split[split.length - 1];
+    }
+    return FQPropertyName;
   }
 }

@@ -33,6 +33,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import io.moo.propane.annotation.TestConfigEntity;
+import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
@@ -86,6 +87,24 @@ public class ConfigurationManagerTest {
     final TestConfigEntity testPropsWithClasspathSource = configs.get();
     assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
+  }
+
+  @Test
+  public void testLoadFromClasspathWithContext() throws InterruptedException {
+    final ContextInfo contextInfo = ContextInfo.of("eu", "dev");
+
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.of(contextInfo));
+    configurationManager.register(TestConfigEntity.class);
+
+    Thread.sleep(100L);
+    final Optional<TestConfigEntity> configs = configurationManager.load(TestConfigEntity.class, Optional.of(contextInfo));
+    assertThat(configs.isPresent(), equalTo(true));
+
+    final TestConfigEntity testPropsWithClasspathSource = configs.get();
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1001L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
   }
 }
