@@ -42,7 +42,7 @@ import org.junit.Test;
  */
 public class ClasspathPropertiesResourceConnectorTest {
   public static final String TEST_PROPS = "configurations/test.properties";
-  public static final int EXPECTED_PROP_COUNT = 4;
+  public static final int EXPECTED_PROP_COUNT = 6;
 
 
   @Test
