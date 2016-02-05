@@ -23,18 +23,16 @@
  */
 package io.moo.propane;
 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.moo.propane.data.ContextInfo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.Source;
+import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.providers.ConfigurationProvider;
 import io.moo.propane.sources.ConfigurationSource;
@@ -51,10 +49,14 @@ import io.moo.propane.sources.ConfigurationSource;
 public class ConfigurationManagerImpl implements ConfigurationManager {
   private static final Logger LOG = LogManager.getLogger();
 
-  private final Optional<ContextInfo> contextInfo;
+  public static final int DEFAULT_REFRESHNESS = 60;
 
-  public ConfigurationManagerImpl(Optional<ContextInfo> contextInfo) {
+  private final Optional<ContextInfo> contextInfo;
+  private final Optional<Integer> refressness;
+
+  public ConfigurationManagerImpl(Optional<ContextInfo> contextInfo, Optional<Integer> refressness) {
     this.contextInfo = contextInfo;
+    this.refressness = refressness;
   }
 
   /** Cache */
@@ -80,7 +82,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
     final Source source = clazz.getAnnotation(Source.class);
     final ConfigurationSource configSource = ConfigurationSource.newConfigurationSourceFor(source);
-    final ConfigurationProvider<T> fileBackedProvider = ConfigurationProvider.createFileBackedProvider(clazz, configSource, 60);
+    final ConfigurationProvider<T> fileBackedProvider = ConfigurationProvider.createFileBackedProvider(clazz, configSource, refressness.orElse(DEFAULT_REFRESHNESS));
 
     cache.put(clazz, fileBackedProvider);
   }

@@ -23,18 +23,13 @@
  */
 package io.moo.propane.providers;
 
-import io.moo.propane.annotation.Source;
-import io.moo.propane.data.ContextInfo;
-import io.moo.propane.exception.InvalidConfigurationEntityException;
-import io.moo.propane.sources.ClasspathFileConfigurationSource;
-import io.moo.propane.sources.ConfigurationSource;
-import io.moo.propane.sources.PropertiesFileConfigurationSource;
-
-import javax.naming.Context;
 import java.util.Optional;
 
+import io.moo.propane.data.ContextInfo;
+import io.moo.propane.sources.ConfigurationSource;
+
 /**
- *
+ * Configuration provider.
  *
  * @author bagdemir
  * @version 1.0
