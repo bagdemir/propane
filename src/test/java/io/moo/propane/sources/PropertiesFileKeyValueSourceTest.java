@@ -57,7 +57,7 @@ public class PropertiesFileKeyValueSourceTest {
 
   @Before
   public void setUp() throws IOException {
-    file = folder.newFile("test.properties");
+    file = folder.newFile("test1.properties");
 
     Map<String, Object> testProps = new HashMap<>(3);
 

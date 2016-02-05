@@ -55,11 +55,11 @@ public class KeyValueEntityProcessorImplTest {
             "intProp", "1"
     );
     final ConfigData configData = new ConfigData();
-    configData.setSource("classpath://configurations/test.properties");
+    configData.setSource("classpath://configurations/test1.properties");
     configData.setPropsMap(propsMap);
 
     AnnotationProcessor processor = new ConfigurationAnnotationProcessorImpl();
-    TestConfigEntity testPropsWithClasspathSource = processor.createEntity(TestConfigEntity.class, configData);
+    Test1ConfigEntity testPropsWithClasspathSource = processor.createEntity(Test1ConfigEntity.class, configData);
 
     assertThat(testPropsWithClasspathSource, notNullValue());
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(EXPECTED_TIMEOUT));
