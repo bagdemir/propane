@@ -1,0 +1,9 @@
+language: java
+
+jdk:
+  - oraclejdk8
+  
+after_success:
+  - mvn clean test jacoco:report coveralls:report
+
+secure: "LGWj4Dr9uNyKkGBnnPB3yE3cyg9yJ9GkIbttGqrKx/2xTpsVrQFgv7oMCSUHjKQs9qUHPKvZ9Bt7o7sIkJrKq5JQIKSuE3/iwoyBrb52q9aD+pl39MKKk1Vn6ghyBttjrT8Z+nV2WU9y7Kpv+P2RSe8JHcr0ktUOQKbMuclMai8="
