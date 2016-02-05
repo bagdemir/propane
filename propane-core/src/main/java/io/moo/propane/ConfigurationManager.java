@@ -91,7 +91,7 @@ public interface ConfigurationManager {
    * @return Manager instance.
    */
   static ConfigurationManager newManager(Optional<ContextInfo> contextInfo) {
-    return new ConfigurationManagerImpl(contextInfo);
+    return new ConfigurationManagerImpl(contextInfo, Optional.empty());
   }
 
 }
