@@ -3,7 +3,7 @@
 
 ##
 
-<img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
+<img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/github/bagdemir/propane/badge.svg?branch=master)](https://coveralls.io/github/bagdemir/propane?branch=master) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
 Propane is a light-weight Java framework for Configuration Management. This 
 project is inspired by the Netflix's Archaius project with some cool new 
