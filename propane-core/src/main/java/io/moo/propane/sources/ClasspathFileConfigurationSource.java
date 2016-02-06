@@ -27,6 +27,7 @@ package io.moo.propane.sources;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.Map;
 import java.util.Properties;
 
@@ -53,19 +54,19 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
 
   @Override
   public ConfigData read() {
-    ConfigData configData = new ConfigData();
-    Map<String, String> propsMap = configData.getPropsMap();
 
-    try {
+    final ConfigData configData = new ConfigData();
+    final Map<String, String> propsMap = configData.getPropsMap();
+    try(InputStreamReader reader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source))) {
       Properties properties = new Properties();
-      properties.load(new InputStreamReader(getClass().getClassLoader().getResourceAsStream(source)));
+      properties.load(reader);
       properties.forEach((name,value) -> propsMap.put(name.toString(), value.toString()));
     }
     catch (IOException e) {
       LOG.error(e);
     }
 
-    configData.setSource(super.getSource());
+    configData.setSource(getSource());
     return configData;
   }
 }
