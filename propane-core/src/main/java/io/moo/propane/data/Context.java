@@ -25,8 +25,15 @@ package io.moo.propane.data;
 
 /**
  * @author bagdemir
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public interface Context {
+
+  /**
+   * Tie breaker, if two context info stays in conflict during election.
+   *
+   * @return Priority of the context. Lower the priority, better while electing the context infos.
+   */
+  int getPriority();
 }

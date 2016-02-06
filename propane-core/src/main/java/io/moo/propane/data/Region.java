@@ -25,8 +25,30 @@ package io.moo.propane.data;
 
 /**
  * @author bagdemir
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
-public class Region {
+public class Region implements Context {
+
+  public static int priority = 10;
+
+  private String region;
+
+  public enum Regions {
+    UE1, UW1, UW2, EW1, EC1, APS1, APN1, APS2, APN2, SAE1, US, EU, AP, SA
+  }
+
+
+  private Region(final String region) {
+    this.region = region;
+  }
+
+  public static Region of(String regionName) {
+    return new Region(regionName);
+  }
+
+  @Override
+  public int getPriority() {
+    return priority;
+  }
 }
