@@ -181,8 +181,10 @@ public class TestConfigurationEntityWithClasspathSource {
 
 You can now register your entity witin the configuration manager:
 <pre lang="java">
-final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+    final ContextInfo contextInfo = ContextInfo.of("eu");
+    final ConfigurationManager configurationManager = manager
+            .newManager(Optional.of(contextInfo));
+    manager.register(TestConfigurationEntityWithClasspathSource.class);
 </pre>
 
 Once the configurations are loaded by the ConfigurationManager, you can access them:
