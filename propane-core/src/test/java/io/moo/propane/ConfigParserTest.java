@@ -21,23 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.moo.propane.data;
+package io.moo.propane;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import org.junit.Test;
+
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 
 /**
- * <p>Context information for the configurations and configuration manager. A
- * context might be  <i>region</i> or <i>environment</i> or you can create
- * your own contexts.
- *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public interface Context {
+public class ConfigParserTest {
 
-  /**
-   * Tie breaker, if two context info stays in conflict during election.
-   *
-   * @return Priority of the context. Lower the priority, better while electing the context infos.
-   */
-  int getPriority();
+  @Test
+  public void testParseConfig() {
+
+    try (InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream
+            ("/configurations/testconfig1.yml"))) {
+
+      YAMLFactory factory = new YAMLFactory();
+      JsonParser parser = factory.createParser(reader);
+
+      while (parser.nextValue() != null) {
+
+        System.out.println(parser.getCurrentName() + " : " + parser
+                .getCurrentValue() + " : " + parser.getText());
+      }
+
+    }
+    catch (IOException e) {
+      System.out.println(e);
+    }
+  }
 }

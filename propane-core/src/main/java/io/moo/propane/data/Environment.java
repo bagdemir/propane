@@ -23,21 +23,28 @@
  */
 package io.moo.propane.data;
 
-/**
- * <p>Context information for the configurations and configuration manager. A
- * context might be  <i>region</i> or <i>environment</i> or you can create
- * your own contexts.
- *
- * @author bagdemir
- * @version 1.0
- * @since 1.0
- */
-public interface Context {
+import com.sun.tools.doclint.Env;
 
-  /**
-   * Tie breaker, if two context info stays in conflict during election.
-   *
-   * @return Priority of the context. Lower the priority, better while electing the context infos.
-   */
-  int getPriority();
+/**
+ * @author bagdemir
+ * @since 1.0
+ * @version 1.0
+ */
+public class Environment implements Context {
+  public static int priority = 10;
+
+  private String environment;
+
+  private Environment(final String environment) {
+    this.environment = environment;
+  }
+
+  public static Environment of(String environment) {
+    return new Environment(environment);
+  }
+
+  @Override
+  public int getPriority() {
+    return priority;
+  }
 }
