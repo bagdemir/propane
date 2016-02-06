@@ -1,14 +1,22 @@
-<img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/bagdemir/Propane/badge.svg)](https://coveralls.io/r/bagdemir/Propane) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
+<img src="http://www.bagdemir.com/img/propane_banner.jpg"/>
 
-## Propane
+##
 
-Propane is a light-weight Java framework for Configuration Management.
+<img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/github/bagdemir/propane/badge.svg?branch=master)](https://coveralls.io/github/bagdemir/propane?branch=master) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
+
+Propane is a light-weight Java framework for Configuration Management. This 
+project is inspired by the Netflix's Archaius project with some cool new 
+features like annotation based configuration entities, custom context 
+definitions and so on. If Archaius works for you, probably, you would keep it.
+ If you make some considerations on managing your configurations throughout 
+ your applications from the scratch, Propane might be the right solution for you.
+ 
 [Check out Project's home for API docs.] (http://propane.moo.io)
 
-<img src="http://www.bagdemir.com/img/propane.png" width="200"/>
+## Overview
 
-### Overview
+##
 
 Propane is a Java framework to manage your configurations for different contexts. 
 - Annotate your Java classes with configuration management annotations. 
@@ -19,6 +27,8 @@ and then  Propane enables the configuration set in applications for this given c
 A context may be a region, an environment, or a custom context just defined by you. For instance, if your service is running in the US region and in the dev environment, Propane enables the configurations for Development + US in those applications running in US and dev environment.
 
 ## Usage
+
+##
 
 Since the project is under development, you are able to test it by cloning the project on your computer and build it. 
 
@@ -61,8 +71,10 @@ public class TestConfigurationEntityWithClasspathSource {
 
 You can now register your entity witin the configuration manager:
 <pre lang="java">
-final ConfigurationManager configurationManager = new ConfigurationManagerImpl();
-configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
+    final ContextInfo contextInfo = ContextInfo.of("eu");
+    final ConfigurationManager configurationManager = manager
+            .newManager(Optional.of(contextInfo));
+    manager.register(TestConfigurationEntityWithClasspathSource.class);
 </pre>
 
 Once the configurations are loaded by the ConfigurationManager, you can access them:
@@ -78,6 +90,8 @@ That's all.
 
 ## Contributing
 
+##
+
 1. Fork it ( https://github.com/bagdemir/propane/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
@@ -85,6 +99,8 @@ That's all.
 5. Create a new Pull Request
 
 ## License
+
+##
 
 Copyright (c) 2016 Erhan Bağdemir
 
