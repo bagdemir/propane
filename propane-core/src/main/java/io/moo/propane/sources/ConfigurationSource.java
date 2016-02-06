@@ -41,16 +41,15 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
 
   /**
    * Static factory method that creates new source implementations for a source annotation given.
-   * @param source
+   * @param url
    * @return {@link ConfigurationSource} instance.
    */
-  public static ConfigurationSource newConfigurationSourceFor(Source source) {
+  public static ConfigurationSource of(String url) {
 
-    if (source == null) {
+    if (url == null) {
       throw new InvalidConfigurationEntityException("@Source annotation is missing.");
     }
 
-    final String url = source.url();
     final String prefix = getPrefix(url);
 
     ConfigurationSource configSource;

@@ -35,7 +35,6 @@ import io.moo.propane.annotation.Source;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.providers.ConfigurationProvider;
-import io.moo.propane.sources.ConfigurationSource;
 
 /**
  * {@link ConfigurationManagerImpl} is the repository for your configuration
@@ -54,12 +53,16 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   private final Optional<ContextInfo> contextInfo;
   private final Optional<Integer> refressness;
 
+
   public ConfigurationManagerImpl(Optional<ContextInfo> contextInfo, Optional<Integer> refressness) {
     this.contextInfo = contextInfo;
     this.refressness = refressness;
   }
 
-  /** Cache */
+
+  /**
+   * Cache
+   */
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 
 
@@ -78,14 +81,15 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
     return true;
   }
 
+
   private <T> void registerConfigurationProvider(final Class<T> clazz) {
 
     final Source source = clazz.getAnnotation(Source.class);
-    final ConfigurationSource configSource = ConfigurationSource.newConfigurationSourceFor(source);
-    final ConfigurationProvider<T> fileBackedProvider = ConfigurationProvider.createFileBackedProvider(clazz, configSource, refressness.orElse(DEFAULT_REFRESHNESS));
-
-    cache.put(clazz, fileBackedProvider);
+    final Integer refreshnessInt = refressness.orElse(DEFAULT_REFRESHNESS);
+    final ConfigurationProvider<T> provider = ConfigurationProvider.create(clazz, source.url(), refreshnessInt);
+    cache.put(clazz, provider);
   }
+
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
@@ -105,6 +109,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   public <T> Optional<T> load(final Class<T> clazz) {
     return load(clazz, Optional.empty());
   }
+
 
   @Override
   public <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
