@@ -33,7 +33,7 @@ package io.moo.propane.annotation;
  * @since 1.0
  */
 @Configuration(componentId = "test1")
-@Source(url = "classpath://configurations/test1.properties")
+@Source(url = "classpath://configurations/test1.yml")
 public class Test1ConfigEntity {
 
   @KeyValue(name = "testProp")

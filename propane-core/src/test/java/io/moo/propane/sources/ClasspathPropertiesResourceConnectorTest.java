@@ -27,8 +27,10 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.util.List;
 import java.util.Map;
 
+import io.moo.propane.data.ConfigurationEntity;
 import org.junit.Test;
 
 /**
@@ -39,17 +41,18 @@ import org.junit.Test;
  * @since 1.0
  */
 public class ClasspathPropertiesResourceConnectorTest {
-  public static final String TEST_PROPS = "configurations/test1.properties";
-  public static final int EXPECTED_PROP_COUNT = 6;
 
+  public static final String TEST_PROPS = "configurations/test1.yml";
+  public static final int EXPECTED_PROP_COUNT = 8;
 
   @Test
   public void testRead() {
     final ClasspathFileConfigurationSource connector =
             new ClasspathFileConfigurationSource(TEST_PROPS);
-    final ConfigData configData = connector.read();
-    final Map<String, String> propsMap = configData.getPropsMap();
-    assertThat(propsMap, notNullValue());
-    assertThat(propsMap.size(), equalTo(EXPECTED_PROP_COUNT));
+
+    final ConfigData configData = connector.read().get();
+    final List<ConfigurationEntity> entities = configData.getEntities();
+    assertThat(entities, notNullValue());
+    assertThat(entities.size(), equalTo(EXPECTED_PROP_COUNT));
   }
 }

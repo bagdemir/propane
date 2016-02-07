@@ -55,6 +55,7 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   @Override
   public T load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
-    return new ConfigurationAnnotationProcessorImpl().createEntity(clazz, configData.get(), contextInfo);
+    return new ConfigurationAnnotationProcessorImpl().createEntity(clazz,
+            configData.get().get(), contextInfo);
   }
 }
