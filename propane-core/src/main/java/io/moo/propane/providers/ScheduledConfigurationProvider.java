@@ -1,5 +1,6 @@
 package io.moo.propane.providers;
 
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,8 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
 
   private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(CORE_POOL_SIZE);
 
-  protected final AtomicReference<ConfigData> configData = new AtomicReference<>(new ConfigData());
+  protected final AtomicReference<Optional<ConfigData>> configData = new
+          AtomicReference<>(Optional.empty());
 
 
   public ScheduledConfigurationProvider(final Class<T> propsClazz, final ConfigurationSource connector, final int frequencyInSecs) {
@@ -39,9 +41,9 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
   protected void initScheduler() {
 
     final Runnable reader = () -> {
-      final ConfigData configuration = connector.read();
+      final ConfigData configuration = connector.read().get();
       final ConfigData filteredConfiguration = filter.filter(configuration);
-      configData.set(filteredConfiguration);
+      configData.set(Optional.of(filteredConfiguration));
     };
 
     // Submits a new task to call the configurations.

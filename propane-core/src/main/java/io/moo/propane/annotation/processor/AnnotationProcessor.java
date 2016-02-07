@@ -23,13 +23,13 @@
  */
 package io.moo.propane.annotation.processor;
 
-import java.util.Map;
-import java.util.Optional;
-
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigData;
+
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Annotation processor is used to process configuration entity annotations.
@@ -52,7 +52,7 @@ public interface AnnotationProcessor {
    *
    * @param componentIdExtractor Component id extractor.
    * @param contextExtractor     Context extractor.
-   * @param data                 Configuration data.
+   * @param source               Configuration source.
    * @param entry                Configuration entry as key, value.
    * @return Configuration entity.
    * @see ConfigurationEntity
@@ -60,12 +60,11 @@ public interface AnnotationProcessor {
    */
   static ConfigurationEntity newEntity(final TokenExtractor componentIdExtractor,
           final TokenExtractor contextExtractor,
-          final ConfigData data,
+          final String source,
           final Map.Entry<String, String> entry) {
 
-    return new ConfigurationEntity(String.join(BLANK_STRING, componentIdExtractor.extract(data.getSource())),
+    return new ConfigurationEntity(String.join(BLANK_STRING, componentIdExtractor.extract(source)),
             contextExtractor.extract(entry.getKey()), getPropertyNameFromFQPropertyName(entry.getKey()),
-
             entry.getValue());
   }
 

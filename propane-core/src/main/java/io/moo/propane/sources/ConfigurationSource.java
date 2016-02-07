@@ -26,6 +26,7 @@ package io.moo.propane.sources;
 import io.moo.propane.annotation.Source;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
+import java.util.Optional;
 import java.util.concurrent.Callable;
 
 /**
@@ -33,7 +34,7 @@ import java.util.concurrent.Callable;
  * @version 1.0
  * @since 1.0
  */
-public abstract class ConfigurationSource implements Callable<ConfigData> {
+public abstract class ConfigurationSource implements Callable<Optional<ConfigData>> {
   static final String CLASSPATH_PREFIX = "classpath://";
   static final String FILE_PREFIX = "file://";
   static final String DB_MYSQL_PREFIX = "mysql://";
@@ -59,9 +60,6 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
       case "classpath" :
         configSource = new ClasspathFileConfigurationSource(url.replace(CLASSPATH_PREFIX, BLANK_STR));
         break;
-      case "file" :
-        configSource = new PropertiesFileConfigurationSource(url.replace(FILE_PREFIX, BLANK_STR));
-        break;
       default :
         throw new RuntimeException("Unknown source type.");
     }
@@ -84,7 +82,7 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
   }
 
   @Override
-  public ConfigData call() throws Exception {
+  public Optional<ConfigData> call() throws Exception {
     return read();
   }
 
@@ -93,7 +91,7 @@ public abstract class ConfigurationSource implements Callable<ConfigData> {
    *
    * @return Properties.
    */
-  public abstract ConfigData read();
+  public abstract Optional<ConfigData> read();
 
   public String getSource() {
     return source;

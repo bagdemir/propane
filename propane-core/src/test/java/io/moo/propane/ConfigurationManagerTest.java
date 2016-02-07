@@ -23,18 +23,17 @@
  */
 package io.moo.propane;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import java.util.Optional;
-
+import io.moo.propane.annotation.Test1ConfigEntity;
+import io.moo.propane.data.ContextInfo;
+import io.moo.propane.exception.InvalidConfigurationEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
-import io.moo.propane.annotation.Test1ConfigEntity;
-import io.moo.propane.data.ContextInfo;
-import io.moo.propane.exception.InvalidConfigurationEntityException;
+import java.util.Optional;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit test for the configuration manager.
@@ -45,8 +44,6 @@ import io.moo.propane.exception.InvalidConfigurationEntityException;
  */
 public class ConfigurationManagerTest {
   private static final Logger LOG = LogManager.getLogger();
-  private static final String TEST_PROPS = "configurations/test1.properties";
-
 
   @Test(expected = InvalidConfigurationEntityException.class)
   public void testIsRegisteredTestUsingInvalidPropsEntity() {
@@ -94,27 +91,7 @@ public class ConfigurationManagerTest {
   @Test
   public void testLoadFromClasspathWithMultipleContext() throws
           InterruptedException {
-    final ContextInfo contextInfo = ContextInfo.of("eu", "dev");
-
-    final ConfigurationManager configurationManager = ConfigurationManager
-            .newManager(Optional.of(contextInfo));
-    configurationManager.register(Test1ConfigEntity.class);
-
-    Thread.sleep(100L);
-    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class, Optional.of(contextInfo));
-    assertThat(configs.isPresent(), equalTo(true));
-
-    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
-    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
-    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1002L));
-    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
-  }
-
-
-  @Test
-  public void testLoadFromClasspathWithSingleContext() throws
-          InterruptedException {
-    final ContextInfo contextInfo = ContextInfo.of("eu");
+    final ContextInfo contextInfo = ContextInfo.of("EU", "STAGE");
 
     final ConfigurationManager configurationManager = ConfigurationManager
             .newManager(Optional.of(contextInfo));
@@ -127,6 +104,26 @@ public class ConfigurationManagerTest {
     final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
     assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1001L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(97));
+  }
+
+
+  @Test
+  public void testLoadFromClasspathWithSingleContext() throws
+          InterruptedException {
+    final ContextInfo contextInfo = ContextInfo.of("US");
+    final ConfigurationManager configurationManager = ConfigurationManager
+            .newManager(Optional.of(contextInfo));
+    configurationManager.register(Test1ConfigEntity.class);
+
+    Thread.sleep(250L);
+
+    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class, Optional.of(contextInfo));
+    assertThat(configs.isPresent(), equalTo(true));
+
+    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://us.foo.com/"));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(999L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
   }
 

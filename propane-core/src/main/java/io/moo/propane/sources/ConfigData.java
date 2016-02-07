@@ -23,7 +23,11 @@
  */
 package io.moo.propane.sources;
 
+import io.moo.propane.data.ConfigurationEntity;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,37 +39,20 @@ import java.util.concurrent.ConcurrentHashMap;
  * @since 1.0
  */
 public class ConfigData {
-  /* Configuration properties. */
-  private Map<String, String> propsMap = new ConcurrentHashMap<>();
-
   /* Configuration source. */
   private String source;
+  private List<ConfigurationEntity> entities = new ArrayList<>();
 
-  public Map<String, String> getPropsMap() {
-    return propsMap;
+  public ConfigData(String source, List<ConfigurationEntity> entities) {
+    this.source = source;
+    this.entities = entities;
   }
 
-
-  public void setPropsMap(final Map<String, String> propsMap) {
-    this.propsMap = propsMap;
+  public List<ConfigurationEntity> getEntities() {
+    return entities;
   }
-
 
   public String getSource() {
     return source;
-  }
-
-
-  public void setSource(final String source) {
-    this.source = source;
-  }
-
-
-  @Override
-  public String toString() {
-    return "ConfigData{" +
-            "propsMap=" + propsMap +
-            ", source='" + source + '\'' +
-            '}';
   }
 }

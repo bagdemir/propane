@@ -23,13 +23,16 @@
  */
 package io.moo.propane.annotation;
 
-import com.google.common.collect.ImmutableMap;
+
 import io.moo.propane.annotation.processor.AnnotationProcessor;
 import io.moo.propane.annotation.processor.ConfigurationAnnotationProcessorImpl;
+import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.sources.ConfigData;
 import org.junit.Test;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -49,14 +52,17 @@ public class KeyValueEntityProcessorImplTest {
 
   @Test
   public void testCreate() {
-    final Map<String, String> propsMap = ImmutableMap.of(
-            "testProp", "abc",
-            "longProp", "100",
-            "intProp", "1"
+
+    final List<ConfigurationEntity> entitites = new ArrayList<>();
+    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "testProp",
+                    "abc"));
+    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "intProp",
+                    "1"));
+    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "longProp",
+                    "100")
     );
-    final ConfigData configData = new ConfigData();
-    configData.setSource("classpath://configurations/test1.properties");
-    configData.setPropsMap(propsMap);
+    final String source = "classpath://configurations/test1.yml";
+    final ConfigData configData = new ConfigData(source, entitites);
 
     AnnotationProcessor processor = new ConfigurationAnnotationProcessorImpl();
     Test1ConfigEntity testPropsWithClasspathSource = processor.createEntity(Test1ConfigEntity.class, configData);
