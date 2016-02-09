@@ -5,12 +5,16 @@
 
 <img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/github/bagdemir/propane/badge.svg?branch=master)](https://coveralls.io/github/bagdemir/propane?branch=master) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
-Propane is a light-weight Java framework for Configuration Management. This 
-project is inspired by the Netflix's Archaius project with some cool new 
+Propane is a light-weight Java framework for Configuration Management that 
+intend to take advantage of structured data serialization format, YAML, by 
+providing configurations context-awareness.  
+ 
+Propane is inspired by the Netflix's Archaius project with some cool new 
 features like annotation based configuration entities, custom context 
 definitions and so on. If Archaius works for you, probably, you would keep it.
  If you make some considerations on managing your configurations throughout 
- your applications from the scratch, Propane might be the right solution for you.
+ your new applications from the scratch, Propane might be the right solution for
+  you.
  
 [Check out Project's home for API docs.] (http://propane.moo.io)
 
@@ -19,8 +23,8 @@ definitions and so on. If Archaius works for you, probably, you would keep it.
 ##
 
 Propane is a Java framework to manage your configurations for different contexts. 
+- Create YAML configuration files.
 - Annotate your Java classes with configuration management annotations. 
-- Define your configurations for each context for a particular application. 
 
 and then  Propane enables the configuration set in applications for this given context.
  
@@ -71,10 +75,10 @@ public class TestConfigurationEntityWithClasspathSource {
 
 You can now register your entity witin the configuration manager:
 <pre lang="java">
-    final ContextInfo contextInfo = ContextInfo.of("eu");
-    final ConfigurationManager configurationManager = manager
+    final ContextInfo contextInfo = ContextInfo.of("EU", "STAGE");
+    final ConfigurationManager configurationManager = ConfigurationManager
             .newManager(Optional.of(contextInfo));
-    manager.register(TestConfigurationEntityWithClasspathSource.class);
+    configurationManager.register(TestConfigurationEntityWithClasspathSource.class);
 </pre>
 
 Once the configurations are loaded by the ConfigurationManager, you can access them:
