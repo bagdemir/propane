@@ -56,7 +56,7 @@ Now, you can create the configuration entities:
 
 <pre lang="java">
 @Configuration(componentId = "test")
-@Source(url = "classpath://configurations/test.properties")
+@Source(url = "classpath://configurations/test.yml")
 public class TestConfigurationEntityWithClasspathSource {
 
   @KeyValue(name = "testProp")
