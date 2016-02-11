@@ -73,6 +73,23 @@ public class TestConfigurationEntityWithClasspathSource {
 }
 </pre>
 
+for the configuration file:
+
+<pre lang="yaml">
+  longProp: 1000
+  testProp: http://localhost/
+  intProp: 99
+  US:
+    longProp: 999
+    testProp: http://us.foo.com/
+    DEV:
+      intProp: 98
+  EU:
+    longProp: 1001
+    STAGE:
+      intProp: 97
+</pre>
+
 You can now register your entity witin the configuration manager:
 <pre lang="java">
     final ContextInfo contextInfo = ContextInfo.of("EU", "STAGE");
