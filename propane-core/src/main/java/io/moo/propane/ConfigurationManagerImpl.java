@@ -98,6 +98,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
 
   private <T> void validateConfigurationEntity(final Class<T> clazz) {
+
     final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
     if (configurationAnnotation == null) {
       throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
@@ -113,9 +114,9 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
   @Override
   public <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
+
     if (isRegistered(clazz)) {
-      final ConfigurationProvider<T> provider = cache.get(clazz);
-      return Optional.ofNullable((T) provider.load(clazz, contextInfo));
+      return Optional.ofNullable((T) cache.get(clazz).load(clazz, contextInfo));
     }
     return Optional.empty();
   }

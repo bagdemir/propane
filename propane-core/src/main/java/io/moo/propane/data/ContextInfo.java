@@ -12,18 +12,6 @@ import com.google.common.collect.Lists;
  */
 public class ContextInfo {
 
-  public enum Regions {
-    UE1, UW1, UW2, EW1, EC1, APS1, APN1, APS2, APN2, SAE1, US, EU, AP, SA
-  }
-
-  public enum Environments {
-    DEV, QE, QA, STAGE, PROD
-  }
-
-  public enum Stacks {
-    A, B, BLUE, GREEN
-  }
-
   private final List<String> contextIds = Collections.synchronizedList(Lists.newArrayList());
 
 

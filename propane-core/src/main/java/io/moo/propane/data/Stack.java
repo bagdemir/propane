@@ -23,29 +23,22 @@
  */
 package io.moo.propane.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author bagdemir
- * @version 1.0
  * @since 1.0
+ * @version 1.0
  */
-public interface Context {
+public enum Stack implements Context {
+  A, B, BLUE, GREEN, ACTIVE, INACTIVE, PUBLIC, PRIVATE;
 
-  /**
-   * Tie breaker, if two context info stays in conflict during election.
-   *
-   * @return Priority of the context. Lower the priority, better while electing the context infos.
-   */
-  int getPriority();
+  @Override
+  public int getPriority() {
+    return 0;
+  }
 
-  /**
-   * Unique context identifier, that used in context id to context instance or
-   * vice versa
-   * (de)serialization.
-   *
-   * @return
-   */
-  String getContextId();
+
+  @Override
+  public String getContextId() {
+    return null;
+  }
 }
