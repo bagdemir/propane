@@ -31,14 +31,17 @@ package io.moo.propane.data;
 public enum Stack implements Context {
   A, B, BLUE, GREEN, ACTIVE, INACTIVE, PUBLIC, PRIVATE;
 
+  private int priority = 10;
+
+
   @Override
   public int getPriority() {
-    return 0;
+    return priority;
   }
 
 
   @Override
   public String getContextId() {
-    return null;
+    return name();
   }
 }

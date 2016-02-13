@@ -25,6 +25,8 @@ package io.moo.propane;
 
 import io.moo.propane.annotation.Test1ConfigEntity;
 import io.moo.propane.data.ContextInfo;
+import io.moo.propane.data.Environment;
+import io.moo.propane.data.Region;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -91,7 +93,9 @@ public class ConfigurationManagerTest {
   @Test
   public void testLoadFromClasspathWithMultipleContext() throws
           InterruptedException {
-    final ContextInfo contextInfo = ContextInfo.of("EU", "STAGE");
+
+    final ContextInfo contextInfo = ContextInfo.of(Region.EU, Environment
+            .STAGE);
 
     final ConfigurationManager configurationManager = ConfigurationManager
             .newManager(Optional.of(contextInfo));
@@ -111,7 +115,7 @@ public class ConfigurationManagerTest {
   @Test
   public void testLoadFromClasspathWithSingleContext() throws
           InterruptedException {
-    final ContextInfo contextInfo = ContextInfo.of("US");
+    final ContextInfo contextInfo = ContextInfo.of(Region.US);
     final ConfigurationManager configurationManager = ConfigurationManager
             .newManager(Optional.of(contextInfo));
     configurationManager.register(Test1ConfigEntity.class);

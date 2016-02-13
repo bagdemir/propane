@@ -31,15 +31,18 @@ package io.moo.propane.data;
 public enum Environment implements Context {
   DEV, QE, QA, STAGE, PROD;
 
+  private int priority = 10;
+
 
   @Override
   public int getPriority() {
-    return 0;
+    return priority;
   }
 
 
   @Override
   public String getContextId() {
-    return null;
+    return name();
   }
+
 }
