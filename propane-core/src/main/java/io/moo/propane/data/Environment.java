@@ -23,29 +23,23 @@
  */
 package io.moo.propane.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author bagdemir
- * @version 1.0
  * @since 1.0
+ * @version 1.0
  */
-public interface Context {
+public enum Environment implements Context {
+  DEV, QE, QA, STAGE, PROD;
 
-  /**
-   * Tie breaker, if two context info stays in conflict during election.
-   *
-   * @return Priority of the context. Lower the priority, better while electing the context infos.
-   */
-  int getPriority();
 
-  /**
-   * Unique context identifier, that used in context id to context instance or
-   * vice versa
-   * (de)serialization.
-   *
-   * @return
-   */
-  String getContextId();
+  @Override
+  public int getPriority() {
+    return 0;
+  }
+
+
+  @Override
+  public String getContextId() {
+    return null;
+  }
 }
