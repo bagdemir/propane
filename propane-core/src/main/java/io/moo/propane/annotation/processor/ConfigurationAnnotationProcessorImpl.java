@@ -96,7 +96,9 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
                   equals(AnnotationProcessor.getPropertyNameFromFQPropertyName(entity.getPropertyName())) &&
                   entity.getContextIds().size() > contextIds.size()) {
 
-            if (contextInfo.get().getContexts().containsAll(entity
+            List<String> cIds = contextInfo.get().getContexts().stream()
+                    .map(c -> c.getContextId()).collect(Collectors.toList());
+            if (cIds.containsAll(entity
                     .getContextIds())) {
               if (result.contains(next)) result.remove(next);
             } else {
