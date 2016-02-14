@@ -23,7 +23,6 @@
  */
 package io.moo.propane.annotation.processor;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.KeyValue;
 import io.moo.propane.annotation.Source;
@@ -96,10 +95,11 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
                   equals(AnnotationProcessor.getPropertyNameFromFQPropertyName(entity.getPropertyName())) &&
                   entity.getContextIds().size() > contextIds.size()) {
 
-            List<String> cIds = contextInfo.get().getContexts().stream()
-                    .map(c -> c.getContextId()).collect(Collectors.toList());
-            if (cIds.containsAll(entity
-                    .getContextIds())) {
+            //TODO first convert the context into Context types, then compare
+            // with the object's.
+            if (contextInfo.get().getContexts().stream()
+                    .map(c -> c.getContextId()).collect(Collectors.toList()).containsAll(entity
+                            .getContextIds())) {
               if (result.contains(next)) result.remove(next);
             } else {
               overriddenElements.add(entity);
