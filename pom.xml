@@ -24,7 +24,7 @@
     <properties>
         <jackson.yml>2.5.4</jackson.yml>
         <commons.io>2.4</commons.io>
-        <commons.collection>3.2.1</commons.collection>
+        <commons.collection>3.2.2</commons.collection>
         <guava>18.0</guava>
         <log4j>2.2</log4j>
         <junit>4.12</junit>
