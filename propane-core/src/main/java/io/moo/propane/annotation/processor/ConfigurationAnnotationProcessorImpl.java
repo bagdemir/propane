@@ -27,6 +27,7 @@ import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.KeyValue;
 import io.moo.propane.annotation.Source;
 import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.data.Context;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.extractors.TokenExtractor;
@@ -38,6 +39,9 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static io.moo.propane.annotation.processor.AnnotationProcessor.getPropertyNameFrom;
+
+
 /**
  * Process the configuration annotations provided in configuration entities.
  *
@@ -46,24 +50,28 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor {
+
   private static final Logger LOG = LogManager.getLogger();
+  private static final String MISSING_ANNOTATION = "@Configuration annotation is missing.";
 
   @Override
   public <T> T createEntity(final Class<T> clazz, final ConfigData data) {
     return createEntity(clazz, data, Optional.empty());
   }
 
-
   public <T> T createEntity(final Class<T> clazz, final ConfigData configData, final Optional<ContextInfo> contextInfo) {
-    final Source source = clazz.getDeclaredAnnotation(Source.class);
+
     final List<ConfigurationEntity> entities = configData.getEntities();
-    final Configuration configurationAnnotation = clazz.getDeclaredAnnotation(Configuration.class);
-    if (configurationAnnotation != null) {
-      final T instance = newEntityInstance(clazz);
-      processFields(filterEntities(entities, contextInfo), configurationAnnotation.componentId(), clazz.getDeclaredFields(), instance);
-      return instance;
-    } else
-      throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
+    final Optional<Configuration> configAnnotation = Optional.ofNullable(clazz.getDeclaredAnnotation
+            (Configuration.class));
+
+    Configuration configuration = configAnnotation.orElseThrow(() -> new InvalidConfigurationEntityException(MISSING_ANNOTATION));
+    final T instance = newEntityInstance(clazz);
+    final Field[] declaredFields = clazz.getDeclaredFields();
+    final List<ConfigurationEntity> configurationEntities = filterEntities(entities, contextInfo);
+    processFields(configurationEntities, configuration.componentId(), declaredFields, instance);
+
+    return instance;
   }
 
   private List<ConfigurationEntity> filterEntities(final List<ConfigurationEntity> entities, final Optional<ContextInfo> contextInfo) {
@@ -77,41 +85,45 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
     int current = 0;
 
     while (iterator.hasNext()) {
-      ConfigurationEntity next = iterator.next();
-      Collection<String> contextIds = next.getContextIds();
+
+      ConfigurationEntity nextEntity = iterator.next();
+      Collection<String> nextEntitiesContextIds = nextEntity.getContextIds();
+
       // If context info is provided, then look for suitable configs.
       if (contextInfo.isPresent()) {
-        final ListIterator<ConfigurationEntity>
-                configurationEntityListIterator = entities.listIterator(current);
 
-        if (!result.contains(next) && !overriddenElements.contains
-                (next)) {
-          result.add(next);
+        final ListIterator<ConfigurationEntity> listIterator = entities.listIterator(current);
+
+        if (!result.contains(nextEntity) && !overriddenElements.contains(nextEntity)) {
+          result.add(nextEntity);
         }
 
-        while (configurationEntityListIterator.hasNext()) {
-          ConfigurationEntity entity = configurationEntityListIterator.next();
-          if (AnnotationProcessor.getPropertyNameFromFQPropertyName(next.getPropertyName()).
-                  equals(AnnotationProcessor.getPropertyNameFromFQPropertyName(entity.getPropertyName())) &&
-                  entity.getContextIds().size() > contextIds.size()) {
+        while (listIterator.hasNext()) {
+          final ConfigurationEntity entity = listIterator.next();
+          final String propNameEntity = getPropertyNameFrom(entity.getPropertyName());
+          final String propNameNextEntity = getPropertyNameFrom(nextEntity.getPropertyName());
+          if (propNameNextEntity.equals(propNameEntity) && entity.getContextIds().size() > nextEntitiesContextIds.size()) {
+            final List<Context> contexts = contextInfo.get().getContexts();
+            final boolean entityContextIdsAllMatched = contexts.stream().
+                    map(Context::getContextId).
+                    collect(Collectors.toList()).
+                    containsAll(entity.getContextIds());
 
-            //TODO first convert the context into Context types, then compare
-            // with the object's.
-            if (contextInfo.get().getContexts().stream()
-                    .map(c -> c.getContextId()).collect(Collectors.toList()).containsAll(entity
-                            .getContextIds())) {
-              if (result.contains(next)) result.remove(next);
+            if (entityContextIdsAllMatched) {
+              if (result.contains(nextEntity)) result.remove(nextEntity);
             } else {
               overriddenElements.add(entity);
             }
           }
         }
+
         current++;
+
       } else {
         // if context info is not provided, then look for global
         // configs.
-        if (next.getContextIds().isEmpty() && !result.contains(next)) {
-          result.add(next);
+        if (nextEntity.getContextIds().isEmpty() && !result.contains(nextEntity)) {
+          result.add(nextEntity);
         }
       }
     }

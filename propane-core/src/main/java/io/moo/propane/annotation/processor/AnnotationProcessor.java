@@ -64,21 +64,21 @@ public interface AnnotationProcessor {
           final Map.Entry<String, String> entry) {
 
     return new ConfigurationEntity(String.join(BLANK_STRING, componentIdExtractor.extract(source)),
-            contextExtractor.extract(entry.getKey()), getPropertyNameFromFQPropertyName(entry.getKey()),
+            contextExtractor.extract(entry.getKey()), getPropertyNameFrom(entry.getKey()),
             entry.getValue());
   }
 
   /**
    * Returns the plain property name from a fully-qualified property name.
    *
-   * @param FQPropertyName Fully-qualified property name.
+   * @param fullyQualifiedPropertyName Fully-qualified property name.
    * @return Plain property name.
    */
-  static String getPropertyNameFromFQPropertyName(final String FQPropertyName) {
-    if (FQPropertyName.contains(".")) {
-      final String[] split = FQPropertyName.split("\\.");
+  static String getPropertyNameFrom(final String fullyQualifiedPropertyName) {
+    if (fullyQualifiedPropertyName.contains(".")) {
+      final String[] split = fullyQualifiedPropertyName.split("\\.");
       return split[split.length - 1];
     }
-    return FQPropertyName;
+    return fullyQualifiedPropertyName;
   }
 }

@@ -115,15 +115,12 @@ SOFTWARE.
 
 <img src="https://travis-ci.org/bagdemir/propane.svg?branch=master"/> [![Coverage Status](https://coveralls.io/repos/github/bagdemir/propane/badge.svg?branch=master)](https://coveralls.io/github/bagdemir/propane?branch=master) <img src="https://img.shields.io/packagist/l/doctrine/orm.svg" /> [![GitHub version](https://badge.fury.io/gh/bagdemir%2Fpropane.svg)](https://badge.fury.io/gh/bagdemir%2Fpropane)
 
-Propane is a light-weight Java framework for Configuration Management that 
-intend to take advantage of structured data serialization format, YAML, by 
-providing configurations context-awareness.  
+Propane is a light-weight Java framework for Configuration Management by leveraging structured data serialization format, YAML, while providing context-awareness to your configuration sets in a distributed environment.
  
 Propane is inspired by the Netflix's Archaius project with some cool new 
 features like annotation based configuration entities, custom context 
-definitions and so on. If Archaius works for you, probably, you would keep it.
- If you make some considerations on managing your configurations throughout 
- your new applications from the scratch, Propane might be the right solution for
+definitions, etc. If Archaius does work for you, you should keep it using.
+ If you are already searching for a confiuguration management framework, Propane is likely the right solution for
   you.
  
 [Check out Project's home for API docs.] (http://propane.moo.io)
@@ -136,7 +133,7 @@ Propane is a Java framework to manage your configurations for different contexts
 - Create YAML configuration files.
 - Annotate your Java classes with configuration management annotations. 
 
-and then  Propane enables the configuration set in applications for this given context.
+and then Propane enables the configuration set in applications for the context provided.
  
 A context may be a region, an environment, or a custom context just defined by you. For instance, if your service is running in the US region and in the dev environment, Propane enables the configurations for Development + US in those applications running in US and dev environment.
 
