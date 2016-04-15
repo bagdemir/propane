@@ -86,37 +86,15 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
 
     while (iterator.hasNext()) {
 
-      ConfigurationEntity nextEntity = iterator.next();
-      Collection<String> nextEntitiesContextIds = nextEntity.getContextIds();
+      final ConfigurationEntity nextEntity = iterator.next();
+      final Collection<String> nextEntitiesContextIds = nextEntity.getContextIds();
 
       // If context info is provided, then look for suitable configs.
       if (contextInfo.isPresent()) {
 
+        addElementIfNotExists(result, overriddenElements, nextEntity);
         final ListIterator<ConfigurationEntity> listIterator = entities.listIterator(current);
-
-        if (!result.contains(nextEntity) && !overriddenElements.contains(nextEntity)) {
-          result.add(nextEntity);
-        }
-
-        while (listIterator.hasNext()) {
-          final ConfigurationEntity entity = listIterator.next();
-          final String propNameEntity = getPropertyNameFrom(entity.getPropertyName());
-          final String propNameNextEntity = getPropertyNameFrom(nextEntity.getPropertyName());
-          if (propNameNextEntity.equals(propNameEntity) && entity.getContextIds().size() > nextEntitiesContextIds.size()) {
-            final List<Context> contexts = contextInfo.get().getContexts();
-            final boolean entityContextIdsAllMatched = contexts.stream().
-                    map(Context::getContextId).
-                    collect(Collectors.toList()).
-                    containsAll(entity.getContextIds());
-
-            if (entityContextIdsAllMatched) {
-              if (result.contains(nextEntity)) result.remove(nextEntity);
-            } else {
-              overriddenElements.add(entity);
-            }
-          }
-        }
-
+        searchForOverridingElements(contextInfo, result, overriddenElements, nextEntity, nextEntitiesContextIds, listIterator);
         current++;
 
       } else {
@@ -131,6 +109,41 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
     overriddenElements.clear();
 
     return result;
+  }
+
+  private void searchForOverridingElements(final Optional<ContextInfo> contextInfo,
+     final List<ConfigurationEntity> result,
+     final List<ConfigurationEntity> overriddenElements,
+     final ConfigurationEntity nextEntity,
+     final Collection<String> nextEntitiesContextIds,
+     final ListIterator<ConfigurationEntity> listIterator) {
+
+    while (listIterator.hasNext()) {
+      final ConfigurationEntity entity = listIterator.next();
+      final String propNameEntity = getPropertyNameFrom(entity.getPropertyName());
+      final String propNameNextEntity = getPropertyNameFrom(nextEntity.getPropertyName());
+
+      if (propNameNextEntity.equals(propNameEntity) && entity.getContextIds().size() > nextEntitiesContextIds.size()) {
+        if (contextIdsAllMatched(contextInfo, entity)) {
+          if (result.contains(nextEntity)) result.remove(nextEntity);
+        } else {
+          overriddenElements.add(entity);
+        }
+      }
+    }
+  }
+
+  private boolean contextIdsAllMatched(Optional<ContextInfo> contextInfo, ConfigurationEntity entity) {
+    return contextInfo.get().getContexts().stream().
+            map(Context::getContextId).
+            collect(Collectors.toList()).
+            containsAll(entity.getContextIds());
+  }
+
+  private void addElementIfNotExists(List<ConfigurationEntity> result, List<ConfigurationEntity> overriddenElements, ConfigurationEntity nextEntity) {
+    if (!result.contains(nextEntity) && !overriddenElements.contains(nextEntity)) {
+      result.add(nextEntity);
+    }
   }
 
 

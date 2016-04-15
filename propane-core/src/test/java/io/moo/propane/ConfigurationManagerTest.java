@@ -72,24 +72,6 @@ public class ConfigurationManagerTest {
     assertThat(configurationManager.isRegistered(Test1ConfigEntity.class), equalTo(true));
   }
 
-
-  @Test
-  public void testLoadFromClasspath() throws InterruptedException {
-    final ConfigurationManager configurationManager = ConfigurationManager
-            .newManager(Optional.empty());
-    configurationManager.register(Test1ConfigEntity.class);
-
-    Thread.sleep(100L);
-    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class);
-    assertThat(configs.isPresent(), equalTo(true));
-
-    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
-    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
-    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
-    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
-  }
-
-
   @Test
   public void testLoadFromClasspathWithMultipleContext() throws
           InterruptedException {
@@ -131,14 +113,47 @@ public class ConfigurationManagerTest {
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
   }
 
+  @Test
+  public void testLoadFromClasspathWithNonMatchingContext() throws
+          InterruptedException {
+    final ContextInfo contextInfo = ContextInfo.of(Region.AP);
+    final ConfigurationManager configurationManager = ConfigurationManager.newManager(Optional.of(contextInfo));
+    configurationManager.register(Test1ConfigEntity.class);
+
+    Thread.sleep(250L);
+
+    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class, Optional.of(contextInfo));
+    assertThat(configs.isPresent(), equalTo(true));
+
+    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://localhost/"));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1000L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
+  }
+
+  @Test
+  public void testLoadFromClasspathWithNestedNonMatchingContext() throws
+          InterruptedException {
+    final ContextInfo contextInfo = ContextInfo.of(Region.US, Environment.PROD);
+    final ConfigurationManager configurationManager = ConfigurationManager.newManager(Optional.of(contextInfo));
+    configurationManager.register(Test1ConfigEntity.class);
+
+    Thread.sleep(250L);
+
+    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class, Optional.of(contextInfo));
+    assertThat(configs.isPresent(), equalTo(true));
+
+    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
+    assertThat(testPropsWithClasspathSource.getUrl(), equalTo("http://us.foo.com/"));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(999L));
+    assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
+  }
 
   @Test
   public void testLoadFromClasspathOnlyGlobalConfigurations() throws
           InterruptedException {
 
-
-    final ConfigurationManager configurationManager = ConfigurationManager
-            .newManager(Optional.empty());
+    final ConfigurationManager configurationManager = ConfigurationManager.newManager(Optional.empty());
     configurationManager.register(Test1ConfigEntity.class);
 
     Thread.sleep(100L);
