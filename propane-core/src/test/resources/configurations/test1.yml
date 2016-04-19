@@ -1,11 +1,27 @@
 longProp: 1000
 testProp: http://localhost/
 intProp: 99
+TR:
+  STAGE:
+    X:
+      Y:
+        intProp: 666
 US:
   longProp: 999
   testProp: http://us.foo.com/
   DEV:
     intProp: 98
+    A:
+      intProp: 95
+PROD:
+  US:
+    A:
+      longProp: 1001
+
+US:
+  PROD:
+    longProp: 1666
+
 EU:
   longProp: 1001
   STAGE:

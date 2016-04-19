@@ -36,6 +36,7 @@ import io.moo.propane.annotation.Test1ConfigEntity;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.data.Environment;
 import io.moo.propane.data.Region;
+import io.moo.propane.data.Stack;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
@@ -149,6 +150,23 @@ public class ConfigurationManagerTest {
     assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(999L));
     assertThat(testPropsWithClasspathSource.getCount(), equalTo(99));
   }
+
+  @Test
+  public void testLoadFromClasspathWithMixedOrder() throws
+          InterruptedException {
+    final ContextInfo contextInfo = ContextInfo.of(Region.US, Environment.PROD, Stack.A);
+    final ConfigurationManager configurationManager = ConfigurationManager.newManager(Optional.of(contextInfo));
+    configurationManager.register(Test1ConfigEntity.class);
+
+    Thread.sleep(250L);
+
+    final Optional<Test1ConfigEntity> configs = configurationManager.load(Test1ConfigEntity.class, Optional.of(contextInfo));
+    assertThat(configs.isPresent(), equalTo(true));
+
+    final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1001L));
+  }
+
 
   @Test
   public void testLoadFromClasspathOnlyGlobalConfigurations() throws

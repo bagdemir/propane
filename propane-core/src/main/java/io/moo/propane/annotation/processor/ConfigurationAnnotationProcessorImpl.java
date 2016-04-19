@@ -93,7 +93,7 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
       if (contextInfo.isPresent()) {
 
         addElementIfNotExists(result, overriddenElements, nextEntity);
-        final ListIterator<ConfigurationEntity> listIterator = entities.listIterator(current);
+        final ListIterator<ConfigurationEntity> listIterator = entities.listIterator(current + 1);
         searchForOverridingElements(contextInfo, result, overriddenElements, nextEntity, nextEntitiesContextIds, listIterator);
         current++;
 
@@ -134,10 +134,14 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
   }
 
   private boolean contextIdsAllMatched(Optional<ContextInfo> contextInfo, ConfigurationEntity entity) {
+
+    final List<String> contextIds = new ArrayList<>(entity.getContextIds().size());
+    contextIds.addAll(entity.getContextIds());
+    contextIds.sort(String::compareToIgnoreCase);
     return contextInfo.get().getContexts().stream().
             map(Context::getContextId).
             collect(Collectors.toList()).
-            containsAll(entity.getContextIds());
+            containsAll(contextIds);
   }
 
   private void addElementIfNotExists(List<ConfigurationEntity> result, List<ConfigurationEntity> overriddenElements, ConfigurationEntity nextEntity) {
