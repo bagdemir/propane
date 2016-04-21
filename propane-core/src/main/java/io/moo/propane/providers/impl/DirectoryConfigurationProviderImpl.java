@@ -1,4 +1,4 @@
-package io.moo.propane.providers;
+package io.moo.propane.providers.impl;
 
 import java.io.File;
 import java.util.Collection;
@@ -6,6 +6,8 @@ import java.util.Optional;
 
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.data.ContextInfo;
+import io.moo.propane.providers.ConfigurationProvider;
+
 import org.apache.commons.io.FileUtils;
 
 /**

@@ -26,6 +26,7 @@ package io.moo.propane.providers;
 import java.util.Optional;
 
 import io.moo.propane.data.ContextInfo;
+import io.moo.propane.providers.impl.FileBackedConfigurationProviderImpl;
 import io.moo.propane.sources.ConfigurationSource;
 
 /**

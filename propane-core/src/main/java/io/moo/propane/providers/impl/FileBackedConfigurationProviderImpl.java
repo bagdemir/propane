@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.moo.propane.providers;
+package io.moo.propane.providers.impl;
 
 import io.moo.propane.annotation.processor.ConfigurationAnnotationProcessorImpl;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import io.moo.propane.extractors.TokenExtractor;
+import io.moo.propane.providers.ScheduledConfigurationProvider;
 import io.moo.propane.sources.ConfigurationSource;
 
 import java.util.Optional;
@@ -49,12 +50,12 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
   }
 
   @Override
-  public T load(Class<T> clazz) {
+  public T load(final Class<T> clazz) {
     return load(clazz, Optional.empty());
   }
 
   @Override
-  public T load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
+  public T load(final Class<T> clazz, final Optional<ContextInfo> contextInfo) {
     return new ConfigurationAnnotationProcessorImpl().createEntity(clazz,
             configData.get().get(), contextInfo);
   }

@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 
-import io.moo.propane.providers.DirectoryConfigurationProviderImpl;
+import io.moo.propane.providers.impl.DirectoryConfigurationProviderImpl;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

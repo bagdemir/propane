@@ -99,7 +99,7 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
       } else {
         entities.add(new ConfigurationEntity(componentIdExtractor.extract
                 (source).iterator().next(), new
-                ArrayList<String>
+                ArrayList<>
                 (contextIds), next
                 .getKey(),
                 next.getValue().asText()));

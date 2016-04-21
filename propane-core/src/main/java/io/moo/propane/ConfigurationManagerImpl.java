@@ -1,18 +1,18 @@
 /**
  * The MIT License (MIT)
- * <p/>
+ * <p>
  * Copyright (c) 2015 moo.io , Erhan Bagdemir
- * <p/>
+ * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * <p/>
+ * <p>
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * <p/>
+ * <p>
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -54,7 +54,8 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
   private final Optional<Integer> refressness;
 
 
-  public ConfigurationManagerImpl(Optional<ContextInfo> contextInfo, Optional<Integer> refressness) {
+  public ConfigurationManagerImpl(final Optional<ContextInfo> contextInfo,
+          final Optional<Integer> refressness) {
     this.contextInfo = contextInfo;
     this.refressness = refressness;
   }
@@ -98,11 +99,10 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
 
   private <T> void validateConfigurationEntity(final Class<T> clazz) {
+    Optional.ofNullable(clazz.getAnnotation(Configuration.class)).
+            orElseThrow(() -> new InvalidConfigurationEntityException
+                    ("@Configuration annotation is missing."));
 
-    final Configuration configurationAnnotation = clazz.getAnnotation(Configuration.class);
-    if (configurationAnnotation == null) {
-      throw new InvalidConfigurationEntityException("@Configuration annotation is missing.");
-    }
   }
 
 

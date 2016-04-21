@@ -23,19 +23,20 @@
  */
 package io.moo.propane;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.Test;
+
 import io.moo.propane.annotation.Test1ConfigEntity;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.data.Environment;
 import io.moo.propane.data.Region;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.Test;
-
-import java.util.Optional;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * Unit test for the configuration manager.
