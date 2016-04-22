@@ -37,22 +37,23 @@ import io.moo.propane.sources.ConfigurationSource;
  * @since 1.0
  */
 public interface ConfigurationProvider<T> {
-  static final String CLASSPATH_PREFIX = "classpath://";
-  static final String FILE_PREFIX = "file://";
-  static final String DB_MYSQL_PREFIX = "mysql://";
-  static final String BLANK_STR = "";
+  String CLASSPATH_PREFIX = "classpath";
+  String FILE_PREFIX = "file";
+  String DB_MYSQL_PREFIX = "mysql";
+  String BLANK_STR = "";
+  String URI_DETERMINATOR = "://";
 
   static <E> ConfigurationProvider<E> create(
           Class<E> clazz, String source, int refreshInSeconds) {
 
-    final String[] split = source.split("://");
+    final String[] split = source.split(URI_DETERMINATOR);
     if (split.length == 0) {
       throw new RuntimeException("Source URL doesn't seem valid.");
     }
 
     switch (split[0]) {
-      case "classpath":
-      case "file":
+      case CLASSPATH_PREFIX:
+      case FILE_PREFIX:
         return new FileBackedConfigurationProviderImpl<>(clazz, ConfigurationSource.of(source), refreshInSeconds);
       default:
         throw new RuntimeException("Unknown source type.");

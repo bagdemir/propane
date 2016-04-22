@@ -23,18 +23,25 @@
  */
 package io.moo.propane.sources;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.moo.propane.data.ConfigurationEntity;
-import io.moo.propane.extractors.DefaultComponentIdExtractor;
-import io.moo.propane.extractors.TokenExtractor;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeSet;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.extractors.DefaultComponentIdExtractor;
+import io.moo.propane.extractors.TokenExtractor;
 
 
 /**
@@ -52,6 +59,7 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
   private final TokenExtractor componentIdExtractor = new
           DefaultComponentIdExtractor();
 
+
   public ClasspathFileConfigurationSource(final String source) {
     super(source);
   }
@@ -68,11 +76,13 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
               entities, 0);
       return Optional.of(new ConfigData(getSource(), entities));
 
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       LOG.error(e);
       return Optional.empty();
     }
   }
+
 
   private void parse(
           final String source,
@@ -99,8 +109,7 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
       } else {
         entities.add(new ConfigurationEntity(componentIdExtractor.extract
                 (source).iterator().next(), new
-                ArrayList<>
-                (contextIds), next
+                TreeSet<>(contextIds), next
                 .getKey(),
                 next.getValue().asText()));
       }

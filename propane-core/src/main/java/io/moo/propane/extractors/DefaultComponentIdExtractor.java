@@ -27,6 +27,7 @@ package io.moo.propane.extractors;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 import io.moo.propane.exception.NoComponentIdFoundException;
 
@@ -38,7 +39,7 @@ import io.moo.propane.exception.NoComponentIdFoundException;
 public class DefaultComponentIdExtractor implements TokenExtractor {
 
   @Override
-  public Collection<String> extract(final String sourceString) {
+  public Set<String> extract(final String sourceString) {
     assertPropertyNameIsValid(sourceString);
     int slLastIndex = sourceString.lastIndexOf(SEGMENT_SEPARATOR);
     int ptLastIndex = sourceString.lastIndexOf(".");

@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
 /**
- * Created by bagdemir on 30/01/16.
+ * Context information for the configuration entities.
  */
 public class ContextInfo {
 

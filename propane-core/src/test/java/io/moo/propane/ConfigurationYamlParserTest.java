@@ -27,7 +27,7 @@ public class ConfigurationYamlParserTest {
       JsonNode jsonNode = mapper.readTree(reader);
 
       List<ConfigurationEntity> entities = new ArrayList<>();
-      parse(jsonNode, new ArrayList<String>(), entities);
+      parse(jsonNode, new TreeSet<>(), entities);
       System.out.println(entities);
 
 
@@ -37,7 +37,7 @@ public class ConfigurationYamlParserTest {
 
   }
 
-  private void parse(final JsonNode jsonNode, final List<String>
+  private void parse(final JsonNode jsonNode, final Set<String>
           contextIds, final List<ConfigurationEntity> entities) {
 
     final Iterator<Map.Entry<String, JsonNode>> it = jsonNode.fields();
@@ -48,7 +48,7 @@ public class ConfigurationYamlParserTest {
           contextIds.add(next.getKey());
           parse(next.getValue(), contextIds, entities);
       } else {
-        entities.add(new ConfigurationEntity("test1", new ArrayList<String>(contextIds), next
+        entities.add(new ConfigurationEntity("test1", contextIds, next
                 .getKey(),
                 next.getValue().asText()));
       }

@@ -25,6 +25,7 @@ package io.moo.propane.data;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * Entity to hold a single property imported from a props file. Each property
@@ -38,13 +39,13 @@ import java.util.Collection;
  */
 public class ConfigurationEntity {
   private String componentId;
-  private Collection<String> contextIds;
+  private Set<String> contextIds;
   private String propertyName;
   private String propertyValue;
 
 
   public ConfigurationEntity(final String componentId,
-          final Collection<String> contextIds,
+          final Set<String> contextIds,
           final String propertyName,
           final String propertyValue) {
 
@@ -70,7 +71,7 @@ public class ConfigurationEntity {
   }
 
 
-  public void setContextIds(final Collection<String> contextIds) {
+  public void setContextIds(final Set<String> contextIds) {
     this.contextIds = contextIds;
   }
 

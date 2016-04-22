@@ -24,6 +24,8 @@
 package io.moo.propane.data;
 
 /**
+ * Region context.
+ *
  * @author bagdemir
  * @version 1.0
  * @since 1.0

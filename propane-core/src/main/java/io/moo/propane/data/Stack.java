@@ -24,6 +24,8 @@
 package io.moo.propane.data;
 
 /**
+ * Stack context type.
+ *
  * @author bagdemir
  * @since 1.0
  * @version 1.0

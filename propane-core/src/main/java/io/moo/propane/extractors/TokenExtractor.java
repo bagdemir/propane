@@ -26,6 +26,7 @@
 package io.moo.propane.extractors;
 
 import java.util.Collection;
+import java.util.Set;
 
 /**
  * @author bagdemir
@@ -37,5 +38,5 @@ public interface TokenExtractor {
   String SEGMENT_SEPARATOR = "/";
   String BLANK_STR = "";
 
-  Collection<String> extract(String sourceString);
+  Set<String> extract(String sourceString);
 }

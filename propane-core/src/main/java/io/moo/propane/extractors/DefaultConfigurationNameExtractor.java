@@ -27,6 +27,7 @@ package io.moo.propane.extractors;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 import io.moo.propane.exception.InvalidPropertyNameException;
 
@@ -40,7 +41,7 @@ import io.moo.propane.exception.InvalidPropertyNameException;
 public class DefaultConfigurationNameExtractor implements TokenExtractor {
 
   @Override
-  public Collection<String> extract(final String sourceString) {
+  public Set<String> extract(final String sourceString) {
     assertConfigurationNameIsValid(sourceString);
     String segment = sourceString;
     if (sourceString.contains(SEGMENT_SEPARATOR)) {

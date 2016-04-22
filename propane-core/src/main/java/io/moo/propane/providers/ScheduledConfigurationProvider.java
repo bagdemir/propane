@@ -12,7 +12,7 @@ import io.moo.propane.sources.ConfigurationSource;
 /**
  * Calls the configurations from the source within a schedule.
  */
-public abstract class ScheduledConfigurationProvider<T> implements ConfigurationProvider<T> /*, ContextAwareProvider<T> */ {
+public abstract class ScheduledConfigurationProvider<T> implements ConfigurationProvider<T> {
 
   private static final int CORE_POOL_SIZE = 1;
   private static final long INITIAL_DELAY = 0L;

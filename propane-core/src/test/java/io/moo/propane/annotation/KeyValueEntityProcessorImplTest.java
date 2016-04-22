@@ -54,11 +54,11 @@ public class KeyValueEntityProcessorImplTest {
   public void testCreate() {
 
     final List<ConfigurationEntity> entitites = new ArrayList<>();
-    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "testProp",
+    entitites.add(new ConfigurationEntity("test1", Collections.emptySet(), "testProp",
                     "abc"));
-    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "intProp",
+    entitites.add(new ConfigurationEntity("test1", Collections.emptySet(), "intProp",
                     "1"));
-    entitites.add(new ConfigurationEntity("test1", Collections.emptyList(), "longProp",
+    entitites.add(new ConfigurationEntity("test1", Collections.emptySet(), "longProp",
                     "100")
     );
     final String source = "classpath://configurations/test1.yml";
