@@ -23,23 +23,29 @@
  */
 package io.moo.propane.annotation.processor;
 
+import static io.moo.propane.annotation.processor.AnnotationProcessor.getPropertyNameFrom;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import io.moo.propane.annotation.Configuration;
 import io.moo.propane.annotation.KeyValue;
-import io.moo.propane.annotation.Source;
 import io.moo.propane.data.ConfigurationEntity;
 import io.moo.propane.data.Context;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
-import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.sources.ConfigData;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import java.lang.reflect.Field;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static io.moo.propane.annotation.processor.AnnotationProcessor.getPropertyNameFrom;
 
 
 /**
@@ -54,10 +60,12 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
   private static final Logger LOG = LogManager.getLogger();
   private static final String MISSING_ANNOTATION = "@Configuration annotation is missing.";
 
+
   @Override
   public <T> T createEntity(final Class<T> clazz, final ConfigData data) {
     return createEntity(clazz, data, Optional.empty());
   }
+
 
   public <T> T createEntity(final Class<T> clazz, final ConfigData configData, final Optional<ContextInfo> contextInfo) {
 
@@ -69,10 +77,12 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
     final T instance = newEntityInstance(clazz);
     final Field[] declaredFields = clazz.getDeclaredFields();
     final List<ConfigurationEntity> configurationEntities = filterEntities(entities, contextInfo);
+
     processFields(configurationEntities, configuration.componentId(), declaredFields, instance);
 
     return instance;
   }
+
 
   private List<ConfigurationEntity> filterEntities(final List<ConfigurationEntity> entities, final Optional<ContextInfo> contextInfo) {
     // Sort the entities according to their number of context ids.
@@ -111,12 +121,13 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
     return result;
   }
 
+
   private void searchForOverridingElements(final Optional<ContextInfo> contextInfo,
-     final List<ConfigurationEntity> result,
-     final List<ConfigurationEntity> overriddenElements,
-     final ConfigurationEntity nextEntity,
-     final Collection<String> nextEntitiesContextIds,
-     final ListIterator<ConfigurationEntity> listIterator) {
+          final List<ConfigurationEntity> result,
+          final List<ConfigurationEntity> overriddenElements,
+          final ConfigurationEntity nextEntity,
+          final Collection<String> nextEntitiesContextIds,
+          final ListIterator<ConfigurationEntity> listIterator) {
 
     while (listIterator.hasNext()) {
       final ConfigurationEntity entity = listIterator.next();
@@ -133,6 +144,7 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
     }
   }
 
+
   private boolean contextIdsAllMatched(Optional<ContextInfo> contextInfo, ConfigurationEntity entity) {
 
     final List<String> contextIds = new ArrayList<>(entity.getContextIds().size());
@@ -144,6 +156,7 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
             containsAll(contextIds);
   }
 
+
   private void addElementIfNotExists(List<ConfigurationEntity> result, List<ConfigurationEntity> overriddenElements, ConfigurationEntity nextEntity) {
     if (!result.contains(nextEntity) && !overriddenElements.contains(nextEntity)) {
       result.add(nextEntity);
@@ -151,38 +164,8 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
   }
 
 
-  private TokenExtractor getComponentIdExtractorInstance(final Source source) {
-
-    try {
-      if (source == null) {
-        throw new InvalidConfigurationEntityException("@Source annotation is missing.");
-      } else {
-        return source.componentIdExtractor().newInstance();
-      }
-    } catch (InstantiationException | IllegalAccessException e) {
-      LOG.error(e);
-      throw new InvalidConfigurationEntityException(e.getMessage(), e);
-    }
-  }
-
-
-  private TokenExtractor getComponentContextExtractorInstance(final Source source) {
-
-    try {
-      if (source == null) {
-        throw new InvalidConfigurationEntityException("@Source annotation is missing.");
-      } else {
-        return source.contextExtractor().newInstance();
-      }
-    } catch (InstantiationException | IllegalAccessException e) {
-      LOG.error(e);
-      throw new InvalidConfigurationEntityException(e.getMessage(), e);
-    }
-  }
-
-
   private <T> void processFields(final Collection<ConfigurationEntity> entities,
-                                 final String componentId, final Field[] fields, final T instance) {
+          final String componentId, final Field[] fields, final T instance) {
 
     Arrays.stream(fields).
             filter(field -> null != field.getAnnotation(KeyValue.class)).
@@ -194,7 +177,7 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
 
 
   private <T> void performEntityProcessing(final KeyValue annotation, final ConfigurationEntity configurationEntity,
-                                           final Field field, T instance) {
+          final Field field, T instance) {
 
     if (annotation.name().equals(configurationEntity.getPropertyName())) {
       Object propertyValue = configurationEntity.getPropertyValue();
@@ -219,8 +202,8 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
 
 
   private <T> void performPrimitiveAssignment(final T instance,
-                                              final Field field,
-                                              final Object propertyValue) {
+          final Field field,
+          final Object propertyValue) {
     final Class<?> fieldType = field.getType();
     if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
       performAssignment(instance, field, Integer.valueOf((String) propertyValue));
@@ -243,12 +226,13 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
 
 
   private <T> void performAssignment(final T instance,
-                                     final Field field,
-                                     final Object propertyValue) {
+          final Field field,
+          final Object propertyValue) {
     try {
       field.setAccessible(true);
       field.set(instance, propertyValue);
-    } catch (IllegalAccessException e) {
+    }
+    catch (IllegalAccessException e) {
       LOG.error(e);
     } finally {
       field.setAccessible(false);
@@ -259,7 +243,8 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
   private <T> T newEntityInstance(final Class<T> clazz) {
     try {
       return clazz.newInstance();
-    } catch (InstantiationException | IllegalAccessException e) {
+    }
+    catch (InstantiationException | IllegalAccessException e) {
       LOG.error(e);
     }
     throw new AssertionError("Cannot createEntity a new instance of :" + clazz.getName());

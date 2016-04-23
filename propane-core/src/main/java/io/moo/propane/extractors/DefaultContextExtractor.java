@@ -24,7 +24,6 @@
 package io.moo.propane.extractors;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,14 +31,14 @@ import java.util.stream.Collectors;
 import io.moo.propane.exception.InvalidPropertyNameException;
 
 /**
- * <p>Context extractor to determine the context of a configuration entity.
+ * Context extractor to determine the context of a configuration entity.
  * Default context extractor searches for the context pattern in a URI given.
- * If you consider the following configuration path:</p>
+ * If you consider the following configuration path:<p>
  * <p>
  * file://.app/configuration/dev-ue1.fooservice.properties
  * <p>
- * <p>the default context extractor returns a list that includes, dev and
- * ue1.</p>
+ * <p>
+ * the default context extractor returns a list that includes, DEV and UE1.
  *
  * @author bagdemir
  * @version 1.0
@@ -49,15 +48,16 @@ public class DefaultContextExtractor implements TokenExtractor {
 
   @Override
   public Set<String> extract(final String sourceString) {
+
     assertPropertyNameIsValid(sourceString);
 
     if (sourceString.contains(".")) {
       String[] split = sourceString.split("\\.");
       if (split.length > 1) {
 
-        return Arrays.stream(split).limit(split.length - 1).collect(Collectors
-                .toSet());
-        // return Arrays.asList(Arrays.copyOf(split, split.length-1));
+        return Arrays.stream(split).
+                limit(split.length - 1).
+                collect(Collectors.toSet());
       }
     }
     return Collections.<String>emptySet();
