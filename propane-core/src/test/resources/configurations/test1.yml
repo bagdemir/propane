@@ -9,7 +9,6 @@ TR:
 US:
   longProp: 999
   testProp: http://us.foo.com/
-
   DEV:
     intProp: 98
     A:
@@ -17,11 +16,7 @@ US:
 PROD:
   US:
     A:
-      longProp: 1001
-
-US:
-  PROD:
-    longProp: 1666
+      longProp: 1011
 
 EU:
   longProp: 1001

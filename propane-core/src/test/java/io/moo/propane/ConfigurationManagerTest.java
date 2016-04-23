@@ -164,7 +164,7 @@ public class ConfigurationManagerTest {
     assertThat(configs.isPresent(), equalTo(true));
 
     final Test1ConfigEntity testPropsWithClasspathSource = configs.get();
-    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1001L));
+    assertThat(testPropsWithClasspathSource.getTimeout(), equalTo(1011L));
   }
 
 
