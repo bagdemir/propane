@@ -23,11 +23,10 @@
  */
 package io.moo.propane.sources;
 
-import io.moo.propane.annotation.Source;
-import io.moo.propane.exception.InvalidConfigurationEntityException;
-
 import java.util.Optional;
 import java.util.concurrent.Callable;
+
+import io.moo.propane.exception.InvalidConfigurationEntityException;
 
 /**
  * @author bagdemir
@@ -40,12 +39,18 @@ public abstract class ConfigurationSource implements Callable<Optional<ConfigDat
   static final String DB_MYSQL_PREFIX = "mysql://";
   static final String BLANK_STR = "";
 
+  protected final String source;
+  protected final Class<?> entityType;
+
+
   /**
    * Static factory method that creates new source implementations for a source annotation given.
+   *
    * @param url
    * @return {@link ConfigurationSource} instance.
    */
-  public static ConfigurationSource of(String url) {
+  public static ConfigurationSource of(final String url,
+                                       final Class<?> entityType) {
 
     if (url == null) {
       throw new InvalidConfigurationEntityException("@Source annotation is missing.");
@@ -55,17 +60,18 @@ public abstract class ConfigurationSource implements Callable<Optional<ConfigDat
 
     ConfigurationSource configSource;
 
-    switch (prefix)
-    {
-      case "classpath" :
-        configSource = new ClasspathFileConfigurationSource(url.replace(CLASSPATH_PREFIX, BLANK_STR));
+    switch (prefix) {
+      case "classpath":
+        configSource = new ClasspathFileConfigurationSource(url.replace
+                (CLASSPATH_PREFIX, BLANK_STR), entityType);
         break;
-      default :
+      default:
         throw new RuntimeException("Unknown source type.");
     }
 
     return configSource;
   }
+
 
   private static String getPrefix(String url) {
     final String[] split = url.split(":");
@@ -75,23 +81,31 @@ public abstract class ConfigurationSource implements Callable<Optional<ConfigDat
     return split[0];
   }
 
-  protected final String source;
 
-  public ConfigurationSource(final String source) {
+  public ConfigurationSource(final String source, final Class<?> entityType) {
     this.source = source;
+    this.entityType = entityType;
   }
+
 
   @Override
   public Optional<ConfigData> call() throws Exception {
-    return read();
+    return read(entityType);
   }
+
 
   /**
    * Reads properties from the resource.
    *
    * @return Properties.
    */
-  public abstract Optional<ConfigData> read();
+  public abstract <T> Optional<ConfigData> read(Class<T> clazz);
+
+
+  public Class<?> getEntityType() {
+    return entityType;
+  }
+
 
   public String getSource() {
     return source;

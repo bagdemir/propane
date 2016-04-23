@@ -23,18 +23,28 @@
  */
 package io.moo.propane.sources;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import io.moo.propane.data.ConfigurationEntity;
-import io.moo.propane.extractors.DefaultComponentIdExtractor;
-import io.moo.propane.extractors.TokenExtractor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static io.moo.propane.annotation.processor.AnnotationUtils.getDefinedProperties;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeSet;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+
+import io.moo.propane.annotation.processor.AnnotationUtils;
+import io.moo.propane.data.ConfigurationEntity;
+import io.moo.propane.extractors.DefaultComponentIdExtractor;
+import io.moo.propane.extractors.TokenExtractor;
 
 
 /**
@@ -47,29 +57,33 @@ import java.util.*;
  */
 public class ClasspathFileConfigurationSource extends ConfigurationSource {
   private static final Logger LOG = LogManager.getLogger();
-  //TODO need of a singleton.
+
   private final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
   private final TokenExtractor componentIdExtractor = new
           DefaultComponentIdExtractor();
 
 
-  public ClasspathFileConfigurationSource(final String source) {
-    super(source);
+  public ClasspathFileConfigurationSource(final String source,
+                                          final Class<?> entityType) {
+    super(source, entityType);
   }
 
 
   @Override
-  public Optional<ConfigData> read() {
+  public Optional<ConfigData> read(final Class clazz) {
 
     try (InputStreamReader reader = new InputStreamReader(getClass()
             .getClassLoader().getResourceAsStream(source))) {
 
-      final List<ConfigurationEntity> entities = new ArrayList<>();
+      List<ConfigurationEntity> entities = new ArrayList<>();
+
       parse(getSource(), mapper.readTree(reader), new ArrayList<>(),
               entities, 0);
+
       return Optional.of(new ConfigData(getSource(), entities));
 
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       LOG.error(e);
       return Optional.empty();
     }
@@ -86,9 +100,12 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
     final Iterator<Map.Entry<String, JsonNode>> it = jsonNode.fields();
 
     while (it.hasNext()) {
-      final Map.Entry<String, JsonNode> next = it.next();
-      if (next.getValue().isContainerNode()) {
 
+      final Map.Entry<String, JsonNode> next = it.next();
+      final List<String> definedProperties = getDefinedProperties(getEntityType());
+
+      if (!definedProperties.contains(next.getKey()) && next.getValue()
+              .isContainerNode()) {
         if (level == 0) {
           final List<String> ids = new ArrayList<>();
           ids.add(next.getKey());
@@ -98,7 +115,7 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
           parse(source, next.getValue(), contextIds, entities, level);
         }
 
-      } else {
+      } else if (definedProperties.contains(next.getKey())) {
         ConfigurationEntity configurationEntity = new ConfigurationEntity(componentIdExtractor.extract
                 (source).iterator().next(), new
                 TreeSet<>(contextIds), next

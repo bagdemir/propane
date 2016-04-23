@@ -23,16 +23,16 @@
  */
 package io.moo.propane;
 
-import io.moo.propane.data.ContextInfo;
-
 import java.util.Optional;
+
+import io.moo.propane.data.ContextInfo;
 
 /**
  * <p>{@link ConfigurationManager} is the repository for your configuration
  * entities which lives in a context like environment, region, etc. According
  * to its content, the configuration managers gives only the configurations
  * back that they exist within the same configuration.
- *
+ * <p>
  * <p>Each configuration manager instance may live in a context for which the
  * configuration manager handles the configurations. For instance, if the
  * configuration manager instance is configured for the environment <i>STAGE</i>,

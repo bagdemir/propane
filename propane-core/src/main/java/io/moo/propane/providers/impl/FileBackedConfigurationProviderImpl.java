@@ -23,14 +23,14 @@
  */
 package io.moo.propane.providers.impl;
 
+import java.util.Optional;
+
 import io.moo.propane.annotation.processor.ConfigurationAnnotationProcessorImpl;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.extractors.DefaultComponentIdExtractor;
 import io.moo.propane.extractors.TokenExtractor;
 import io.moo.propane.providers.ScheduledConfigurationProvider;
 import io.moo.propane.sources.ConfigurationSource;
-
-import java.util.Optional;
 
 /**
  * File backed configuration provider.
@@ -43,16 +43,22 @@ public class FileBackedConfigurationProviderImpl<T> extends ScheduledConfigurati
 
   private final TokenExtractor componentIdExtractor;
 
-  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz, final ConfigurationSource source, final int refreshFrequencyInSeconds) {
+
+  public FileBackedConfigurationProviderImpl(final Class<T> propsClazz,
+                                             final ConfigurationSource source,
+                                             final int refreshFrequencyInSeconds) {
+
     super(propsClazz, source, refreshFrequencyInSeconds);
 
     this.componentIdExtractor = new DefaultComponentIdExtractor();
   }
 
+
   @Override
   public T load(final Class<T> clazz) {
     return load(clazz, Optional.empty());
   }
+
 
   @Override
   public T load(final Class<T> clazz, final Optional<ContextInfo> contextInfo) {

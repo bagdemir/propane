@@ -16,8 +16,9 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
 
   private static final int CORE_POOL_SIZE = 1;
   private static final long INITIAL_DELAY = 0L;
+  private static final int DEFAULT_REFRESH_RATE_IN_SECS = 60;
 
-  private int frequencyInSecs = 60;
+  private int frequencyInSecs = DEFAULT_REFRESH_RATE_IN_SECS;
   private ConfigurationSource connector;
   private Class<T> configurationClazz;
   private ConfigurationFilter filter = new ConfigurationEnvironmentFilter();
@@ -28,7 +29,9 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
           AtomicReference<>(Optional.empty());
 
 
-  public ScheduledConfigurationProvider(final Class<T> propsClazz, final ConfigurationSource connector, final int frequencyInSecs) {
+  public ScheduledConfigurationProvider(final Class<T> propsClazz,
+                                        final ConfigurationSource connector,
+                                        final int frequencyInSecs) {
 
     this.configurationClazz = propsClazz;
     this.connector = connector;
@@ -41,8 +44,8 @@ public abstract class ScheduledConfigurationProvider<T> implements Configuration
   protected void initScheduler() {
 
     final Runnable reader = () -> {
-      final ConfigData configuration = connector.read().get();
-      final ConfigData filteredConfiguration = filter.filter(configuration);
+      ConfigData configuration = connector.read(configurationClazz).get();
+      ConfigData filteredConfiguration = filter.filter(configuration);
       configData.set(Optional.of(filteredConfiguration));
     };
 

@@ -1,7 +1,7 @@
 /**
  * The MIT License (MIT)
  * <p>
- * Copyright (c) 2015 moo.io , Erhan Bagdemir
+ * Copyright (c) 2016 moo.io , Erhan Bagdemir
  * <p>
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package io.moo.propane.sources;
+package io.moo.propane.annotation;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static io.moo.propane.annotation.processor.AnnotationUtils.getDefinedProperties;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 import java.util.List;
-import java.util.Map;
 
-import io.moo.propane.annotation.Test1ConfigEntity;
-import io.moo.propane.data.ConfigurationEntity;
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableList;
+
 /**
- * Test for properties resource connector for classpath property files.
+ * Test for annotation utils.
  *
  * @author bagdemir
  * @version 1.0
  * @since 1.0
  */
-public class ClasspathPropertiesResourceConnectorTest {
-
-  public static final String TEST_PROPS = "configurations/test1.yml";
-  public static final int EXPECTED_PROP_COUNT = 12;
+public class AnnotationUtilsTest {
 
   @Test
-  public void testRead() {
-    final ClasspathFileConfigurationSource connector =
-            new ClasspathFileConfigurationSource(TEST_PROPS,
-                    Test1ConfigEntity.class);
-
-    final ConfigData configData = connector.read(Test1ConfigEntity.class).get();
-    final List<ConfigurationEntity> entities = configData.getEntities();
-    assertThat(entities, notNullValue());
-    assertThat(entities.size(), equalTo(EXPECTED_PROP_COUNT));
+  public void testDefinedProperties() throws Exception {
+    final List<String> definedProperties = getDefinedProperties(Test1ConfigEntity.class);
+    assertThat(definedProperties, is(ImmutableList.of("testProp", "longProp", "intProp")));
   }
 }

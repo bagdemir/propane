@@ -31,7 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import io.moo.propane.annotation.Configuration;
-import io.moo.propane.annotation.Source;
+import io.moo.propane.annotation.processor.AnnotationUtils;
 import io.moo.propane.data.ContextInfo;
 import io.moo.propane.exception.InvalidConfigurationEntityException;
 import io.moo.propane.providers.ConfigurationProvider;
@@ -46,37 +46,32 @@ import io.moo.propane.providers.ConfigurationProvider;
  * @version 1.0
  */
 public class ConfigurationManagerImpl implements ConfigurationManager {
-  private static final Logger LOG = LogManager.getLogger();
 
-  public static final int DEFAULT_REFRESHNESS = 60;
+  private static final Logger LOG = LogManager.getLogger();
+  private static final int DEFAULT_REFRESH_RATE = 60;
 
   private final Optional<ContextInfo> contextInfo;
-  private final Optional<Integer> refressness;
+  private final Optional<Integer> refreshRate;
 
 
   public ConfigurationManagerImpl(final Optional<ContextInfo> contextInfo,
-          final Optional<Integer> refressness) {
+                                  final Optional<Integer> refressness) {
     this.contextInfo = contextInfo;
-    this.refressness = refressness;
+    this.refreshRate = refressness;
   }
 
 
-  /**
-   * Cache
-   */
   private final Map<Class<?>, ConfigurationProvider> cache = new ConcurrentHashMap<>();
 
 
   @Override
   public <T> boolean register(final Class<T> clazz) {
 
-    if (cache.containsKey(clazz)) {
-      LOG.info("{} has already been registered.", clazz);
+    if (clazz == null || cache.containsKey(clazz)) {
       return false;
     }
 
     validateConfigurationEntity(clazz);
-
     registerConfigurationProvider(clazz);
 
     return true;
@@ -84,40 +79,47 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
 
 
   private <T> void registerConfigurationProvider(final Class<T> clazz) {
-
-    final Source source = clazz.getAnnotation(Source.class);
-    final Integer refreshnessInt = refressness.orElse(DEFAULT_REFRESHNESS);
-    final ConfigurationProvider<T> provider = ConfigurationProvider.create(clazz, source.url(), refreshnessInt);
+    Integer refreshRate = this.refreshRate.orElse(DEFAULT_REFRESH_RATE);
+    ConfigurationProvider<T> provider = ConfigurationProvider.create(clazz, AnnotationUtils.getSourceURL(clazz), refreshRate);
     cache.put(clazz, provider);
   }
 
 
   @Override
   public <T> boolean isRegistered(final Class<T> clazz) {
+
     return cache.containsKey(clazz);
-  }
-
-
-  private <T> void validateConfigurationEntity(final Class<T> clazz) {
-    Optional.ofNullable(clazz.getAnnotation(Configuration.class)).
-            orElseThrow(() -> new InvalidConfigurationEntityException
-                    ("@Configuration annotation is missing."));
-
   }
 
 
   @Override
   public <T> Optional<T> load(final Class<T> clazz) {
+
     return load(clazz, Optional.empty());
   }
 
 
   @Override
-  public <T> Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
+  public <T> Optional<T> load(final Class<T> clazz,
+                              final Optional<ContextInfo> contextInfo) {
 
     if (isRegistered(clazz)) {
       return Optional.ofNullable((T) cache.get(clazz).load(clazz, contextInfo));
     }
     return Optional.empty();
+  }
+
+
+  public Optional<ContextInfo> getContextInfo() {
+    return contextInfo;
+  }
+
+
+  private <T> void validateConfigurationEntity(final Class<T> clazz) {
+
+    Optional.ofNullable(clazz.getAnnotation(Configuration.class)).
+            orElseThrow(() -> new InvalidConfigurationEntityException
+                    ("@Configuration annotation is missing."));
+
   }
 }
