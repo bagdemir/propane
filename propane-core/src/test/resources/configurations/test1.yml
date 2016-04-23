@@ -16,6 +16,7 @@ US:
 PROD:
   US:
     A:
+      testProp: http://us-a.foo.com/
       longProp: 1011
 
 EU:

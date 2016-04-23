@@ -43,7 +43,7 @@ import org.junit.Test;
 public class ClasspathPropertiesResourceConnectorTest {
 
   public static final String TEST_PROPS = "configurations/test1.yml";
-  public static final int EXPECTED_PROP_COUNT = 11;
+  public static final int EXPECTED_PROP_COUNT = 12;
 
   @Test
   public void testRead() {
