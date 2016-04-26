@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeSet;
 
 import io.moo.propane.data.ConfigurationEntity;
@@ -38,8 +39,7 @@ import static io.moo.propane.annotation.processor.AnnotationUtils.getDefinedProp
 
 
 /**
- * {@link ClasspathFileConfigurationSource} uses classpath resources as
- * sources.
+ * {@link ClasspathFileConfigurationSource} uses classpath resources as sources.
  *
  * @author bagdemir
  * @version 1.0
@@ -53,8 +53,9 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
             DefaultComponentIdExtractor();
 
 
-    public ClasspathFileConfigurationSource(final String source,
-                                            final Class<?> entityType) {
+    public ClasspathFileConfigurationSource(
+            final String source,
+            final Class<?> entityType) {
         super(source, entityType);
     }
 
@@ -90,30 +91,54 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
 
         while (it.hasNext()) {
 
-            final Map.Entry<String, JsonNode> next = it.next();
-            final List<String> definedProperties = getDefinedProperties(getEntityType());
+            Map.Entry<String, JsonNode> next = it.next();
+            List<String> definedProperties = getDefinedProperties(getEntityType());
+            String key = next.getKey();
+            JsonNode value = next.getValue();
 
-            if (!definedProperties.contains(next.getKey()) && next.getValue()
-                    .isContainerNode()) {
+            if (!definedProperties.contains(key) && value.isContainerNode()) {
                 if (level == 0) {
                     final List<String> ids = new ArrayList<>();
-                    ids.add(next.getKey());
-                    parse(source, next.getValue(), ids, entities, level + 1);
+                    ids.add(key);
+                    parse(source, value, ids, entities, level + 1);
                 } else {
-                    contextIds.add(next.getKey());
-                    parse(source, next.getValue(), contextIds, entities, level);
+                    contextIds.add(key);
+                    parse(source, value, contextIds, entities, level);
                 }
 
-            } else if (definedProperties.contains(next.getKey())) {
-                ConfigurationEntity configurationEntity = new ConfigurationEntity(componentIdExtractor.extract
-                        (source).iterator().next(), new
-                        TreeSet<>(contextIds), next
-                        .getKey(),
-                        next.getValue().asText());
+            } else if (definedProperties.contains(key)) {
+
+                String componentName = componentIdExtractor.extract(source).iterator().next();
+                Set<String> contexts = new TreeSet<>(contextIds);
+                ConfigurationEntity configurationEntity = new ConfigurationEntity(
+                        componentName,
+                        contexts,
+                        key,
+                        map(value));
 
                 LOG.info("Creating entity: {}", configurationEntity);
+
                 entities.add(configurationEntity);
             }
         }
     }
+
+    private Object map(final JsonNode input) {
+        if (input.isArray()) {
+            Iterator<JsonNode> elements = input.elements();
+            List<Object> values = new ArrayList<>();
+            while (elements.hasNext()) {
+                Optional.of(elements.next()).
+                        filter(JsonNode::isValueNode).
+                        map(JsonNode::asText).
+                        ifPresent(values::add);
+            }
+            return values;
+        } else if (input.isValueNode()) {
+            return input.asText();
+        } else {
+            return input;
+        }
+    }
+
 }
