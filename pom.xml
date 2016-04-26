@@ -23,11 +23,6 @@
     </developers>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
-
-    <properties>
         <jackson.yml>2.5.4</jackson.yml>
         <commons.io>2.4</commons.io>
         <commons.collection>3.2.2</commons.collection>
