@@ -88,15 +88,16 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
             final int level) {
 
         final Iterator<Map.Entry<String, JsonNode>> it = jsonNode.fields();
+        final List<String> definedProperties = getDefinedProperties(getEntityType());
 
         while (it.hasNext()) {
 
             Map.Entry<String, JsonNode> next = it.next();
-            List<String> definedProperties = getDefinedProperties(getEntityType());
             String key = next.getKey();
             JsonNode value = next.getValue();
 
             if (!definedProperties.contains(key) && value.isContainerNode()) {
+
                 if (level == 0) {
                     final List<String> ids = new ArrayList<>();
                     ids.add(key);
@@ -134,11 +135,12 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
                         ifPresent(values::add);
             }
             return values;
+        } else if (input.isObject()) {
+            return input.asText();
         } else if (input.isValueNode()) {
             return input.asText();
         } else {
             return input;
         }
     }
-
 }
