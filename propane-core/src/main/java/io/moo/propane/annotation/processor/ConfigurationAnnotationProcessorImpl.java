@@ -199,6 +199,7 @@ public class ConfigurationAnnotationProcessorImpl implements AnnotationProcessor
             final T instance,
             final Field field,
             final Object propertyValue) {
+
         final Class<?> fieldType = field.getType();
         if (fieldType.equals(int.class) || fieldType.equals(Integer.class)) {
             performAssignment(instance, field, Integer.valueOf((String) propertyValue));

@@ -45,9 +45,7 @@ public class Test1ConfigEntity {
     @KeyValue(name = "listConfigurationProp")
     private List<String> unmappedEntity;
 
-
     private String nonPropField;
-
 
     public String getUrl() {
         return url;
@@ -67,4 +65,5 @@ public class Test1ConfigEntity {
     public String getNonPropField() {
         return nonPropField;
     }
+
 }

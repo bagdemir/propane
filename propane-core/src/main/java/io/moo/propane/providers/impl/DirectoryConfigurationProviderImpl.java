@@ -36,12 +36,12 @@ public class DirectoryConfigurationProviderImpl<T> implements ConfigurationProvi
   }
 
   @Override
-  public T load(Class<T> clazz) {
+  public Optional<T> load(Class<T> clazz) {
     return null;
   }
 
   @Override
-  public T load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
+  public Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo) {
     return null;
   }
 }

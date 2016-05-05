@@ -120,6 +120,8 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
                 LOG.info("Creating entity: {}", configurationEntity);
 
                 entities.add(configurationEntity);
+            } else {
+                LOG.warn("Key {} does not look like a defined configuration property with value {}", key, value);
             }
         }
     }
@@ -136,6 +138,13 @@ public class ClasspathFileConfigurationSource extends ConfigurationSource {
             }
             return values;
         } else if (input.isObject()) {
+
+            System.out.println("Inception:");
+            final Iterator<Map.Entry<String, JsonNode>> fields = input.fields();
+            while (fields.hasNext()) {
+                System.out.println(fields.next());
+            }
+
             return input.asText();
         } else if (input.isValueNode()) {
             return input.asText();

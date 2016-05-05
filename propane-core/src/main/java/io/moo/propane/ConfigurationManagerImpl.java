@@ -104,7 +104,7 @@ public class ConfigurationManagerImpl implements ConfigurationManager {
                               final Optional<ContextInfo> contextInfo) {
 
     if (isRegistered(clazz)) {
-      return Optional.ofNullable((T) cache.get(clazz).load(clazz, contextInfo));
+      return cache.get(clazz).load(clazz, contextInfo);
     }
     return Optional.empty();
   }

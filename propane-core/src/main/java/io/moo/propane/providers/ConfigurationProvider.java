@@ -71,7 +71,7 @@ public interface ConfigurationProvider<T> {
     return new FileBackedConfigurationProviderImpl<>(clazz, configSource, refreshInSeconds);
   }
 
-  T load(Class<T> clazz);
+  Optional<T> load(Class<T> clazz);
 
-  T load(Class<T> clazz, Optional<ContextInfo> contextInfo);
+  Optional<T> load(Class<T> clazz, Optional<ContextInfo> contextInfo);
 }
