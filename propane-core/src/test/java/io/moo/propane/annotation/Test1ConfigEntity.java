@@ -43,7 +43,7 @@ public class Test1ConfigEntity {
     private int count;
 
     @KeyValue(name = "listConfigurationProp")
-    private List<String> unmappedEntity;
+    private List<String> listConfigurationProp;
 
     private String nonPropField;
 
@@ -66,4 +66,7 @@ public class Test1ConfigEntity {
         return nonPropField;
     }
 
+    public List<String> getListConfigurationProp() {
+        return listConfigurationProp;
+    }
 }

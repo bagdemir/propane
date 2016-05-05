@@ -2,7 +2,10 @@
 longProp: 1000
 testProp: http://localhost/
 intProp: 99
-
+listConfigurationProp:
+  - New York
+  - London
+  - Sydney
 TR:
   STAGE:
     X:
@@ -12,10 +15,6 @@ TR:
 US:
   longProp: 999
   testProp: http://us.foo.com/
-  listConfigurationProp:
-    - New York
-    - London
-    - Sydney
   DEV:
     intProp: 98
     A:
